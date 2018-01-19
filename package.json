@@ -11,11 +11,11 @@
   "license": "GPL-3.0",
   "dependencies": {
     "express": "^4.16.2",
-    "mongoose": "^5.0.0"
+    "mongoose": "^5.0.0",
+    "pug": "^2.0.0-rc.4"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-pug": "^3.3.0",
-    "pug": "^2.0.0-rc.4"
+    "gulp-pug": "^3.3.0"
   }
 }
