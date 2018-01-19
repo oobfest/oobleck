@@ -5,4 +5,4 @@ const PORT = process.env.PORT || 3000
 app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(PORT, () => console.log('Example app listening on port', PORT))
 
-console.log(process.env.HEROKU)
+console.log(process.env)
