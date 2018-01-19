@@ -21,4 +21,4 @@ db.once('open', function() {
 	var animalSchema = mongoose.Schema({ type: String })
 	var Animal = mongoose.model('Animal', animalSchema)
 	Animal.find(function (err, animals) { console.log(animals) })
-}
+})
