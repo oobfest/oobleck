@@ -1,23 +1,28 @@
-const PORT = process.env.PORT || 3000
-
+// Setup Express
 const express = require('express')
 const app = express()
+app.use(express.static('public/'))	// Static file location
+
+// Setup Body Parser
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
+
+// Setup Pug
 app.set('view engine', 'pug')
 
-
+// Setup routes
 const routes = require('./routes/index')
 const kittens = require('./routes/kittens')
+const vue = require('./routes/vue')
 app.use('/', routes)
 app.use('/kittens', kittens)
+app.use('/vue', vue)
 
+// Setup Database
+const db = require('./db/setup')
+
+// Listen!
+const PORT = process.env.PORT || 3000	// Get port dynamically because of Heroku
 app.listen(PORT, () => console.log('Example app listening on port', PORT))
-
-// Database stuff
-var mongoose = require('mongoose')
-mongoose.connect(process.env.MONGO_CONNECTION || 'mongodb://localhost/test')
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', function() {
-	console.log("Connected!")
-})

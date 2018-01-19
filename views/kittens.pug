@@ -4,6 +4,11 @@ body
 	p Kitten list
 	ul
 		each kitten in kittens
-			li= kitten.name
+			li(data-id=kitten._id) #{kitten.name}
 		else
 			li No kittens found!
+
+	p Add kitten!
+	form(method="POST" action="/kittens/create")
+		input(type="text" name="name")
+		input(type="submit")

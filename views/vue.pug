@@ -1,0 +1,14 @@
+html
+head
+body
+	script(src="/js/vue.js")
+
+	div#app
+		ol
+			todo-item
+
+	script.
+		var app = new Vue({el: "#app"})
+		Vue.component('todo-item', {
+			template: "<li>I'm a todo item!</li>"
+		})
