@@ -1,4 +1,4 @@
- @import url('https://fonts.googleapis.com/css?family=Raleway:400,600');
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,600');
 body { 
 	font-family: 'Raleway', sans-serif; 
 }
@@ -17,7 +17,6 @@ body {
 	color: #fff;
 }
 
-.paypal-oob {
-	width: 250px;
-	/*margin: 0 auto;*/
+.popover-body {
+	font-style: italic;
 }

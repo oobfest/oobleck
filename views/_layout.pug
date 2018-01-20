@@ -15,3 +15,8 @@ body.bg-accent-oob
 	script(src="js/popper.min.js")
 	script(src="js/bootstrap.min.js")
 	script(src="js/charming-pro.min.js")
+	script.
+		// Initialize popovers
+		$(function () {
+		  $('[data-toggle="popover"]').popover()
+		})
