@@ -1,3 +1,40 @@
-extends _layout
+extends ../_layout
 block content
-	p Hello, world!
+	.row
+		.col-lg-6.mx-auto.pb-5
+			.box
+				.box-head.box-head-accent-oob
+				.box-block
+					form
+						//h3.mb-4 Apply to Festival
+						.form-group
+							label.col-form-label(for="act-name") Act Name
+							input#act-name.form-control.form-control-lg(
+								type="text" 
+								placeholder="Tyler Lane and the Giggle Gang" 
+								required 
+								autofocus
+							)
+						.form-group
+							label.col-form-label(for="show-type") Location
+							input#show-type.form-control.form-control-lg(type="text" placeholder="Austin, TX" required)
+				.box-block.box-bt
+					.row
+						.col-md-8
+							span.text-muted By submitting, you agree to our 
+								a(href="#" data-toggle="modal" data-target="#example-modal") legal disclaimer
+								| .
+						.col-md-4
+							button.btn.btn-md.btn-primary(type="button") I Do Nothing
+
+	#example-modal.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h5.modal-title Legal Disclaimer
+					button.close(type="butotn" data-dismiss="modal")
+						span &times;
+				.modal-body
+					p By submitting this application, I undesrtand that I am giving permission to use any and all of these materials for promotional and commercioal festival purposes, should my act be accepted.
+				.modal-footer
+					button.btn.btn-primary(type="button" data-dismiss="modal") Close
