@@ -16,9 +16,11 @@ app.set('view engine', 'pug')
 const routes = require('./routes/index')
 const kittens = require('./routes/kittens')
 const vue = require('./routes/vue')
+const apply = require('./routes/apply')
 app.use('/', routes)
 app.use('/kittens', kittens)
 app.use('/vue', vue)
+app.use('/apply', apply)
 
 // Setup Database
 const db = require('./db/setup')
