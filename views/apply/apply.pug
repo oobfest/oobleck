@@ -6,7 +6,7 @@ block content
 				.box-head.box-head-accent-oob
 				.box-block
 					form
-						//h3.mb-4 Apply to Festival
+						h3.mb-4 Act Details
 						.form-group
 							label.col-form-label(for="act-name") Act Name
 							input#act-name.form-control.form-control-lg(
@@ -18,6 +18,59 @@ block content
 						.form-group
 							label.col-form-label(for="show-type") Location
 							input#show-type.form-control.form-control-lg(type="text" placeholder="Austin, TX" required)
+				.box-block.box-bt
+					h3 Application Fee
+					p Your application fee is 
+						code $1.00
+					p#payment-received(style="display:none") Payment Received! ✅
+					#paypal-button.paypal-oob
+					script(src="https://www.paypalobjects.com/api/checkout.js")
+					script.
+						paypal.Button.render({
+
+							env: 'sandbox',
+
+
+							style: {
+								layout: 'vertical',
+								size:   'medium',
+								shape:  'rect',
+								color:  'gold' 
+							},
+
+							funding: {
+								allowed: [ paypal.FUNDING.CARD ],
+								disallowed: [ paypal.FUNDING.CREDIT ]
+							},
+
+							client: {
+								sandbox:    'AUzSLTCNnKxA_yJ20127P4tRv59dR7XmrJtgwCxpIN-JBlsy0iKea_oU2Hj5BTeQYgpDDAG4Hg1NoEg7',
+								production: 'AX13ANTG6te5DW1WWpz3pxVFf8J0zOeWpEda7ytOF8xdCqYncHvsT7ZjZjpjYwPvTMzcgI32EdGx9RJx'
+							},
+
+							commit: true, // Show a 'Pay Now' button
+
+							payment: function(data, actions) {
+								return actions.payment.create({
+									payment: {
+										transactions: [
+											{
+												amount: { total: '1.00', currency: 'USD' }
+											}
+										]
+									}
+								})
+							},
+
+							onAuthorize: function(data, actions) {
+								return actions.payment.execute().then(function(payment) {
+									// The payment is complete!
+									// You can now show a confirmation message to the customer
+									$("#payment-received").show()
+								})
+							}
+
+						}, '#paypal-button')
 				.box-block.box-bt
 					.row
 						.col-md-8

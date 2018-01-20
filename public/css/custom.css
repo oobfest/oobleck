@@ -16,3 +16,8 @@ body {
 	border-color: #239834;
 	color: #fff;
 }
+
+.paypal-oob {
+	width: 250px;
+	/*margin: 0 auto;*/
+}
