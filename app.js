@@ -26,3 +26,6 @@ const db = require('./db/setup')
 // Listen!
 const PORT = process.env.PORT || 3000	// Get port dynamically because of Heroku
 app.listen(PORT, () => console.log('Example app listening on port', PORT))
+
+// Email stuff
+//let transporter = nodemailer.createTransport(options[, defaults])
