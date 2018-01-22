@@ -8,6 +8,13 @@ block content
 					.box-block.box-bt
 						h3 Upload some Filezz
 						input#file-input(type="file")
+				form(action="/derp" method="POST")
+					.box-block.box-bt
+						h3 Woo
+						input.form-control(type="text" name="fancy[]")
+						input.form-control(type="text" name="fancy[]")
+						input.form-control(type="text" name="fancy[]")
+						button.btn(type="submit") Submit
 	script.
 		// Indebted to https://devcenter.heroku.com/articles/s3-upload-node
 		// Todo: security!!11

@@ -27,7 +27,7 @@ block content
 								option Podcast
 						.form-group
 							label.col-form-label(for="informal-description") Describe Your Act to Us
-							small.form-text.text-muted This is to persuade reviewers &amp; won't be visible to the public. What makes your act special?
+							small.form-text.text-muted This is meant to persuade reviewers and won't be visible to the public. What makes your act special?
 							textarea#informal-description.form-control(type="text")
 						.form-group
 							label.col-form-label(for="public-description") Describe Your Act to the Public
@@ -55,7 +55,7 @@ block content
 							input#country.form-control(type="text")
 						.form-group
 							label.col-form-label(for="home-base") What theater is your home base?
-							small.form-text.text-muted Leave blank if not applicable
+							small.form-text.text-muted Leave blank if not applicable.
 							input#home-base.form-control(type="text")
 					
 					// Performance Needs
@@ -74,29 +74,11 @@ block content
 							textarea#special-needs.form-control
 
 					// Photo Upload
-					.box-block.box-bt
-						h3 Photo Upload
-						p Make it a good one
-						.custom-file
-							input#image-upload.custom-file-input(type="file")
-							label.custom-file-label(for="image-upload")
-					
+					include _photo-upload
+
+
 					// Social Media
-					.box-block.box-bt
-						h3.mb-2 Social Media
-						p Accepted acts will have their social media links listed on the festival website.
-						.form-group
-							.input-group
-								select.form-control
-									option Twitter
-									option Facebook
-									option YouTube
-									option Instagram
-									option Website
-									option Other
-								input.form-control(type="text" placeholder="URL")
-						.form-group.text-right
-							button.btn.btn-secondary(type="button") Add Link
+					include _social-media
 
 					// Applicaton Fee
 					.box-block.box-bt
@@ -111,19 +93,9 @@ block content
 						.row
 							.col-md-8
 								span.text-muted By submitting, you agree to our 
-									a(href="#" data-toggle="modal" data-target="#example-modal") legal disclaimer
+									a(href="#" data-toggle="modal" data-target="#legal-disclaimer-modal") legal disclaimer
 									| .
+								include _legal-disclaimer-modal
 							.col-md-4
 								button.btn.btn-md.btn-primary(type="button") Clicky-click
 	
-	#example-modal.modal.fade
-		.modal-dialog
-			.modal-content
-				.modal-header
-					h5.modal-title Legal Disclaimer
-					button.close(type="butotn" data-dismiss="modal")
-						span &times;
-				.modal-body
-					p By submitting this application I understand that, should my act be accepted, I am giving permission to use any and all of these materials for promotional and commercial festival purposes.
-				.modal-footer
-					button.btn.btn-primary(type="button" data-dismiss="modal") Close
