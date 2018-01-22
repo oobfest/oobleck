@@ -16,7 +16,7 @@ const S3 = new aws.S3()
 const S3_BUCKET = process.env.AWS_BUCKET_NAME
 
 // Retrieve a signed request from the app with which the image can be PUT to S3
-app.get('/image-upload-request', (request, response) => {
+router.get('/image-upload-request', (request, response) => {
 	const fileName = request.query['file-name']
 	const fileType = request.query['file-type']
 	const s3Parameters = {
@@ -39,7 +39,5 @@ app.get('/image-upload-request', (request, response) => {
 		response.end()
 	})
 })
-
-
 
 module.exports = router

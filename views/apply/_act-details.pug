@@ -1,0 +1,32 @@
+.box-block
+	h3.mb-4 Act Details
+	.form-group
+		label.col-form-label(for="act-name") Act Name
+		input#act-name.form-control(
+			type="text" 
+			placeholder="Tyler Lane and the Giggle Gang" 
+			required 
+			autofocus
+		)
+	.form-group
+		label.col-form-label(for="show-type") Show Type
+		select#show-type.form-control
+			option Improv
+			option Sketch
+			option Stand-Up
+			option Variety
+			option Podcast
+	.form-group
+		label.col-form-label(for="informal-description") Describe Your Act to Us
+		small.form-text.text-muted This is meant to persuade reviewers and won't be visible to the public. What makes your act special?
+		textarea#informal-description.form-control(type="text")
+	.form-group
+		label.col-form-label(for="public-description") Describe Your Act to the Public
+		small.form-text.text-muted Accepted acts will have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." 
+			a(tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Miller & Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings." style="cursor:pointer") See an example
+			| .
+		textarea#public-description.form-control(type="text")
+	.form-group
+		label.col-form-label(for="accolades") Previous Festival Apperances, Awards, etc.
+		small.form-text.text-muted List any previous festival appearances, awards you've won, and any additional press materials (quotes, links to reviews, etc)
+		textarea#accolades.form-control(type="text")
