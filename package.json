@@ -1,14 +1,19 @@
 {
   "name": "oobleck",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Tyler Lane",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/oobfest/oobleck.git"
+  },
   "dependencies": {
     "aws-sdk": "^2.185.0",
     "body-parser": "^1.18.2",
