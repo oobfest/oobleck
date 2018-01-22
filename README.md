@@ -3,7 +3,9 @@ Todo: build entire app
 
 ## How to Run
 Download a copy with `clone https://github.com/oobfest/oobleck.git`
+
 Install dependencies with `npm install`
+
 Run with `npm start`
 
 ### Note on Environment Configuration Variables
