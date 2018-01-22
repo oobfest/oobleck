@@ -1,0 +1,46 @@
+extends _layout
+block content
+	.row
+		.col-lg-6.mx-auto.pb-5
+			.box
+				form(action="/upload" method="post" enctype="multipart/form-data")
+					.box-head.box-head-accent-oob
+					.box-block.box-bt
+						h3 Upload some Filezz
+						input#file-input(type="file")
+	script.
+		// Indebted to https://devcenter.heroku.com/articles/s3-upload-node
+		// Todo: security!!11
+
+		$("#file-input").on('change', () => {
+			initUpload()
+		})
+
+		function initUpload() {
+			const file = $("#file-input").prop('files')[0]
+			getSignedRequest(file);
+		}
+
+		function getSignedRequest(file) {
+			const xhr = new XMLHttpRequest()
+			xhr.open('GET', getRequestUrl(file.name, file.type))
+			xhr.onreadystatechange = () => {
+				if(xhr.readyState === 4) {
+					if(xhr.status === 200) {
+						const response = JSON.parse(xhr.responseText)
+						uploadFile(file, response.signedRequest, response.url)
+					}
+				}
+			}
+			xhr.send()
+		}
+
+		function getRequestUrl(fileName, fileType) {
+			return "/uploady?file-name=" + encodeURIComponent(fileName) + "&file-type=" + encodeURIComponent(fileType)
+		}
+
+		function uploadFile(file, signedRequest, url) {
+			const xhr = new XMLHttpRequest()
+			xhr.open('PUT', signedRequest)
+			xhr.send(file)
+		}
