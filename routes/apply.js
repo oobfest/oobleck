@@ -5,6 +5,11 @@ router.get('/', (request, response) => {
 	response.render('apply/apply')
 })
 
+router.post('/', (request, response) => {
+	console.log(request.body)
+	response.send("Yay")
+})
+
 // This kinda fucks shit up
 router.get('/:id/:guid', (request, response) => {
 	response.send(request.params)

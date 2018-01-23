@@ -26,3 +26,6 @@ body {
 .popover-body {
 	font-style: italic;
 }
+
+a 		{ color: #2284fe; }
+a:hover { color: #016ff9; }

@@ -1,0 +1,14 @@
+.dash-app
+	header.dash-toolbar
+		a.dash-nav-toggler
+			span.dash-nav-toggler-icon
+
+		.dropdown.dash-toolbar-dropdown
+			a.dropdown-toggle(href="#" data-toggle="dropdown")
+				span.d-none.d-md-inline-block Username
+			.dropdown-menu.dropdown-menu-right
+				a.dropdown-item(href="#") Profile
+				a.dropdown-item(href="#") Logout
+
+	main
+		block content
