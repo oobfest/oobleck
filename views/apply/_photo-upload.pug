@@ -4,16 +4,16 @@
 	p If you do not have the perfect photo ready yet, don't worry! You'll be able to update or submit one later. 
 	.image-upload
 		.custom-file
-			input#submit-image.custom-file-input(type="file")
-			label.custom-file-label(for="image-upload") Upload file...
+			input#image-input.custom-file-input(type="file")
+			label.custom-file-label(for="image-input") Upload file...
 	.image-preview(style="display:none")
 		h4.mt-4 Image Preview
 		.box-banner.mt-2.mb-2
-			img.box-banner-image(src="https://s3.us-east-2.amazonaws.com/oobfest-assets/all-star-maestro.jpg")
+			img.box-banner-image(src="https://s3.us-east-2.amazonaws.com/oobfest-assets/all-star-maestro.jpg" alt="All-Star Maestro")
 		.text-right
 			button#delete-image.btn.btn-danger(type="button") Delete
 script.
-	$("#submit-image").on('change', ()=> {
+	$("#image-input").on('change', ()=> {
 		$(".image-upload").hide()
 		$(".image-preview").show()
 	})
