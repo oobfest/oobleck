@@ -6,18 +6,9 @@
 		.custom-file
 			input#image-input.custom-file-input(type="file")
 			label.custom-file-label(for="image-input") Upload file...
-	.image-preview(style="display:none")
+	.image-preview
 		h4.mt-4 Image Preview
 		.box-banner.mt-2.mb-2
 			img.box-banner-image(src="https://s3.us-east-2.amazonaws.com/oobfest-assets/all-star-maestro.jpg" alt="All-Star Maestro")
 		.text-right
 			button#delete-image.btn.btn-danger(type="button") Delete
-script.
-	$("#image-input").on('change', ()=> {
-		$(".image-upload").hide()
-		$(".image-preview").show()
-	})
-	$("#delete-image").click(()=> {
-		$(".image-upload").show()
-		$(".image-preview").hide()
-	})

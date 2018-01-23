@@ -1,16 +1,32 @@
 .box-block.box-bt
 	h3 Social Media
 	p Accepted acts will have their social media links listed on the festival website.
+	#social-media
 	.form-group
-		.input-group
-			.input-group-prepend
-				select.form-control(name="social-media-type[]")
-					option Twitter
-					option Facebook
-					option YouTube
-					option Instagram
-					option Website
-					option Other
-			input.form-control(type="text" placeholder="URL" name="social-media-url[]")
-	.form-group
-		button.btn.btn-secondary(type="button") Add Link
+		button#add-social-media-button.btn.btn-secondary(type="button") Add Link
+
+	script#social-media-template(type="text/x-template")
+		.social-media-item
+			.form-group
+				.input-group
+					.input-group-prepend
+						select.form-control(name="social-media-type[]")
+							option Twitter
+							option Facebook
+							option YouTube
+							option Instagram
+							option Website
+							option Other
+					input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280")
+			.form-group.text-right
+				button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
+			hr
+	
+	script.
+		var socialMediaTemplate = $("#social-media-template").html()
+		$("#add-social-media-button").click(function() {
+			$("#social-media").append(socialMediaTemplate)
+		})
+		$("#social-media").on('click', '.remove-social-media-button', function() {
+			$(this).closest(".social-media-item").remove()
+		})

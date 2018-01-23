@@ -2,12 +2,53 @@
 	h3 Location
 	.form-group
 		include _location/_countries
+	#state-item
+	#region-item
 	.form-group
-		include _location/_states
-	.form-group
-		label.col-form-label(for="city") City
-		input#city.form-control(type="text" name="city" required)
+		label.col-form-label.required-field(for="city") City
+		input#city.form-control(type="text" name="city" required maxlength="280")
 	.form-group
 		label.col-form-label(for="home-theater") What theater is your home base?
 		small.form-text.text-muted Leave blank if not applicable.
-		input#home-theater.form-control(type="text" name="home-theater")
+		input#home-theater.form-control(type="text" name="home-theater" maxlength="280")
+
+	include _location/_states
+
+	script#region-template(type="text/x-template")
+		.form-group
+			label.col-form-label(for="state") State / Province / Region
+			input#state.form-control(type="text" name="state" required maxlength="280")
+
+	script.
+
+		// Get template for state dropdown
+		var stateTemplate = $("#state-template").html()
+
+		// Get template for region text input
+		var regionTemplate = $("#region-template").html()
+
+		// Whenever the "Country" dropdown changes
+		$("#country").on('change', function() {
+
+			// Get what country was selected
+			var selectedCountry = $("#country").val()
+
+			// If the selected country was the US
+			if(selectedCountry === "US") {
+				// Remove the region input
+				$("#region-item").empty()
+
+				// Show the state dropdown
+				$("#state-item").html(stateTemplate)
+			}
+			// Otherwise
+			else {
+				// Remove the state dropdown
+				$("#state-item").empty()
+				// Insert the region dropdown
+				$("#region-item").html(regionTemplate)
+			}
+		})
+
+		// Initialize the correct field by what the country dropdown is set to
+		$("#country").change()

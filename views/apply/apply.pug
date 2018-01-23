@@ -11,9 +11,11 @@ block content
 	.container
 		.row
 			.col-lg-8.mx-auto.pb-5
-				.box
+				.box#app
 					form(action="/apply" method="POST")
 						.box-head.box-head-accent-oob
+						if errors 
+							include _errors
 						include _act-details
 						include _location
 						include _personnel
@@ -22,15 +24,6 @@ block content
 						include _video
 						include _social-media
 						include _availability
+						include _flight-agreement
 						include _application-fee
-						
-						// Submit
-						.box-block.box-bt
-							.row
-								.col-md-8
-									span.text-muted By submitting, you agree to our 
-										a(href="#" data-toggle="modal" data-target="#legal-disclaimer-modal") legal disclaimer
-										| .
-									include _legal-disclaimer-modal
-								.col-md-4
-									button.btn.btn-md.btn-primary(type="submit") Clicky-click
+						include _submit

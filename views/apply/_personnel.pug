@@ -3,16 +3,16 @@
 	h4 Primary Contact
 	p In case we need to get a hold of you, who is the best person to contact?
 	.form-group.row
-		label.col-form-label.col-2(for="primary-contact-name") Name
-		input#primary-contact-name.form-control.col-10(type="text" name="primary-contact-name" required)
+		label.col-form-label.col-2.required-field(for="primary-contact-name") Name
+		input#primary-contact-name.form-control.col-10(type="text" name="primary-contact-name" required maxlength="280")
 	.form-group.row
-		label.col-form-label.col-2(for="primary-contact-email") Email
-		input#primary-contact-email.form-control.col-10(type="email" name="primary-contact-email" required)
+		label.col-form-label.col-2.required-field(for="primary-contact-email") Email
+		input#primary-contact-email.form-control.col-10(type="email" name="primary-contact-email" required maxlength="280")
 	.form-group.row
-		label.col-form-label.col-2(for="primary-contact-phone") Phone
-		input#primary-contact-phone.form-control.col-10(type="text" name="primary-contact-phone" required)
+		label.col-form-label.col-2.required-field(for="primary-contact-phone") Phone
+		input#primary-contact-phone.form-control.col-10(type="text" name="primary-contact-phone" required maxlength="280")
 	.form-group.row
-		label.col-form-label.col-2(for="primary-contact-role") Role
+		label.col-form-label.col-2.required-field(for="primary-contact-role") Role
 		select#primary-contact-role.form-control.col-10(name="primary-contact-role")
 			option Performer
 			option Crew
@@ -20,22 +20,35 @@
 			option Other
 	h4 Additional Members
 	p Please list everyone that will be attending the festival.
-	.additional-contacts(style="display:none")
-		.form-group.row
-			label.col-form-label.col-2 Name
-			input.form-control.col-10(type="text" name="personnel-name[]")
-		.form-group.row
-			label.col-form-label.col-2 Email
-			input.form-control.col-10(type="email" name="personnel-email[]")
-		.form-group.row
-			label.col-form-label.col-2 Role
-			select.form-control.col-10(name="personnel-role[]")
-				option Performer
-				option Tech
-				option Director
-				option Other
-		.form-group.text-right
-			button.btn.btn-danger(type="button" onclick="$('.additional-contacts').hide()") Remove Contact
-	hr
+	#additional-members
 	.form-group
-		button.btn.btn-secondary(type="button" onclick="$('.additional-contacts').show()") Add Contact
+		button#add-contact-button.btn.btn-secondary(type="button") Add Contact
+
+	script#additional-contact-template(type="text/x-template")
+		.personnel-item
+			.form-group.row
+				label.col-form-label.col-2 Name
+				input.form-control.col-10(type="text" name="personnel-name[]" maxlength="280")
+			.form-group.row
+				label.col-form-label.col-2 Email
+				input.form-control.col-10(type="email" name="personnel-email[]" maxlength="280")
+			.form-group.row
+				label.col-form-label.col-2 Role
+				select.form-control.col-10(name="personnel-role[]")
+					option Performer
+					option Tech
+					option Director
+					option Other
+			.form-group.text-right
+				button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
+			hr
+	
+	script.
+		var additionalContactTemplate = $("#additional-contact-template").html()
+		$("#add-contact-button").click(function() {
+			$("#additional-members").append(additionalContactTemplate)
+		})
+		$("#additional-members").on('click', '.remove-contact-button', function() {
+			$(this).closest(".personnel-item").remove()
+		})
+
