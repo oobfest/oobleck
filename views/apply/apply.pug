@@ -1,28 +1,36 @@
-extends ../_layout-apply
+extends ../_layout
 block content
-	.row
-		.col-lg-8.mx-auto.pb-5
-			.box
-				form(action="/apply" method="POST")
-					.box-head.box-head-accent-oob
-					include _act-details
-					include _location
-					include _personnel
-					include _performance-needs
-					include _photo-upload
-					include _video
-					include _social-media
-					include _availability
-					include _application-fee
-					
-					// Submit
-					.box-block.box-bt
-						.row
-							.col-md-8
-								span.text-muted By submitting, you agree to our 
-									a(href="#" data-toggle="modal" data-target="#legal-disclaimer-modal") legal disclaimer
-									| .
-								include _legal-disclaimer-modal
-							.col-md-4
-								button.btn.btn-md.btn-primary(type="submit") Clicky-click
-	
+	style.
+		.bg-accent-oob {
+			background: url('../img/audience-dark.jpg') no-repeat bottom center fixed; 
+			background-size: cover;
+		}
+	.p-3.text-center
+		img.submission-logo(src="img/logo.png" alt="Out of Bounds Comedy Festival")
+		h1.p-3.text-light.font-weight-bold 2018 Application
+	.container
+		.row
+			.col-lg-8.mx-auto.pb-5
+				.box
+					form(action="/apply" method="POST")
+						.box-head.box-head-accent-oob
+						include _act-details
+						include _location
+						include _personnel
+						include _performance-needs
+						include _photo-upload
+						include _video
+						include _social-media
+						include _availability
+						include _application-fee
+						
+						// Submit
+						.box-block.box-bt
+							.row
+								.col-md-8
+									span.text-muted By submitting, you agree to our 
+										a(href="#" data-toggle="modal" data-target="#legal-disclaimer-modal") legal disclaimer
+										| .
+									include _legal-disclaimer-modal
+								.col-md-4
+									button.btn.btn-md.btn-primary(type="submit") Clicky-click

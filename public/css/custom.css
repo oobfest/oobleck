@@ -9,10 +9,9 @@ body {
 	max-width: 547px;
 	padding-top: 2em;
 }
+
 .bg-accent-oob {
-	background: url('../img/audience-dark.jpg') no-repeat bottom center fixed; 
-	background-size: cover;
-	background-color: #1A1A1A;
+	background-color: #242524;
 }
 
 .box-head-accent-oob {
