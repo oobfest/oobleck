@@ -3,11 +3,11 @@ const router = express.Router()
 
 // GET home page
 router.get('/', (request, response) => {
-	response.render( 'login', { navigation: false })
+	response.render( 'login' )
 })
 
 router.get('/hax0rz', (request, response) => {
-	response.render('index', { navigation: true })
+	response.render('index', { username: 'Carlton' })
 })
 
 module.exports = router

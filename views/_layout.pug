@@ -8,10 +8,13 @@ html(lang="en")
 		title OoBleck
 		script(src="js/jquery.slim.min.js")
 	body.bg-accent-oob
-		if navigation
+		if username
 			.dash.dash-fixed
 				include _navigation
-				include _app
+				.dash-app
+					include _toolbar
+					main
+						block content
 		else
 			block content
 
