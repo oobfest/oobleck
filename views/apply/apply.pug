@@ -3,13 +3,14 @@ block content
 	.row
 		.col-lg-8.mx-auto.pb-5
 			.box
-				form
+				form(action="/meow" method="POST")
 					.box-head.box-head-accent-oob
 					include _act-details
 					include _location
 					include _personnel
 					include _performance-needs
 					include _photo-upload
+					include _video
 					include _social-media
 					include _availability
 					include _application-fee
@@ -23,5 +24,5 @@ block content
 									| .
 								include _legal-disclaimer-modal
 							.col-md-4
-								button.btn.btn-md.btn-primary(type="button") Clicky-click
+								button.btn.btn-md.btn-primary(type="submit") Clicky-click
 	
