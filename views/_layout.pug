@@ -10,9 +10,9 @@ html(lang="en")
 	body.bg-accent-oob
 		if username
 			.dash.dash-fixed
-				include _navigation
+				include _layout/_navigation
 				.dash-app
-					include _toolbar
+					include _layout/_toolbar
 					main
 						block content
 		else

@@ -1,0 +1,29 @@
+extends _layout
+block content
+	style.
+		.bg-accent-oob {
+			background: url('../img/audience-dark.jpg') no-repeat bottom center fixed; 
+			background-size: cover;
+		}
+	.p-3.text-center
+		img.submission-logo(src="img/logo.png" alt="Out of Bounds Comedy Festival")
+		h1.p-3.text-light.font-weight-bold 2018 Application
+	.container
+		.row
+			.col-lg-8.mx-auto.pb-5
+				.box#app
+					form(action="/apply" method="POST")
+						.box-head.box-head-accent-oob
+						if errors 
+							include submission/errors
+						include submission/act-details
+						include submission/location
+						include submission/personnel
+						include submission/performance-needs
+						include submission/photo-upload
+						include submission/video
+						include submission/social-media
+						include submission/availability
+						include submission/flight-agreement
+						include submission/application-fee
+						include submission/submit

@@ -13,21 +13,14 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-// Setup Express Validator 
-//
-
 // Setup Pug
 app.set('view engine', 'pug')
 
 // Setup routes
-const routes = require('./routes/index')
-const kittens = require('./routes/kittens')
-const vue = require('./routes/vue')
-const apply = require('./routes/apply')
-app.use('/', routes)
-app.use('/kittens', kittens)
-app.use('/vue', vue)
-app.use('/apply', apply)
+const indexRouter = require('./routes/index')
+const submissionRoutes = require('./submission/submission.routes')
+app.use('/', indexRouter)
+app.use('/apply', submissionRoutes)
 
 // Fleeting, temporary
 app.get('/upload', (request, response) => {

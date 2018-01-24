@@ -1,7 +1,7 @@
 .box-block.box-bt
 	h3 Location
 	.form-group
-		include _location/_countries
+		include location/countries
 	#state-item
 	#region-item
 	.form-group
@@ -12,7 +12,7 @@
 		small.form-text.text-muted Leave blank if not applicable.
 		input#home-theater.form-control(type="text" name="home-theater" maxlength="280")
 
-	include _location/_states
+	include location/states
 
 	script#region-template(type="text/x-template")
 		.form-group
