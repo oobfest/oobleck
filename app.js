@@ -16,11 +16,17 @@ app.use(bodyParser.json())
 // Setup Pug
 app.set('view engine', 'pug')
 
+// Setup logging
+const logging = require('./utilities/logging')
+app.use(logging)
+
 // Setup routes
 const indexRouter = require('./routes/index')
-const submissionRoutes = require('./submission/submission.routes')
+const applyRoutes = require('./submissions/apply.routes')
+const submissionRoutes = require('./submissions/submission.routes')
 app.use('/', indexRouter)
-app.use('/apply', submissionRoutes)
+app.use('/apply', applyRoutes)
+app.use('/submissions', submissionRoutes)
 
 // Fleeting, temporary
 app.get('/upload', (request, response) => {

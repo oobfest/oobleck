@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 
-// GET Vue page
+// GET /submissions
 router.get('/', (request, response) => {
-	response.render('vue')
+	response.render('submissions', {username: 'ted'})
 })
+
 
 module.exports = router

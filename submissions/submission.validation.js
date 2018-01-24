@@ -5,14 +5,24 @@ let validationSchema = [
 		.exists().withMessage("Act name must exist")
 		.not().isEmpty().withMessage("Act name cannot be empty")
 		.isLength({max: 280}).withMessage("Act name is too long"),
+	check('accolades')
+		.isLength({max: 1400}).withMessage("Accolades are too long"),
+	check('availability.*')
+		.isBoolean().withMessage("Availability must be booleans"),
 	check('city')
 		.exists().withMessage("City missing")
 		.not().isEmpty().withMessage("City cannot be empty")
 		.isLength({max: 280}).withMessage("City is too long"),
+	check('conflicts')
+		.isLength({max:1400}).withMessage("Conflicts are too long"),
+	check('country')
+		.isLength({max: 280}).withMessage("Country is too long"),
 	check('flight-agreement')
 		.exists().withMessage("Flight agreement missing")
 		.not().isEmpty().withMessage("Flight agreement cannot be empty")
 		.isLength({max: 280}).withMessage("Flight agreement is too long"),
+	check('home-theater')
+		.isLength({max: 280}).withMessage("Home theater is too long"),
 	check('informal-description')
 		.exists().withMessage("Missing act description")
 		.not().isEmpty().withMessage("Act description cannot be empty")
@@ -49,11 +59,19 @@ let validationSchema = [
 	check('show-type')
 		.exists().withMessage("Show type must exist")
 		.not().isEmpty().withMessage("Show type cannot be empty")
-		.isLength({max:140}).withMessage("Show type is too long"),
+		.isLength({max:280}).withMessage("Show type is too long"),
+	check('social-media-type.*')
+		.isLength({max:280}).withMessage("Social media type is too long"),
+	check('social-media-url.*')
+		.isURL().withMessage("Social Media URL is not a valid URL"),
+	check('special-needs')
+		.isLength({max:1400}).withMessage("Special needs is too long"),
 	check('video-url')
 		.exists().withMessage("Video URL must exist")
 		.not().isEmpty().withMessage("Video URL cannot be empty")
-		.isURL().withMessage("Video URL must be a valid URL")
+		.isURL().withMessage("Video URL must be a valid URL"),
+	check('video-info')
+		.isLength({max:1400}).withMessage("Video information is too long")
 ]
 
 module.exports = validationSchema
