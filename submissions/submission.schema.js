@@ -1,6 +1,6 @@
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-var submissionSchema = mongoose.Schema({
+let submissionSchema = mongoose.Schema({
 
 	// Act Details
 	actName: String,
@@ -45,6 +45,7 @@ var submissionSchema = mongoose.Schema({
 	payedFee: Boolean
 
 })
-var Submission = mongoose.model('Submission', submissionSchema)
+
+let Submission = mongoose.model('Submission', submissionSchema)
 
 module.exports = Submission
