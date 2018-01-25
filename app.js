@@ -8,14 +8,21 @@ const express = require('express')
 const app = express()
 app.use(express.static('public/'))	// Static file location
 
+// Setup Cookie Parser 🍪😋
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
 // Setup Body Parser
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-// Setup Cookie Parser 🍪😋
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
+// Setup Express Session
+app.use(require('express-session')({
+	secret: 'Donnie Darko is an overrated movie',
+	resave: false,
+	saveUninitialized: false
+}))
 
 // Setup Pug
 app.set('view engine', 'pug')
@@ -24,13 +31,26 @@ app.set('view engine', 'pug')
 const logging = require('./utilities/logging')
 app.use(logging)
 
+// Setup Passport
+const passport = require('passport')
+let localStrategy = require('passport-local')
+app.use(passport.initialize())
+app.use(passport.session())
+
+let user = require('./users/user.schema')
+passport.use(new localStrategy(user.authenticate()))
+passport.serializeUser(user.serializeUser())
+passport.deserializeUser(user.deserializeUser())
+
 // Setup routes
 const indexRouter = require('./routes/index')
 const applyRoutes = require('./submissions/apply.routes')
 const submissionRoutes = require('./submissions/submission.routes')
+const userRoutes = require('./users/user.routes')
 app.use('/', indexRouter)
 app.use('/apply', applyRoutes)
 app.use('/submissions', submissionRoutes)
+app.use('/users', userRoutes)
 
 // Error handling route
 app.use((request, response, next)=> {
@@ -46,30 +66,6 @@ app.use((error, request, response, next)=> {
 	response.render('error', { error: error })
 })
 
-// Fleeting, temporary
-app.get('/upload', (request, response) => {
-	response.render('upload')
-})
-
-app.post('/upload', (request, response) => {
-	response.send("Meow")
-})
-
-// Setup Passport
-const passport = require('passport')
-let localStrategy = require('passport-local')
-app.use(require('express-session')({
-	secret: 'Donnie Darko is an overrated movie',
-	resave: false,
-	saveUninitialized: false
-}))
-app.use(passport.initialize())
-app.use(passport.session())
-
-let user = require('./users/user.schema')
-passport.use(new localStrategy(user.authenticate()))
-passport.serializeUser(user.serializeUser())
-passport.deserializeUser(user.deserializeUser())
 
 // Setup Database
 const db = require('./db/setup')
