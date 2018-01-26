@@ -7,6 +7,8 @@ html(lang="en")
 		link(rel="stylesheet" href="css/custom.css")
 		title OoBleck
 		script(src="js/jquery.min.js")
+		if recaptcha 
+			script(src='https://www.google.com/recaptcha/api.js')
 	body.bg-accent-oob
 		if username
 			.dash.dash-fixed

@@ -2,33 +2,35 @@ const express = require('express')
 const router = express.Router()
 const { validationResult } = require('express-validator/check')
 const submissionValidation = require('./submission.validation')
+const checkRecaptcha = require('../utilities/check-recaptcha')
 
 // GET /apply
 router.get('/', (request, response) => {
-	response.render('apply', { submission: {}, socialMedia: [], personnel: [] })
+	response.render('apply', { 
+		recaptcha: true, 
+		submission: {available: []}, 
+		socialMedia: [], 
+		personnel: [] 
+	})
 })
 
 // POST /apply
-router.post('/', submissionValidation, (request, response) => {
-	console.log("Availability", request.body['available'])
+router.post('/', submissionValidation, checkRecaptcha, (request, response) => {
 
 	let errors = validationResult(request)
-	if (errors.isEmpty())
-		response.send("YAY")
-	else
-		response.render('apply', {
-			errors: errors.array(),
-			socialMedia: normalizeSocialMedia(
-				request.body['social-media-type'],
-				request.body['social-media-url']
-			),
-			personnel: normalizePersonnel(
-				request.body['personnel-name'], 
-				request.body['personnel-email'], 
-				request.body['personnel-role']
-			),
-			submission: request.body
-		})
+	if (errors.isEmpty()) { response.send("YAY") }
+
+	let socialMedia = normalizeSocialMedia(request.body['social-media-type'], request.body['social-media-url'])
+	let personnel = normalizePersonnel(request.body['personnel-name'], request.body['personnel-email'], request.body['personnel-role'])
+	if (!request.body['available']) request.body['available'] = []
+
+	response.render('apply', {
+		recaptcha: true,
+		errors: errors.array(),
+		socialMedia: socialMedia,
+		personnel: personnel,
+		submission: request.body
+	})
 })
 
 function normalizeSocialMedia(socialMediaTypes, socialMediaUrls) {
