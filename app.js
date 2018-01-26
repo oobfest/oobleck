@@ -47,10 +47,12 @@ const indexRouter = require('./routes/index')
 const applyRoutes = require('./submissions/apply.routes')
 const submissionRoutes = require('./submissions/submission.routes')
 const userRoutes = require('./users/user.routes')
+const imgurRoutes = require('./imgur/imgur.routes')
 app.use('/', indexRouter)
 app.use('/apply', applyRoutes)
 app.use('/submissions', submissionRoutes)
 app.use('/users', userRoutes)
+app.use('/imgur', imgurRoutes)
 
 // Error handling route
 app.use((request, response, next)=> {
@@ -66,11 +68,9 @@ app.use((error, request, response, next)=> {
 	response.render('error', { error: error })
 })
 
-
 // Setup Database
 const db = require('./db/setup')
 
 // Listen!
 const PORT = process.env.PORT || 3000	// Get port dynamically because of Heroku
 app.listen(PORT, () => console.log('Example app listening on port', PORT))
-

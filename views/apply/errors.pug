@@ -1,5 +1,6 @@
 .box-block
-	h3.mb-4 Errors
-	ul
-		for error in errors
-			li #{error.value}, #{error.msg}
+	.alert.alert-danger
+		h4.alert-heading Errors
+		ul
+			for error in errors
+				li=error.msg

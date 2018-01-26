@@ -1,6 +1,6 @@
 script#state-template(type="text/x-template")
 	label.col-form-label(for="state") State
-	select#state.form-control(name="state")
+	select#state.form-control(name="state" value=submission['state'])
 		option(value='TX') Texas
 		option(value='--') --
 		option(value='AL') Alabama

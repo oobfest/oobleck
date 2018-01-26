@@ -19,7 +19,7 @@ let validationSchema = [
 		.isLength({max: 280}).withMessage("Country is too long"),
 	check('flight-agreement')
 		.exists().withMessage("Flight agreement missing")
-		.not().isEmpty().withMessage("Flight agreement cannot be empty")
+		.not().isEmpty().withMessage("Flight agreement cannot be left blank")
 		.isLength({max: 280}).withMessage("Flight agreement is too long"),
 	check('home-theater')
 		.isLength({max: 280}).withMessage("Home theater is too long"),

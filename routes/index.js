@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
-const checkAuthentication = require('../utilities/checkAuthentication')
+const checkAuthentication = require('../utilities/check-authentication')
 
 // GET /
 // Home page / log in page

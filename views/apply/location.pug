@@ -6,18 +6,18 @@
 	#region-item
 	.form-group
 		label.col-form-label.required-field(for="city") City
-		input#city.form-control(type="text" name="city" required maxlength="280")
+		input#city.form-control(type="text" name="city" required maxlength="280" value=submission['city'])
 	.form-group
 		label.col-form-label(for="home-theater") What theater is your home base?
 		small.form-text.text-muted Leave blank if not applicable.
-		input#home-theater.form-control(type="text" name="home-theater" maxlength="280")
+		input#home-theater.form-control(type="text" name="home-theater" maxlength="280" value=submission['home-theater'])
 
 	include location/states
 
 	script#region-template(type="text/x-template")
 		.form-group
 			label.col-form-label(for="state") State / Province / Region
-			input#state.form-control(type="text" name="state" required maxlength="280")
+			input#state.form-control(type="text" name="state" required maxlength="280" value=submission['state'])
 
 	script.
 

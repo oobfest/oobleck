@@ -11,19 +11,25 @@ block content
 	.container
 		.row
 			.col-lg-8.mx-auto.pb-5
-				.box#app
-					form(action="/apply" method="POST")
-						.box-head.box-head-accent-oob
-						if errors 
-							include apply/errors
-						include apply/act-details
-						include apply/location
-						include apply/personnel
-						include apply/performance-needs
-						include apply/photo-upload
-						include apply/video
-						include apply/social-media
-						include apply/availability
-						include apply/flight-agreement
-						include apply/application-fee
-						include apply/submit
+				.box
+					if confirmation
+						form(action="/gloop" method="POST")
+							.box-head.box-head-accent-oob
+							include apply/photo-upload
+							include apply/application-fee
+							include apply/submit
+
+					else 
+						form(action="/apply" method="POST")
+							.box-head.box-head-accent-oob
+							if errors 
+								include apply/errors
+							include apply/act-details
+							include apply/location
+							include apply/personnel
+							include apply/performance-needs
+							include apply/video
+							include apply/social-media
+							include apply/availability
+							include apply/flight-agreement
+							include apply/next

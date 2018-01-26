@@ -31,4 +31,4 @@
 			label.custom-control-label(for="available-monday" name="available[]") Monday
 	p To prevent scheduling conflicts, what other acts are any of your members submitting for?
 	.form-group
-		textarea.form-control(maxlength="1500" name="conflicts")
+		textarea.form-control(maxlength="1500" name="conflicts")= submission['conflicts']

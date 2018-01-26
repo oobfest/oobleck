@@ -1,0 +1,85 @@
+extends _layout
+block content
+	.p-5.text-center
+		//a.charming-logo.text-light(href="#") OoBleck
+	.container
+		.row
+			.col-6.mx-auto.pb-5
+				.box
+					.box-head.box-head-accent-oob
+					.box-block.box-bt
+						h3 Imgur Upload
+						input#file-input(type="file" accept="image/*")
+						p.message
+						.progress
+							.progress-bar.bg-primary
+					.box-banner
+						img#image-preview.box-banner-image(alt="Image preview")
+					.box-block.text-right.delete-image-box
+						a#delete-image.btn.btn-danger(href="#" target="_blank" onclick="resetView()") Delete image
+						
+	script.
+		resetView()
+		
+		function resetView() {
+			$("#image-preview, .progress, .delete-image-box").hide()
+			$(".message").html("")
+			$("#file-input").show()
+		}
+
+
+		$("#file-input").on('change', () => {
+			var image = $("#file-input").prop('files')[0]
+			if(image.size > (1024 * 1000 * 10)) {
+				alert("Image cannot be larger than 10MB")
+				return;
+			}
+			else {
+				$(".progress").show()
+				$("#file-input").hide()
+				$(".message").html("Uploading...")
+				formData = new FormData()
+				formData.append('image', image)
+
+				var request = {
+				    url: 'https://imgur-apiv3.p.mashape.com/3/image',
+					type: 'POST',
+					mimeType: 'multipart/form-data',
+					crossDomain: true,
+					processData: false,
+					contentType: false,
+					dataType: 'json',
+					headers: {
+						'X-mashape-Key': '',
+				        'Authorization': 'Client-ID xxx'
+					},
+					data: formData,
+					xhr: function() {
+						var xhr = new window.XMLHttpRequest()
+						xhr.upload.addEventListener("progress", function(evt) {
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total
+								percentComplete = parseInt(percentComplete * 100)
+								$(".progress-bar").width(percentComplete + '%')
+								if (percentComplete === 100) $(".message").html("Processing...")
+							}
+						}, false)
+						return xhr
+					}
+				}
+
+				$.ajax(request)
+					.done(function(response){
+						let imageUrl = response.data.link
+						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
+						$(".message").html("Complete!")
+						$("#image-preview").attr('src', imageUrl)
+						$("#delete-image").attr('href', deleteImageUrl)
+						$(".delete-image-box, #image-preview").show()
+					})
+					.fail(function(response){ 
+						console.log("Upload failed", response)
+						alert(response.data.error)
+					})
+			}
+		})

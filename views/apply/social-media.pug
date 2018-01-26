@@ -2,6 +2,22 @@
 	h3 Social Media
 	p Accepted acts will have their social media links listed on the festival website.
 	#social-media
+		for sm in socialMedia
+			.social-media-item
+				.form-group
+					.input-group
+						.input-group-prepend
+							select.form-control(name="social-media-type[]" selected=sm.type)
+								option Twitter
+								option Facebook
+								option YouTube
+								option Instagram
+								option Website
+								option Other
+						input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280" value=sm.url)
+				.form-group.text-right
+					button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
+				hr
 	.form-group
 		button#add-social-media-button.btn.btn-secondary(type="button") Add Link
 
