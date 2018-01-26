@@ -1,5 +1,5 @@
 const morgan = require('morgan')
-const chalk = require('chalk');
+const chalk = require('chalk')
 
 module.exports = morgan(function (tokens, request, response) {
 	let statusCode = tokens.status(request, response)

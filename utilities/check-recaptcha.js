@@ -9,7 +9,7 @@ function checkRecaptcha(request, response, next) {
 		},
 		function(error, httpResponse, body) {
 			if(body.success) next()
-			else response.render('error', {error: {status: '', message: "Recaptcha failed"}})
+			else response.render('error', {error: new Error("Recaptcha failed")})
 		})
 }
 
