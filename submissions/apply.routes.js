@@ -10,6 +10,7 @@ router.get('/', (request, response) => {
 
 // POST /apply
 router.post('/', submissionValidation, (request, response) => {
+	console.log("Availability", request.body['available'])
 
 	let errors = validationResult(request)
 	if (errors.isEmpty())
@@ -17,7 +18,15 @@ router.post('/', submissionValidation, (request, response) => {
 	else
 		response.render('apply', {
 			errors: errors.array(),
-			socialMedia: normalizeSocialMedia(request.body['social-media-type'], request.body['social-media-url']),
+			socialMedia: normalizeSocialMedia(
+				request.body['social-media-type'],
+				request.body['social-media-url']
+			),
+			personnel: normalizePersonnel(
+				request.body['personnel-name'], 
+				request.body['personnel-email'], 
+				request.body['personnel-role']
+			),
 			submission: request.body
 		})
 })
@@ -31,8 +40,22 @@ function normalizeSocialMedia(socialMediaTypes, socialMediaUrls) {
 				url: socialMediaUrls[i]
 			})
 		}
-		console.log(socialMedia)
 		return socialMedia
+	}
+	return []
+}
+
+function normalizePersonnel(personnelNames, personnelEmails, personnelRoles) {
+	if(personnelNames) {
+		let personnel = []
+		for(let i=0; i<personnelNames.length; i++) {
+			personnel.push({
+				name: personnelNames[i],
+				email: personnelEmails[i],
+				role: personnelRoles[i]
+			})
+		}
+		return personnel
 	}
 	return []
 }

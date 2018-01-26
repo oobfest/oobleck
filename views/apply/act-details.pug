@@ -4,14 +4,14 @@
 		label.col-form-label.required-field(for="act-name") Act Name
 		input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" value=submission['act-name'])
 	.form-group
-		label.col-form-label.required-field(for="show-type") Show Type
+		label.col-form-label.required-field(for="show-type") Show Type #{submission['show-type']}
 		select#show-type.form-control(name="show-type" required)
-			option Improv
-			option Sketch
-			option Stand-Up
-			option Variety
-			option Podcast
-			option Other
+			option(selected=(submission['show-type']==='Improv' 	)) Improv
+			option(selected=(submission['show-type']==='Sketch' 	)) Sketch
+			option(selected=(submission['show-type']==='Stand-Up' 	)) Stand-Up
+			option(selected=(submission['show-type']==='Variety' 	)) Variety
+			option(selected=(submission['show-type']==='Podcast' 	)) Podcast
+			option(selected=(submission['show-type']==='Other' 		)) Other
 	.form-group
 		label.col-form-label.required-field(for="informal-description") Describe Your Act to Us
 		small.form-text.text-muted This is meant to persuade reviewers and won't be visible to the public. What makes your act special?

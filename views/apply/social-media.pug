@@ -8,12 +8,12 @@
 					.input-group
 						.input-group-prepend
 							select.form-control(name="social-media-type[]" selected=sm.type)
-								option Twitter
-								option Facebook
-								option YouTube
-								option Instagram
-								option Website
-								option Other
+								option(selected=(sm.type==='Twitter'	)) Twitter
+								option(selected=(sm.type==='Facebook'	)) Facebook
+								option(selected=(sm.type==='YouTube'	)) YouTube
+								option(selected=(sm.type==='Instagram'	)) Instagram
+								option(selected=(sm.type==='Website'	)) Website
+								option(selected=(sm.type==='Other'		)) Other
 						input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280" value=sm.url)
 				.form-group.text-right
 					button.remove-social-media-button.btn.btn-danger(type="button") Remove Link

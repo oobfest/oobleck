@@ -14,13 +14,32 @@
 	.form-group.row
 		label.col-form-label.col-2.required-field(for="primary-contact-role") Role
 		select#primary-contact-role.form-control.col-10(name="primary-contact-role" selected=submission['primary-contact-phone'])
-			option Performer
-			option Crew
-			option Director
-			option Other
+			option(selected=(submission['primary-contact-role']==='Performer'	)) Performer
+			option(selected=(submission['primary-contact-role']==='Crew'		)) Crew
+			option(selected=(submission['primary-contact-role']==='Director'	)) Director
+			option(selected=(submission['primary-contact-role']==='Other'		)) Other
 	h4 Additional Members
 	p Please list everyone that will be attending the festival.
 	#additional-members
+		for contact in personnel
+			.personnel-item
+				.form-group.row
+					label.col-form-label.col-2 Name
+					input.form-control.col-10(type="text" name="personnel-name[]" maxlength="280" value=contact.name)
+				.form-group.row
+					label.col-form-label.col-2 Email
+					input.form-control.col-10(type="email" name="personnel-email[]" maxlength="280" value=contact.email)
+				.form-group.row
+					label.col-form-label.col-2 Role
+					select.form-control.col-10(name="personnel-role[]")
+						option(selected=contact.role==='Performer'	) Performer
+						option(selected=contact.role==='Tech'		) Tech
+						option(selected=contact.role==='Director'	) Director
+						option(selected=contact.role==='Other'		) Other
+				.form-group.text-right
+					button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
+				hr
+
 	.form-group
 		button#add-contact-button.btn.btn-secondary(type="button") Add Contact
 

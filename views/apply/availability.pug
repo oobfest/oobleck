@@ -3,32 +3,67 @@
 	p What days are you available to perform in the festival?
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-tuesday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-tuesday" name="available[]") Tuesday
+			input#available-tuesday.custom-control-input(
+				type="checkbox" 
+				value="tuesday" 
+				name="available[]"
+				checked=(submission['available'].includes('tuesday'))
+			)
+			label.custom-control-label(for="available-tuesday") Tuesday
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-wednesday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-wednesday" name="available[]") Wednesday
+			input#available-wednesday.custom-control-input(
+				type="checkbox" 
+				value="wednesday" 
+				name="available[]"
+				checked=(submission['available'].includes('wednesday'))
+			)
+			label.custom-control-label(for="available-wednesday") Wednesday
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-thursday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-thursday" name="available[]") Thursday
+			input#available-thursday.custom-control-input(
+				type="checkbox" 
+				value="thursday" 
+				name="available[]"
+				checked=(submission['available'].includes('thursday'))
+			)
+			label.custom-control-label(for="available-thursday") Thursday
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-friday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-friday" name="available[]") Friday
+			input#available-friday.custom-control-input(
+				type="checkbox" 
+				value="friday" 
+				name="available[]"
+				checked=(submission['available'].includes('friday'))
+			)
+			label.custom-control-label(for="available-friday") Friday
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-saturday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-saturday" name="available[]") Saturday
+			input#available-saturday.custom-control-input(
+				type="checkbox" 
+				value="saturday" 
+				name="available[]"
+				checked=(submission['available'].includes('saturday'))
+			)
+			label.custom-control-label(for="available-saturday") Saturday
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-sunday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-sunday" name="available[]") Sunday
+			input#available-sunday.custom-control-input(
+				type="checkbox" 
+				value="sunday" 
+				name="available[]"
+				checked=(submission['available'].includes('sunday'))
+			)
+			label.custom-control-label(for="available-sunday") Sunday
 	.form-group
 		.custom-control.custom-checkbox
-			input#available-monday.custom-control-input(type="checkbox")
-			label.custom-control-label(for="available-monday" name="available[]") Monday
+			input#available-monday.custom-control-input(
+				type="checkbox" 
+				value="monday" 
+				name="available[]"
+				checked=(submission['available'].includes('monday'))
+			)
+			label.custom-control-label(for="available-monday") Monday
 	p To prevent scheduling conflicts, what other acts are any of your members submitting for?
 	.form-group
 		textarea.form-control(maxlength="1500" name="conflicts")= submission['conflicts']

@@ -42,12 +42,12 @@ let validationSchema = [
 		.isMobilePhone('any').withMessage("Invalid phone number")
 		.isLength({max:1400}).withMessage("Email address too long"),
 	check('personnel-name.*')
-		.isLength({max:280}).withMessage("Personnel name is too long"),
+		.isLength({max:280}).withMessage("Cast & crew name is too long"),
 	check('personnel-email.*')
-		.not().isEmail().withMessage("Personnel email is invalid")
-		.isLength({max:280}).withMessage("Personnel email is too long"),
+		.isEmail().withMessage("Cast & crew email is invalid")
+		.isLength({max:280}).withMessage("Cast & crew email is too long"),
 	check('personnel-role.*')
-		.isLength({max:280}).withMessage("Personnel role is too long"),
+		.isLength({max:280}).withMessage("Cast & crew role is too long"),
 	check('public-description')
 		.exists().withMessage("Public description is missing")
 		.not().isEmpty().withMessage("Public description cannot be empty")

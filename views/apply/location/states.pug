@@ -1,57 +1,57 @@
 script#state-template(type="text/x-template")
 	label.col-form-label(for="state") State
-	select#state.form-control(name="state" value=submission['state'])
-		option(value='TX') Texas
-		option(value='--') --
-		option(value='AL') Alabama
-		option(value='AK') Alaska
-		option(value='AZ') Arizona
-		option(value='AR') Arkansas
-		option(value='CA') California
-		option(value='CO') Colorado
-		option(value='CT') Connecticut
-		option(value='DE') Delaware
-		option(value='FL') Florida
-		option(value='GA') Georgia
-		option(value='HI') Hawaii
-		option(value='ID') Idaho
-		option(value='IL') Illinois
-		option(value='IN') Indiana
-		option(value='IA') Iowa
-		option(value='KS') Kansas
-		option(value='KY') Kentucky
-		option(value='LA') Louisiana
-		option(value='ME') Maine
-		option(value='MD') Maryland
-		option(value='MA') Massachusetts
-		option(value='MI') Michigan
-		option(value='MN') Minnesota
-		option(value='MS') Mississippi
-		option(value='MO') Missouri
-		option(value='MT') Montana
-		option(value='NE') Nebraska
-		option(value='NV') Nevada
-		option(value='NH') New Hampshire
-		option(value='NJ') New Jersey
-		option(value='NM') New Mexico
-		option(value='NY') New York
-		option(value='NC') North Carolina
-		option(value='ND') North Dakota
-		option(value='OH') Ohio
-		option(value='OK') Oklahoma
-		option(value='OR') Oregon
-		option(value='PA') Pennsylvania
-		option(value='PR') Puerto Rico
-		option(value='RI') Rhode Island
-		option(value='SC') South Carolina
-		option(value='SD') South Dakota
-		option(value='TN') Tennessee
-		option(value='TX') Texas
-		option(value='UT') Utah
-		option(value='VT') Vermont
-		option(value='VA') Virginia
-		option(value='WA') Washington
-		option(value='DC') Washington D.C.
-		option(value='WV') West Virginia
-		option(value='WI') Wisconsin
-		option(value='WY') Wyoming
+	select#state.form-control(name="state")
+		option(value='TX' selected=(submission['state']==='TX')) Texas
+		option(value='--' selected=(submission['state']==='--')) --
+		option(value='AL' selected=(submission['state']==='AL')) Alabama
+		option(value='AK' selected=(submission['state']==='AK')) Alaska
+		option(value='AZ' selected=(submission['state']==='AZ')) Arizona
+		option(value='AR' selected=(submission['state']==='AR')) Arkansas
+		option(value='CA' selected=(submission['state']==='CA')) California
+		option(value='CO' selected=(submission['state']==='CO')) Colorado
+		option(value='CT' selected=(submission['state']==='CT')) Connecticut
+		option(value='DE' selected=(submission['state']==='DE')) Delaware
+		option(value='FL' selected=(submission['state']==='FL')) Florida
+		option(value='GA' selected=(submission['state']==='GA')) Georgia
+		option(value='HI' selected=(submission['state']==='HI')) Hawaii
+		option(value='ID' selected=(submission['state']==='ID')) Idaho
+		option(value='IL' selected=(submission['state']==='IL')) Illinois
+		option(value='IN' selected=(submission['state']==='IN')) Indiana
+		option(value='IA' selected=(submission['state']==='IA')) Iowa
+		option(value='KS' selected=(submission['state']==='KS')) Kansas
+		option(value='KY' selected=(submission['state']==='KY')) Kentucky
+		option(value='LA' selected=(submission['state']==='LA')) Louisiana
+		option(value='ME' selected=(submission['state']==='ME')) Maine
+		option(value='MD' selected=(submission['state']==='MD')) Maryland
+		option(value='MA' selected=(submission['state']==='MA')) Massachusetts
+		option(value='MI' selected=(submission['state']==='MI')) Michigan
+		option(value='MN' selected=(submission['state']==='MN')) Minnesota
+		option(value='MS' selected=(submission['state']==='MS')) Mississippi
+		option(value='MO' selected=(submission['state']==='MO')) Missouri
+		option(value='MT' selected=(submission['state']==='MT')) Montana
+		option(value='NE' selected=(submission['state']==='NE')) Nebraska
+		option(value='NV' selected=(submission['state']==='NV')) Nevada
+		option(value='NH' selected=(submission['state']==='NH')) New Hampshire
+		option(value='NJ' selected=(submission['state']==='NJ')) New Jersey
+		option(value='NM' selected=(submission['state']==='NM')) New Mexico
+		option(value='NY' selected=(submission['state']==='NY')) New York
+		option(value='NC' selected=(submission['state']==='NC')) North Carolina
+		option(value='ND' selected=(submission['state']==='ND')) North Dakota
+		option(value='OH' selected=(submission['state']==='OH')) Ohio
+		option(value='OK' selected=(submission['state']==='OK')) Oklahoma
+		option(value='OR' selected=(submission['state']==='OR')) Oregon
+		option(value='PA' selected=(submission['state']==='PA')) Pennsylvania
+		option(value='PR' selected=(submission['state']==='PR')) Puerto Rico
+		option(value='RI' selected=(submission['state']==='RI')) Rhode Island
+		option(value='SC' selected=(submission['state']==='SC')) South Carolina
+		option(value='SD' selected=(submission['state']==='SD')) South Dakota
+		option(value='TN' selected=(submission['state']==='TN')) Tennessee
+		option(value='TX' selected=(submission['state']==='TX')) Texas
+		option(value='UT' selected=(submission['state']==='UT')) Utah
+		option(value='VT' selected=(submission['state']==='VT')) Vermont
+		option(value='VA' selected=(submission['state']==='VA')) Virginia
+		option(value='WA' selected=(submission['state']==='WA')) Washington
+		option(value='DC' selected=(submission['state']==='DC')) Washington D.C.
+		option(value='WV' selected=(submission['state']==='WV')) West Virginia
+		option(value='WI' selected=(submission['state']==='WI')) Wisconsin
+		option(value='WY' selected=(submission['state']==='WY')) Wyoming
