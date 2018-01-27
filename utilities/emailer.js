@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const nodemailer = require('nodemailer')
-const checkAuthentication = require('../utilities/check-authentication')
+const checkRecaptcha = require('../utilities/check-recaptcha')
 
-router.post('/contact', (request, response)=> {
+router.post('/contact', checkRecaptcha, (request, response)=> {
 
-	console.log("BODY!", request.body)
+	console.log("Lemme goooo")
 
 	let transporter = nodemailer.createTransport({
 		service: 'Gmail',
@@ -19,7 +19,7 @@ router.post('/contact', (request, response)=> {
 		from: `"${request.body['name']}" <${request.body['email']}>`,
 		to: 'admin@oobfest.com',
 		subject: "CONTACT FORM | " + request.body['subject'],
-		text: `From: ${request.body['name']}, ${request.body['email']} \n ${request.body['message']}`
+		text: `From: ${request.body['name']}, ${request.body['email']} \n${request.body['message']}`
 	}
 
 	transporter.sendMail(mailOptions, (error, info) => {

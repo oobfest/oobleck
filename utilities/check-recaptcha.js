@@ -1,8 +1,10 @@
 const httpRequest = require('request')
 
 function checkRecaptcha(request, response, next) {
+
 	let recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY
 	let gRecaptchaResponse = request.body['g-recaptcha-response']
+
 	httpRequest.post('https://www.google.com/recaptcha/api/siteverify', { 
 			form: { secret: recaptchaSecretKey, response: gRecaptchaResponse },
 			json: true 
