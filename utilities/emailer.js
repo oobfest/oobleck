@@ -5,8 +5,6 @@ const checkAuthentication = require('../utilities/check-authentication')
 
 router.post('/contact', (request, response)=> {
 
-	console.log("Origin", request.get('origin'))
-
 	let transporter = nodemailer.createTransport({
 		service: 'Gmail',
 		auth: {
