@@ -40,7 +40,7 @@ router.post('/contact', (request, response)=> {
 		// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 		})
 
-		res.end('Yay!')
+		response.send('Yay!')
 	})
 })
 
