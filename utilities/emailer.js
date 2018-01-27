@@ -19,7 +19,7 @@ router.post('/contact', (request, response)=> {
 		from: `"${request.body['name']}" <${request.body['email']}>`,
 		to: 'admin@oobfest.com',
 		subject: "CONTACT FORM | " + request.body['subject'],
-		text: request.body['message'],
+		text: `From: ${request.body['name']}, ${request.body['email']} \n ${request.body['message']}`
 	}
 
 	transporter.sendMail(mailOptions, (error, info) => {
