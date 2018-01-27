@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const nodemailer = require('nodemailer')
+const checkAuthentication = require('../utilities/check-authentication')
 
-router.post('/contact', (request, response)=> {
+router.post('/contact', checkAuthentication, (request, response)=> {
+
+	console.log("Origin", request.get('origin'))
 
 	let transporter = nodemailer.createTransport({
 		service: 'Gmail',
