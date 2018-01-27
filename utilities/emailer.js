@@ -13,12 +13,12 @@ router.post('/contact', (request, response)=> {
 	})
 
 	let mailOptions = {
-		from: '"Website Contact Form" <no-reply@oobfest.com>',
+		from: `"${request.body['name']}" <${request.body['email']}>`
 		to: 'admin@oobfest.com',
-		subject: request.body['subject'],
+		subject: "CONTACT FORM | " + request.body['subject'],
 		text: request.body['message'],
 	}
-	
+
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			response.send(error)
