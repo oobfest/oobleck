@@ -13,7 +13,7 @@ router.post('/contact', (request, response)=> {
 	})
 
 	let mailOptions = {
-		from: `"${request.body['name']}" <${request.body['email']}>`
+		from: `"${request.body['name']}" <${request.body['email']}>`,
 		to: 'admin@oobfest.com',
 		subject: "CONTACT FORM | " + request.body['subject'],
 		text: request.body['message'],
