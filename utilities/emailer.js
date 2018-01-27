@@ -3,7 +3,7 @@ const router = express.Router()
 const nodemailer = require('nodemailer')
 const checkAuthentication = require('../utilities/check-authentication')
 
-router.post('/contact', checkAuthentication, (request, response)=> {
+router.post('/contact', (request, response)=> {
 
 	console.log("Origin", request.get('origin'))
 
