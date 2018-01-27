@@ -3,6 +3,7 @@ const router = express.Router()
 const { validationResult } = require('express-validator/check')
 const submissionValidation = require('./submission.validation')
 const checkRecaptcha = require('../utilities/check-recaptcha')
+const Submission = require('../submissions/submission.schema')
 
 // GET /apply
 router.get('/', (request, response) => {
@@ -15,25 +16,96 @@ router.get('/', (request, response) => {
 })
 
 // POST /apply
-router.post('/', submissionValidation, checkRecaptcha, (request, response) => {
+router.post('/', submissionValidation, (request, response) => {
+
+	if (!request.body['available']) 
+		request.body['available'] = []
 
 	let errors = validationResult(request)
-	if (errors.isEmpty()) { response.send("YAY") }
+	let submissionIsErrorFree = errors.isEmpty()
 
-	let socialMedia = normalizeSocialMedia(request.body['social-media-type'], request.body['social-media-url'])
-	let personnel = normalizePersonnel(request.body['personnel-name'], request.body['personnel-email'], request.body['personnel-role'])
-	if (!request.body['available']) request.body['available'] = []
-
-	response.render('apply', {
-		recaptcha: true,
-		errors: errors.array(),
-		socialMedia: socialMedia,
-		personnel: personnel,
-		submission: request.body
-	})
+	if (submissionIsErrorFree) {
+		saveSubmission(request.body, function(error, newResponse) {
+			console.log("STUFF HAPPENED")
+			console.log(error, newResponse)
+			response.send("WOO")
+		})
+	}
+	else {
+		response.render('apply', {
+			recaptcha: true,
+			errors: errors.array(),
+			socialMedia: flattenSocialMedia(
+				request.body['social-media-type'], 
+				request.body['social-media-url']
+			),
+			personnel: flattenPersonnel(
+				request.body['personnel-name'], 
+				request.body['personnel-email'], 
+				request.body['personnel-role']
+			),
+			submission: request.body
+		})	
+	}
 })
 
-function normalizeSocialMedia(socialMediaTypes, socialMediaUrls) {
+function saveSubmission(submissionRequest, callback) {
+	let newSubmission = new Submission({ 
+
+		// Act Details
+		actName: submissionRequest['act-name'],
+		showType: submissionRequest['show-type'],
+		informalDescription: submissionRequest['informal-description'],
+		publicDescription: submissionRequest['public-description'],
+		accolades: submissionRequest['accolades'],
+
+		// Location
+		country: submissionRequest['country'],
+		city: submissionRequest['city'],
+		state: submissionRequest['state'],
+		homeTheater: submissionRequest['home-theater'],
+
+		// Personnel
+		primaryContactName: submissionRequest['primary-contact-name'],
+		primaryContactEmail: submissionRequest['primary-contact-email'],
+		primaryContactPhone: submissionRequest['primary-contact-phone'],
+		primaryContactRole: submissionRequest['primary-contact-role'],
+		additionalMembers: flattenPersonnel(
+			submissionRequest['personnel-name'], 
+			submissionRequest['personnel-email'], 
+			submissionRequest['personnel-role']
+		),
+
+		// Performance Needs
+		showLength: -100,
+		specialNeeds: submissionRequest['special-needs'],
+
+		// Photo
+		photoUrl: null,
+
+		// Video
+		videoUrl: submissionRequest['video-url'],
+		videoInfo: submissionRequest['video-info'],
+
+		// Social Media
+		socialMedia: flattenSocialMedia(
+			submissionRequest['social-media-type'],
+			submissionRequest['social-media-url']
+		),
+
+		// Availability
+		available: submissionRequest['available'],
+		conflicts: submissionRequest['conflicts'],
+
+		// Application Fee
+		payedFee: false
+	})
+	newSubmission.save((error, submission)=> {
+		callback(error, submission)
+	})
+}
+
+function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {
 	if (socialMediaTypes) {
 		let socialMedia = []
 		for(let i=0; i<socialMediaTypes.length; i++) {
@@ -47,7 +119,7 @@ function normalizeSocialMedia(socialMediaTypes, socialMediaUrls) {
 	return []
 }
 
-function normalizePersonnel(personnelNames, personnelEmails, personnelRoles) {
+function flattenPersonnel(personnelNames, personnelEmails, personnelRoles) {
 	if(personnelNames) {
 		let personnel = []
 		for(let i=0; i<personnelNames.length; i++) {

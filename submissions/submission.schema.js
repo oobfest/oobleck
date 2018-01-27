@@ -34,8 +34,7 @@ let submissionSchema = mongoose.Schema({
 	videoInfo: String,
 
 	// Social Media
-	socialMediaType: Array,
-	socialMediaUrl: Array,
+	socialMedia: Array,
 
 	// Availability
 	available: Array,

@@ -5,8 +5,6 @@ const checkRecaptcha = require('../utilities/check-recaptcha')
 
 router.post('/contact', checkRecaptcha, (request, response)=> {
 
-	console.log("Lemme goooo")
-
 	let transporter = nodemailer.createTransport({
 		service: 'Gmail',
 		auth: {
@@ -27,7 +25,7 @@ router.post('/contact', checkRecaptcha, (request, response)=> {
 			response.send(error)
 		}
 		else {
-			console.log("Email sent", info)
+			//console.log("Email sent", info)
 			response.send("Yay")
 		} 
 	})
