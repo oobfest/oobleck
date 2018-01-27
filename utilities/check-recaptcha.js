@@ -2,7 +2,7 @@ const httpRequest = require('request')
 
 function checkRecaptcha(request, response, next) {
 
-	console.log("Checking recaptcha", request.body['g-recaptcha-response'])
+	console.log("Checking recaptcha")
 
 	let recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY
 	let gRecaptchaResponse = request.body['g-recaptcha-response']
@@ -12,7 +12,7 @@ function checkRecaptcha(request, response, next) {
 			json: true 
 		},
 		function(error, httpResponse, body) {
-			console.log("Requested")
+			console.log("Requested", body)
 			if(body.success) {
 				next()
 			}
