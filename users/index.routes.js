@@ -12,7 +12,6 @@ router.get('/', (request, response) => {
 // POST /login
 // Log user in
 router.post('/login', passport.authenticate('local'), (request, response)=> {
-	console.log("LOGIN!", request.body['attempted-url'])
 	response.redirect(request.body['attempted-url'] || 'submissions')
 })
 

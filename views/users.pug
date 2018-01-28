@@ -2,7 +2,7 @@ extends _layout
 block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
-			span.dash-titlebar-title Submissions
+			span.dash-titlebar-title Users
 		//button.btn.btn-secondary.ml-md-auto Add Submission
 
 	.dash-boxes.container-fluid
@@ -13,9 +13,9 @@ block content
 						th Name
 						th Object ID
 				tbody
-					for submission in submissions
+					for user in users
 						tr
-							td=submission.actName
+							td=user.username
 							td
-								a(href="submissions/delete/"+submission._id)=submission._id
+								a(href="users/delete/"+user._id)=user._id
 								

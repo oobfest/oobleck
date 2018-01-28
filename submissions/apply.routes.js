@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const checkRecaptcha = require('../utilities/check-recaptcha')
 const { validationResult } = require('express-validator/check')
 const submissionValidation = require('./submission.validation')
-const checkRecaptcha = require('../utilities/check-recaptcha')
-const Submission = require('../submissions/submission.schema')
+const submissionApi = require('./submission.api')
 
 // GET /apply
 router.get('/', (request, response) => {
@@ -25,10 +25,8 @@ router.post('/', submissionValidation, (request, response) => {
 	let submissionIsErrorFree = errors.isEmpty()
 
 	if (submissionIsErrorFree) {
-		saveSubmission(request.body, function(error, newResponse) {
-			console.log("STUFF HAPPENED")
-			console.log(error, newResponse)
-			response.send("WOO")
+		saveSubmission(request.body, function(submission) {
+			response.send("Saved the submission!")
 		})
 	}
 	else {
@@ -50,7 +48,8 @@ router.post('/', submissionValidation, (request, response) => {
 })
 
 function saveSubmission(submissionRequest, callback) {
-	let newSubmission = new Submission({ 
+
+	let submission = { 
 
 		// Act Details
 		actName: submissionRequest['act-name'],
@@ -99,10 +98,10 @@ function saveSubmission(submissionRequest, callback) {
 
 		// Application Fee
 		payedFee: false
-	})
-	newSubmission.save((error, submission)=> {
-		callback(error, submission)
-	})
+	}
+
+	console.log("Step one", submission)
+	submissionApi.createSubmission(submission, callback)
 }
 
 function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {
