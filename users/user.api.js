@@ -10,6 +10,13 @@ let userApi = {
 		})
 	},
 
+	saveUser: function(user, callback) {
+		user.save((error, savedUser)=> {
+			if (error) throw Error("Failed to save user")
+			callback(savedUser)
+		})
+	},
+
 	getUser: function(objectId, callback) {
 		User.findById(objectId, (error, user)=> {
 			if(error) throw Error("Failed to get user by ID")
@@ -21,6 +28,15 @@ let userApi = {
 		User.find((error, users)=> {
 			if (error) throw Error("Failed to get all users")
 			callback(users)
+		})
+	},
+
+	updateUserRoles: function(objectId, roles, callback) {
+		this.getUser(objectId, (user)=> {
+			user.roles = roles
+			this.saveUser(user, (savedUser)=> {
+				callback(savedUser)
+			})
 		})
 	},
 

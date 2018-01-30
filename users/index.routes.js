@@ -18,6 +18,7 @@ router.post('/login', passport.authenticate('local'), (request, response)=> {
 // GET /logout
 // Log user out
 router.get('/logout', (request, response)=> {
+	request.app.locals.user = null
 	request.logout()
 	response.render('login', { info: "You have been logged out!" })
 })
@@ -25,6 +26,7 @@ router.get('/logout', (request, response)=> {
 // GET /hax0rz
 // Demo app home screen
 router.get('/hax0rz', authenticateUser, (request, response)=> {
+	console.log(request.user)
 	response.render('index', { username: 'Carlton' })
 })
 

@@ -11,13 +11,22 @@ block content
 				thead
 					tr
 						th Name
-						th Object ID
+						th
+						th
+						th Roles
 				tbody
 					for user in users
 						tr
 							td=user.username
 							td
-								a(href="users/delete/"+user._id)=user._id
+								a(href="users/edit/"+user._id) Edit
+							td
+								a(href="users/delete/"+user._id) Delete
+							td
+								for role in user.roles
+									span.badge.badge-secondary=role
+									| &nbsp;
+
 	#add-user-modal.modal.fade
 		.modal-dialog
 			form#add-user-form.modal-content(action="/users/" method="POST")
