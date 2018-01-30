@@ -13,7 +13,9 @@ require('./setup/express-session')(app)
 require('./setup/logging')(app)
 require('./setup/passport')(app)
 require('./setup/routes')(app)
+require('./setup/app-locals')(app)
 require('./setup/database')()
+
 
 // Listen!
 const log = require('winston')

@@ -26,6 +26,10 @@ block content
 								for role in user.roles
 									span.badge.badge-secondary=role
 									| &nbsp;
+		if user.roles.includes('admin')
+			.box.box-b.box-block
+				h3 Fancy admin stuff
+				p Can you see me? 
 
 	#add-user-modal.modal.fade
 		.modal-dialog
