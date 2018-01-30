@@ -3,7 +3,7 @@ block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
 			span.dash-titlebar-title Users
-		//button.btn.btn-secondary.ml-md-auto Add Submission
+		button.btn.btn-secondary.ml-md-auto(data-toggle="modal" data-target="#add-user-modal") Add User
 
 	.dash-boxes.container-fluid
 		.box.box-b
@@ -18,4 +18,20 @@ block content
 							td=user.username
 							td
 								a(href="users/delete/"+user._id)=user._id
-								
+	#add-user-modal.modal.fade
+		.modal-dialog
+			form#add-user-form.modal-content(action="/users/" method="POST")
+				.modal-header
+					h5.modal-title Create User
+					button.close(data-dismiss="modal")
+						span &times;
+				.modal-body
+					.form-group
+						label.col-form-label(for="add-username") Username
+						input#add-username.form-control(type="text" name="username")
+					.form-group
+						label.col-form-label(for="add-password") Password
+						input#add-password.form-control(type="password" name="password")
+				.modal-footer
+					button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+					button#add-user-button.btn.btn-primary(type="submit") Save

@@ -4,13 +4,19 @@ let submissionApi = {
 
 	createSubmission: function(submission, callback) {
 		let newSubmission = Submission(submission)
-		newSubmission.save((error, submission)=> {
-			if (error) throw Error("FUCK MAN")
-			callback(error, submission)
+		this.saveSubmission(newSubmission, (savedSubmission)=> {
+			callback(savedSubmission)
 		})
 	},
 
-	getSubmission: function(callback) {
+	saveSubmission: function(submission, callback) {
+		submission.save((error, submission)=> {
+			if (error) throw Error("Failed to save submission")
+			callback(submission)
+		})
+	},
+
+	getSubmission: function(objectId, callback) {
 		Submission.findById(objectId, (error, submission)=> {
 			if(error) throw Error("FJLFS!!1")
 			callback(submission)
@@ -24,10 +30,30 @@ let submissionApi = {
 		})
 	},
 
-	deleteSubmission: function(objectId, callback) {
-		Submission.findById(objectId, (error, submission)=> {
-			if (error) throw Error("NO THANKS")
+	updateSubmission: function(updatedSubmission, callback) {
+		this.getSubmission(submission.id, (submission)=> {
 
+			submission.actName = updatedSubmission.actName
+			//etc...
+			
+			this.saveSubmission(submission, (savedSubmission)=> {
+				callback(savedSubmission)
+			})
+		})
+	},
+
+	updateSubmissionPhotoAndPayment: function(objectId, photoUrl, paymentStatus, callback) {
+		this.getSubmission(objectId, (submission)=> {
+			submission.photoUrl = photoUrl
+			submission.payedFee = paymentStatus
+			this.saveSubmission(submission, (savedSubmission)=> {
+				callback(savedSubmission)
+			})
+		})
+	},
+
+	deleteSubmission: function(objectId, callback) {
+		this.getSubmission(objectId, (submission)=> {
 			submission.remove((error, submission)=> {
 				if (error) throw Error("AHH NO WAY")
 				callback(submission)

@@ -26,7 +26,7 @@ router.post('/', submissionValidation, (request, response) => {
 
 	if (submissionIsErrorFree) {
 		saveSubmission(request.body, function(submission) {
-			response.send("Saved the submission!")
+			response.render('apply', {secondPage: true, submission: submission})
 		})
 	}
 	else {

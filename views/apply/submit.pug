@@ -1,9 +1,9 @@
 .box-block.box-bt
-	.row
-		.col-md-8
-			span.text-muted By submitting, you agree to our 
-				a(href="#" data-toggle="modal" data-target="#legal-disclaimer-modal") legal disclaimer
-				| .
-			include legal-disclaimer-modal
-		.col-md-4.text-right
-			button.btn.btn-md.btn-primary(type="submit") Submit
+	span.text-muted By submitting, you agree to our 
+		a(href="#" data-toggle="modal" data-target="#legal-disclaimer-modal") legal disclaimer
+		| .
+	include legal-disclaimer-modal
+.box-block.box-bt.pull-right
+	button.btn.btn-md.btn-secondary(type="button") Back
+	| &nbsp;
+	button.btn.btn-md.btn-primary(type="submit") Submit

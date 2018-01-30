@@ -1,4 +1,4 @@
-extends _layout
+extends ../_layout
 block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
@@ -11,11 +11,13 @@ block content
 				thead
 					tr
 						th Name
-						th Object ID
+						th &nbsp;
+						th &nbsp;
 				tbody
 					for submission in submissions
 						tr
 							td=submission.actName
 							td
-								a(href="submissions/delete/"+submission._id)=submission._id
-								
+								a(href="submissions/edit/"+submission._id) Edit
+							td
+								a(href="submissions/delete/"+submission._id) Delete

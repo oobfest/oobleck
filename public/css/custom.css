@@ -34,3 +34,10 @@ a:hover { color: #016ff9; }
 	content:" *";
 	color:red;
 }
+
+#oobleck-logo {
+	height: auto;
+	width: 206px;
+	padding: 0 24px;
+	margin-top: 8px;
+}

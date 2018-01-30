@@ -12,8 +12,9 @@ block content
 		.row
 			.col-lg-8.mx-auto.pb-5
 				.box
-					if confirmation
+					if secondPage
 						form(action="/gloop" method="POST")
+							input(type="hidden" value=submission._id name="submission-id")
 							.box-head.box-head-accent-oob
 							include apply/photo-upload
 							include apply/application-fee

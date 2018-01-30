@@ -2,11 +2,11 @@ const User = require('../users/user.schema')
 
 let userApi = {
 
-	createuser: function(username, password) {
+	createUser: function(user, callback) {
 		// Special "register" method from mongoose-passport
-		User.register(new User({ username: username }), password, function(error, user) {
+		User.register(new User({ username: user.username }), user.password, function(error, newUser) {
 			if(error) throw Error("Failed to create user")
-			return user
+			return callback(newUser)
 		})
 	},
 
@@ -19,14 +19,13 @@ let userApi = {
 
 	getAllUsers: function(callback) {
 		User.find((error, users)=> {
-			console.log("Yippee", users)
 			if (error) throw Error("Failed to get all users")
 			callback(users)
 		})
 	},
 
 	deleteUser: function(objectId, callback) {
-		getUser(objectId, (user)=> {
+		this.getUser(objectId, (user)=> {
 			user.remove((error, user)=> {
 				if (error) throw Error("Failed to delete user")
 				callback(user)

@@ -1,0 +1,298 @@
+extends ../_layout
+block content
+	.dash.dash-fixed
+		.dash-app
+			header.dash-titlebar
+				.mb-md-0.mb-3
+					span.dash-titlebar-title Edit Submission
+
+			form.container(method="POST" action="/submissions/edit")
+				.block-heading.m-4
+					h2.block-title= submission.actName
+					//h5.block-subtitle Use this form to shoot us a quick message
+				.row
+					.col
+						.box.box-b
+							.box-block.box-rounded-top.box-bb
+								h4 General Details
+								.form-group
+									label.col-form-label.required-field(for="act-name") Act Name
+									input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" value=submission.actName)
+								.form-group
+									label.col-form-label.required-field(for="show-type") Show Type
+									select#show-type.form-control(name="show-type" required)
+										option(selected=(submission.showType==='Improv' 	)) Improv
+										option(selected=(submission.showType==='Sketch' 	)) Sketch
+										option(selected=(submission.showType==='Stand-Up' 	)) Stand-Up
+										option(selected=(submission.showType==='Variety' 	)) Variety
+										option(selected=(submission.showType==='Podcast' 	)) Podcast
+										option(selected=(submission.showType==='Other' 		)) Other
+								.form-group
+									label.col-form-label.required-field(for="informal-description") Private Act Description
+									textarea#informal-description.form-control(maxlength="1500" name="informal-description" required)= submission.informalDescription
+								.form-group
+									label.col-form-label.required-field(for="public-description") Public Act Description
+									textarea#public-description.form-control(maxlength="1400" name="public-description" required)= submission.publicDescription
+								.form-group
+									label.col-form-label(for="accolades") Previous Festival Apperances, Awards, etc.
+									textarea#accolades.form-control(maxlength="1400" name="accolades")= submission.accolades
+							.box-block.box-bb
+								h4 Location
+								.form-group
+									include ../apply/location/countries
+								#state-item
+								#region-item
+								.form-group
+									label.col-form-label.required-field(for="city") City
+									input#city.form-control(type="text" name="city" required maxlength="280" value=submission.city)
+								.form-group
+									label.col-form-label(for="home-theater") What theater is your home base?
+									input#home-theater.form-control(type="text" name="home-theater" maxlength="280" value=submission.homeTheater)
+								include ../apply/location/states
+							.box-block.box-bb
+								h4 Performance Details
+								.form-group
+									label.col-form-label.required-field(for="show-length") Typical Act Length
+									.input-group
+										input#show-length.form-control(type="number" min="0" max="2400" name="show-length" value=submission.showLength)
+										.input-group-append
+											span.input-group-text minutes
+								.form-group
+									label.col-form-label(for="special-needs") Special Performance Requirements
+									textarea#special-needs.form-control(maxlength="1500" name="special-needs")= submission.specialNeeds
+							.box-block.box-bb
+								h4 Availability
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-tuesday.custom-control-input(
+											type="checkbox" 
+											value="tuesday" 
+											name="available[]"
+											checked=(submission.available.includes('tuesday'))
+										)
+										label.custom-control-label(for="available-tuesday") Tuesday
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-wednesday.custom-control-input(
+											type="checkbox" 
+											value="wednesday" 
+											name="available[]"
+											checked=(submission.available.includes('wednesday'))
+										)
+										label.custom-control-label(for="available-wednesday") Wednesday
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-thursday.custom-control-input(
+											type="checkbox" 
+											value="thursday" 
+											name="available[]"
+											checked=(submission.available.includes('thursday'))
+										)
+										label.custom-control-label(for="available-thursday") Thursday
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-friday.custom-control-input(
+											type="checkbox" 
+											value="friday" 
+											name="available[]"
+											checked=(submission.available.includes('friday'))
+										)
+										label.custom-control-label(for="available-friday") Friday
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-saturday.custom-control-input(
+											type="checkbox" 
+											value="saturday" 
+											name="available[]"
+											checked=(submission.available.includes('saturday'))
+										)
+										label.custom-control-label(for="available-saturday") Saturday
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-sunday.custom-control-input(
+											type="checkbox" 
+											value="sunday" 
+											name="available[]"
+											checked=(submission.available.includes('sunday'))
+										)
+										label.custom-control-label(for="available-sunday") Sunday
+								.form-group
+									.custom-control.custom-checkbox
+										input#available-monday.custom-control-input(
+											type="checkbox" 
+											value="monday" 
+											name="available[]"
+											checked=(submission.available.includes('monday'))
+										)
+										label.custom-control-label(for="available-monday") Monday
+								.form-group
+									label.col-form-label(for="conflicts") Potential Conflicts (what other acts are your members in?)
+									textarea#conflicts.form-control(maxlength="1500" name="conflicts")= submission.conflicts
+							.box-block.box-bb
+								h4 Video Link
+								.form-group
+									label.col-form-label.required-field(for="video-url") Link to Video
+									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission['video-url'])
+								.form-group
+									label.col-form-label(for="video-info") Password or other information for accessing video
+									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission['video-info'])
+					.col
+						.box.box-b
+							.box-block.box-rounded-top.box-bb
+								h4 Primary Contact
+								.form-group.row
+									label.col-form-label.col-3.required-field(for="primary-contact-name") Name
+									input#primary-contact-name.form-control.col-9(type="text" name="primary-contact-name" required maxlength="280" value=submission.primaryContactName)
+								.form-group.row
+									label.col-form-label.col-3.required-field(for="primary-contact-email") Email
+									input#primary-contact-email.form-control.col-9(type="email" name="primary-contact-email" required maxlength="280" value=submission.primaryContactEmail)
+								.form-group.row
+									label.col-form-label.col-3.required-field(for="primary-contact-phone") Phone
+									input#primary-contact-phone.form-control.col-9(type="text" name="primary-contact-phone" required maxlength="280" value=submission.primaryContactPhone)
+								.form-group.row
+									label.col-form-label.col-3.required-field(for="primary-contact-role") Role
+									select#primary-contact-role.form-control.col-9(name="primary-contact-role" selected=submission.primaryContactRole)
+										option(selected=(submission.primaryContactRole==='Performer'	)) Performer
+										option(selected=(submission.primaryContactRole==='Crew'		)) Crew
+										option(selected=(submission.primaryContactRole==='Director'	)) Director
+										option(selected=(submission.primaryContactRole==='Other'		)) Other
+							.box-block.box-bb
+								h4 Additional Members
+								#additional-members
+									for contact in submission.additionalMembers
+										.personnel-item
+											.form-group.row
+												label.col-form-label.col-3 Name
+												input.form-control.col-9(type="text" name="personnel-name[]" maxlength="280" value=contact.name)
+											.form-group.row
+												label.col-form-label.col-3 Email
+												input.form-control.col-9(type="email" name="personnel-email[]" maxlength="280" value=contact.email)
+											.form-group.row
+												label.col-form-label.col-3 Role
+												select.form-control.col-9(name="personnel-role[]")
+													option(selected=contact.role==='Performer'	) Performer
+													option(selected=contact.role==='Tech'		) Tech
+													option(selected=contact.role==='Director'	) Director
+													option(selected=contact.role==='Other'		) Other
+											.form-group.text-right
+												button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
+											hr
+
+								.form-group
+									button#add-contact-button.btn.btn-secondary(type="button") Add Contact
+							.box-block.box-bb
+								h4 Social Media
+								#social-media
+									for sm in submission.socialMedia
+										.social-media-item
+											.form-group
+												.input-group
+													.input-group-prepend
+														select.form-control(name="social-media-type[]" selected=sm.type)
+															option(selected=(sm.type==='Twitter'	)) Twitter
+															option(selected=(sm.type==='Facebook'	)) Facebook
+															option(selected=(sm.type==='YouTube'	)) YouTube
+															option(selected=(sm.type==='Instagram'	)) Instagram
+															option(selected=(sm.type==='Website'	)) Website
+															option(selected=(sm.type==='Other'		)) Other
+													input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280" value=sm.url)
+											.form-group.text-right
+												button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
+											hr
+								.form-group
+									button#add-social-media-button.btn.btn-secondary(type="button") Add Link
+								script#region-template(type="text/x-template")
+									.form-group
+										label.col-form-label(for="state") State / Province / Region
+										input#state.form-control(type="text" name="state" required maxlength="280" value=submission.state)
+								
+								script#additional-contact-template(type="text/x-template")
+									.personnel-item
+										.form-group.row
+											label.col-form-label.col-3 Name
+											input.form-control.col-9(type="text" name="personnel-name[]" maxlength="280")
+										.form-group.row
+											label.col-form-label.col-3 Email
+											input.form-control.col-9(type="email" name="personnel-email[]" maxlength="280")
+										.form-group.row
+											label.col-form-label.col-3 Role
+											select.form-control.col-9(name="personnel-role[]")
+												option Performer
+												option Tech
+												option Director
+												option Other
+										.form-group.text-right
+											button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
+										hr
+
+								script#social-media-template(type="text/x-template")
+									.social-media-item
+										.form-group
+											.input-group
+												.input-group-prepend
+													select.form-control(name="social-media-type[]")
+														option Twitter
+														option Facebook
+														option YouTube
+														option Instagram
+														option Website
+														option Other
+												input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280")
+										.form-group.text-right
+											button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
+										hr
+				.row
+					.col
+						.text-center.m-5
+							button.btn.btn-primary.btn-lg Save
+							
+	script.
+		// Get template for state dropdown
+		var stateTemplate = $("#state-template").html()
+
+		// Get template for region text input
+		var regionTemplate = $("#region-template").html()
+
+		// Whenever the "Country" dropdown changes
+		$("#country").on('change', function() {
+
+			// Get what country was selected
+			var selectedCountry = $("#country").val()
+
+			// If the selected country was the US
+			if(selectedCountry === "US") {
+				// Remove the region input
+				$("#region-item").empty()
+
+				// Show the state dropdown
+				$("#state-item").html(stateTemplate)
+			}
+			// Otherwise
+			else {
+				// Remove the state dropdown
+				$("#state-item").empty()
+				// Insert the region dropdown
+				$("#region-item").html(regionTemplate)
+			}
+		})
+
+		// Initialize the correct field by what the country dropdown is set to
+		$("#country").change()
+
+	script.
+		var additionalContactTemplate = $("#additional-contact-template").html()
+		$("#add-contact-button").click(function() {
+			$("#additional-members").append(additionalContactTemplate)
+		})
+		$("#additional-members").on('click', '.remove-contact-button', function() {
+			$(this).closest(".personnel-item").remove()
+		})
+
+	script.
+		var socialMediaTemplate = $("#social-media-template").html()
+		$("#add-social-media-button").click(function() {
+			$("#social-media").append(socialMediaTemplate)
+		})
+		$("#social-media").on('click', '.remove-social-media-button', function() {
+			$(this).closest(".social-media-item").remove()
+		})
