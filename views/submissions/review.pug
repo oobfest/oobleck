@@ -1,0 +1,87 @@
+extends ../_layout
+block content
+	.dash.dash-fixed
+		.dash-app
+			header.dash-titlebar
+				.mb-md-0.mb-3
+					span.dash-titlebar-title Review Submission
+
+			form.container(method="POST" action="/submissions/review")
+				.block-heading.m-4
+					h2.block-title=submission.actName
+					h3.block-subtitle=submission.showType
+				.box.box-b.box-block.mb-4
+					h4 How They Describe Their Act
+					p=submission.informalDescription
+					hr
+					h4 Video Link
+					pre
+						a(href=submission.videoUrl)=submission.videoUrl
+					if submission.videoInfo
+						p Video Information
+						p=submission.videoInfo
+
+
+				if user.roles.includes('reviewer')
+					.box.box-b.box-block
+						h3 Your Score
+						.d-none.d-lg-block
+							.row.no-gutters.justify-content-between
+								strong Bad
+								strong Neutral
+								strong Good
+						.row.justify-content-between
+							.col.d-lg-none
+								strong Bad
+							.col-lg
+								.custom-control.custom-radio
+									input#0.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="0") 0
+							.col-lg
+								.custom-control.custom-radio
+									input#1.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="1") 1
+							.col-lg
+								.custom-control.custom-radio
+									input#2.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="2") 2
+							.col-lg
+								.custom-control.custom-radio
+									input#3.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="3") 3
+							.col-lg
+								.custom-control.custom-radio
+									input#4.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="4") 4
+							.col-lg
+								.custom-control.custom-radio
+									input#5.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="5") 5
+							.col-lg
+								.custom-control.custom-radio
+									input#6.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="6") 6
+							.col-lg
+								.custom-control.custom-radio
+									input#7.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="7") 7
+							.col-lg
+								.custom-control.custom-radio
+									input#8.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="8") 8
+							.col-lg
+								.custom-control.custom-radio
+									input#9.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="9") 9
+							.col-lg
+								.custom-control.custom-radio
+									input#10.custom-control-input(type="radio" name="score")
+									label.custom-control-label(for="10") 10
+							.col.d-lg-none
+								strong Good
+						hr
+						.form-group
+							label.col-form-label(for="notes") Notes
+							textarea#notes.form-control(name="notes" rows="3")
+						.text-right
+							button.btn.btn-primary(type="submit") Save

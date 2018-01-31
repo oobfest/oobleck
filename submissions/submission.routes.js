@@ -19,6 +19,13 @@ router.get('/delete/:objectId', (request, response)=> {
 	})
 })
 
+router.get('/review/:objectId', authenticateUser, (request, response)=> {
+	let objectId = request.params.objectId
+	submissionApi.getSubmission(objectId, (submission)=> {
+		response.render('submissions/review', {submission: submission})
+	})
+})
+
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.getSubmission(objectId, (submission)=> {

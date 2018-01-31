@@ -4,6 +4,7 @@ let submissionSchema = mongoose.Schema({
 
 	// Act Details
 	actName: String,
+	domain: String,
 	showType: String,
 	informalDescription: String,
 	publicDescription: String,

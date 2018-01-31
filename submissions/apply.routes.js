@@ -4,6 +4,7 @@ const checkRecaptcha = require('../utilities/check-recaptcha')
 const { validationResult } = require('express-validator/check')
 const submissionValidation = require('./submission.validation')
 const submissionApi = require('./submission.api')
+const limax = require('limax')
 
 // GET /apply
 router.get('/', (request, response) => {
@@ -53,6 +54,7 @@ function saveSubmission(submissionRequest, callback) {
 
 		// Act Details
 		actName: submissionRequest['act-name'],
+		domain: limax(submissionRequest['act-name']),
 		showType: submissionRequest['show-type'],
 		informalDescription: submissionRequest['informal-description'],
 		publicDescription: submissionRequest['public-description'],

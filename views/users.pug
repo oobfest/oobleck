@@ -24,12 +24,13 @@ block content
 								a(href="users/delete/"+user._id) Delete
 							td
 								for role in user.roles
-									span.badge.badge-secondary=role
+									span.badge.badge-info=role
 									| &nbsp;
+
 		if user.roles.includes('admin')
 			.box.box-b.box-block
 				h3 Fancy admin stuff
-				p Can you see me? 
+				p Only an admin can see this part
 
 	#add-user-modal.modal.fade
 		.modal-dialog
