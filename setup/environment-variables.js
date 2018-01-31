@@ -3,6 +3,7 @@ const log = require('winston')
 function setupEnvironment() {
 
 	// Get .env data if not Heroku
+	console.log("Heroku", process.env.HEROKU)
 	if (process.env.HEROKU !== "1") {
 		log.info("Loading .env file")
 		dotenvResult = require('dotenv').load()
