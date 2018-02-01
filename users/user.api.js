@@ -4,7 +4,7 @@ let userApi = {
 
 	createUser: function(user, callback) {
 		// Special "register" method from mongoose-passport
-		User.register(new User({ username: user.username, roles: ['reviewer'] }), user.password, function(error, newUser) {
+		User.register(new User({ username: user.username, roles: user.roles }), user.password, function(error, newUser) {
 			if(error) throw Error("Failed to create user")
 			return callback(newUser)
 		})

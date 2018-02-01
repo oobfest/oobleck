@@ -46,6 +46,13 @@ block content
 					.form-group
 						label.col-form-label(for="add-password") Password
 						input#add-password.form-control(type="password" name="password")
+					p Roles
+					.form-check
+						input#admin-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="admin")
+						label.form-check-label(for="admin-role-checkbox") Admin
+					.form-check
+						input#reviewer-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="reviewer")
+						label.form-check-label(for="reviewer-role-checkbox") Reviewer
 				.modal-footer
 					button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
 					button#add-user-button.btn.btn-primary(type="submit") Save

@@ -3,8 +3,9 @@ const router = express.Router()
 const passport = require('passport')
 const authenticateUser = require('../utilities/authenticate-user')
 const userApi = require('../users/user.api')
+const onlyAllowRoles = require('../utilities/only-allow-roles')
 
-router.get('/', authenticateUser, (request, response)=> {
+router.get('/', authenticateUser, onlyAllowRoles(['admin']), (request, response)=> {
 	userApi.getAllUsers((users)=> {
 		response.render('users', {username: 'clark', users: users })
 	})
@@ -13,7 +14,8 @@ router.get('/', authenticateUser, (request, response)=> {
 router.post('/', (request, response)=> {
 	let user = { 
 		username: request.body.username,
-		password: request.body.password
+		password: request.body.password,
+		roles: request.body.roles
 	}
 	userApi.createUser(user, (newUser)=> {
 		response.redirect('/users')

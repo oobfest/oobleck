@@ -4,9 +4,12 @@ const passport = require('passport')
 const authenticateUser = require('../utilities/authenticate-user')
 
 // GET /
-// Home page / log in page
+// If logged in, default to submissions
+// If not logged in, go to login page!
 router.get('/', (request, response) => {
-	response.render('login')
+	let defaultHomepage = 'submissions'
+	if (request.app.locals.user) response.redirect(defaultHomepage)
+	else response.render('login')
 })
 
 // POST /login
