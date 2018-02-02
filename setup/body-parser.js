@@ -1,10 +1,13 @@
-const log = require('winston')
-
-function setupBodyParser(app) {
+module.exports = async function(app) {
+	
+	// Dependencies
+	const log = require('winston')
 	const bodyParser = require('body-parser')
+
+	// Setup
 	app.use(bodyParser.urlencoded({extended: true}))
 	app.use(bodyParser.json())
-	log.info("Body Parser ✅")
-}
 
-module.exports = setupBodyParser
+	// Log
+	log.info("✅  Body Parser")
+}

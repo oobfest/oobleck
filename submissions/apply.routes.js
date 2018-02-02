@@ -5,6 +5,7 @@ const { validationResult } = require('express-validator/check')
 const submissionValidation = require('./submission.validation')
 const submissionApi = require('./submission.api')
 const limax = require('limax')
+const log = require('winston')
 
 // GET /apply
 router.get('/', (request, response) => {
@@ -46,6 +47,16 @@ router.post('/', submissionValidation, (request, response) => {
 			submission: request.body
 		})	
 	}
+})
+
+router.post('/finish', (request, response)=>{
+	let objectId = request.body['id']
+	let imageUrl = request.body['image-url']
+	let deleteImageUrl = request.body['delete-image-url']
+	console.log("POST", objectId, imageUrl, deleteImageUrl)
+	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
+		response.send("Success!")
+	})
 })
 
 function saveSubmission(submissionRequest, callback) {

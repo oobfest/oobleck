@@ -42,10 +42,12 @@ let submissionApi = {
 		})
 	},
 
-	updateSubmissionPhotoAndPayment: function(objectId, photoUrl, paymentStatus, callback) {
+	updateSubmissionImage: function(objectId, imageUrl, deleteImageUrl, callback) {
 		this.getSubmission(objectId, (submission)=> {
-			submission.photoUrl = photoUrl
-			submission.payedFee = paymentStatus
+
+			submission.imageUrl = imageUrl
+			submission.deleteImageUrl = deleteImageUrl
+			
 			this.saveSubmission(submission, (savedSubmission)=> {
 				callback(savedSubmission)
 			})

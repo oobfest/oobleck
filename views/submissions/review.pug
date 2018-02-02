@@ -10,17 +10,15 @@ block content
 				.block-heading.m-4
 					h2.block-title=submission.actName
 					h3.block-subtitle=submission.showType
-					pre=submission.domain
 				.box.box-b.box-block.mb-4
 					h4 How They Describe Their Act
-					p=submission.informalDescription
-					hr
+					p.alert.alert-light=submission.informalDescription
 					h4 Video Link
-					pre
-						a(href=submission.videoUrl)=submission.videoUrl
+					pre.alert.alert-light
+						a(href=submission.videoUrl target="_blank")=submission.videoUrl
 					if submission.videoInfo
-						p Video Information
-						p=submission.videoInfo
+						h4 Video Information
+						p.alert.alert-light=submission.videoInfo
 
 
 				if user.roles.includes('reviewer')

@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 
 const path = require('path')
-app.use(express.static(path.join(__dirname, 'public/')))	// Static file location
+app.use(express.static(path.join(__dirname, 'public/')))
 
 require('./setup/express')(app)
 //require('./setup/cookie-parser')(app)		// Curently not used!
@@ -16,9 +16,8 @@ require('./setup/routes')(app)
 require('./setup/app-locals')(app)
 require('./setup/database')()
 
-
 // Listen!
 const log = require('winston')
 app.listen(process.env.PORT, ()=> {
-	log.info("Listening on port " + process.env.PORT)
+	log.info("🐵  Listening on port " + process.env.PORT)
 })

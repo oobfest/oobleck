@@ -1,22 +1,16 @@
-const log = require('winston')
+module.exports = async function(app) {
 
-function setupRouter(app) {
+	// Dependencies
+	const log = require('winston')
 	const express = require('express')
 	const router = express.Router()
 
-	const indexRouter = require('../users/index.routes')
-	const applyRoutes = require('../submissions/apply.routes')
-	const submissionRoutes = require('../submissions/submission.routes')
-	const userRoutes = require('../users/user.routes')
-	const imgurRoutes = require('../imgur/imgur.routes')
-	const emailerRoutes = require('../utilities/emailer')
-
-	app.use('/', indexRouter)
-	app.use('/', emailerRoutes)
-	app.use('/apply', applyRoutes)
-	app.use('/submissions', submissionRoutes)
-	app.use('/users', userRoutes)
-	app.use('/imgur', imgurRoutes)	
+	// Setup
+	app.use('/', 			require('../users/index.routes'))
+	app.use('/', 			require('../utilities/emailer'))
+	app.use('/apply', 		require('../submissions/apply.routes'))
+	app.use('/submissions', require('../submissions/submission.routes'))
+	app.use('/users', 		require('../users/user.routes'))
 
 	// 404 Error Page
 	app.use((request, response, next)=> {
@@ -38,7 +32,5 @@ function setupRouter(app) {
 		response.render('login')
 	})	
 
-	log.info("Router ✅")
+	log.info("✅  Routes")
 }
-
-module.exports = setupRouter

@@ -1,7 +1,10 @@
-function setupLogging(app) {
+module.exports = async function(app) {
+
+	// Dependencies
 	const morgan = require('morgan')
 	const chalk = require('chalk')
 
+	// Setup
 	app.use(morgan(function (tokens, request, response) {
 		let statusCode = tokens.status(request, response)
 		let method = tokens.method(request, response)
@@ -15,5 +18,3 @@ function setupLogging(app) {
 		].join(' '))
 	}))	
 }
-
-module.exports = setupLogging

@@ -8,8 +8,16 @@ block content
 				.box
 					.box-head.box-head-accent-oob
 					.box-block.box-bt
-						h3 Imgur Upload
-						input#file-input(type="file" accept="image/*")
+						h3 Photo Upload
+						#custom-file
+							.custom-file
+								input#file-input.custom-file-input(type="file" accept="image/*")
+								label.custom-file-label(for="file-input") Select Image
+							p.form-text
+								em Image hosting powered by 
+									a(href="https://imgur.com/") Imgur
+									| .
+
 						p.message
 						.progress
 							.progress-bar.bg-primary
@@ -24,7 +32,8 @@ block content
 		function resetView() {
 			$("#image-preview, .progress, .delete-image-box").hide()
 			$(".message").html("")
-			$("#file-input").show()
+			$("#custom-file").show()
+			$(".progress-bar").width(0)
 		}
 
 
@@ -36,7 +45,7 @@ block content
 			}
 			else {
 				$(".progress").show()
-				$("#file-input").hide()
+				$("#custom-file").hide()
 				$(".message").html("Uploading...")
 				formData = new FormData()
 				formData.append('image', image)
@@ -50,12 +59,14 @@ block content
 					contentType: false,
 					dataType: 'json',
 					headers: {
-						'X-mashape-Key': '',
-				        'Authorization': 'Client-ID xxx'
+						'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+				        'Authorization': 'Client-ID c60e83c906306c5'
 					},
 					data: formData,
 					xhr: function() {
 						var xhr = new window.XMLHttpRequest()
+
+						// This block of code is for the progress bar
 						xhr.upload.addEventListener("progress", function(evt) {
 							if (evt.lengthComputable) {
 								var percentComplete = evt.loaded / evt.total
@@ -64,6 +75,7 @@ block content
 								if (percentComplete === 100) $(".message").html("Processing...")
 							}
 						}, false)
+
 						return xhr
 					}
 				}
@@ -72,7 +84,13 @@ block content
 					.done(function(response){
 						let imageUrl = response.data.link
 						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
-						$(".message").html("Complete!")
+						$(".message").html(
+							"Complete! <br> Link: <a href='http://imgur.com/" 
+							+ response.data.id 
+							+ "'>http://imgur.com/" 
+							+ response.data.id + "</a>"
+						)
+						$(".progress").hide()
 						$("#image-preview").attr('src', imageUrl)
 						$("#delete-image").attr('href', deleteImageUrl)
 						$(".delete-image-box, #image-preview").show()

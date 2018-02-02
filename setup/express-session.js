@@ -1,15 +1,15 @@
-// Todo: Express Session not fully implemented
-// Not ready for production
-const log = require('winston')
+module.exports = async function(app) {
 
-function setupExpressSession(app) {
+	// Dependencies
+	const log = require('winston')
+
+	// Setup
 	app.use(require('express-session')({
 		secret: 'Donnie Darko is an overrated movie',
 		resave: false,
 		saveUninitialized: false
 	}))
 
-	log.info("Express Session 🆗")
+	// Log
+	log.info("🆗  Express Session")
 }
-
-module.exports = setupExpressSession

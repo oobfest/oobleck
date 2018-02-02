@@ -1,4 +1,4 @@
-function authenticateUser(request, response, next) {
+module.exports = function (request, response, next) {
 
 	if (request.isAuthenticated()) {
 		request.app.locals.user = request.user
@@ -11,5 +11,3 @@ function authenticateUser(request, response, next) {
 		})		
 	}
 }
-
-module.exports = authenticateUser

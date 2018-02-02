@@ -26,6 +26,8 @@ router.get('/review/:objectId', authenticateUser, (request, response)=> {
 	})
 })
 
+// Normally this path would be restricted by roles & signed-in users,
+// It's kept public so troup members can edit the form
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.getSubmission(objectId, (submission)=> {

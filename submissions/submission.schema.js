@@ -28,7 +28,8 @@ let submissionSchema = mongoose.Schema({
 	specialNeeds: String,
 
 	// Photo
-	photoUrl: String,
+	imageUrl: String,
+	deleteImageUrl: String,
 
 	// Video
 	videoUrl: String,

@@ -1,17 +1,14 @@
-const log = require('winston')
+module.exports = async function() {
 
-function setupDatabase() {
+	// Dependencies
+	const log = require('winston')
+	const mongoose = require('mongoose')
 
-	var mongoose = require('mongoose')
+	// Setup
 	mongoose.connect(process.env.MONGO_CONNECTION)
+	let database = mongoose.connection
+	database.on('error', console.error.bind(console, 'Database connection error:'))
 
-	var db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'connection error:'))
-	db.once('open', function() {
-		log.info("Database Ready")
-	})	
-
-	return db
+	// Log 
+	database.once('open', ()=> {log.info("✅  Database connected")})
 }
-
-module.exports = setupDatabase

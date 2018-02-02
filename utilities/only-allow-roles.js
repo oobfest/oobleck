@@ -6,7 +6,6 @@ module.exports = function(allowedRoles) {
 		if (!request.app.locals.user) renderErrorPage(response, "You must be logged in")
 		let userRoles = request.app.locals.user.roles
 		let userHasPermission = arraysHaveElementInCommon(userRoles, allowedRoles)
-		console.log(userRoles, allowedRoles, userHasPermission)
 		if (userHasPermission) next()
 		else renderErrorPage(response, "You do not have permission to do that :(")
 	}

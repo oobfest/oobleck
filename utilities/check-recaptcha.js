@@ -1,6 +1,6 @@
 const httpRequest = require('request')
 
-function checkRecaptcha(request, response, next) {
+module.exports = function(request, response, next) {
 
 	let recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY
 	let gRecaptchaResponse = request.body['g-recaptcha-response']
@@ -14,5 +14,3 @@ function checkRecaptcha(request, response, next) {
 			else response.render('error', {error: new Error("Recaptcha failed")})
 		})
 }
-
-module.exports = checkRecaptcha

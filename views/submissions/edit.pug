@@ -7,9 +7,12 @@ block content
 					span.dash-titlebar-title Edit Submission
 
 			form.container(method="POST" action="/submissions/edit")
-				.block-heading.m-4
+				.block-heading.m-3
 					h2.block-title= submission.actName
-					//h5.block-subtitle Use this form to shoot us a quick message
+				.row
+					.col
+						.text-center.mb-4
+							button.btn.btn-primary.btn-lg(type="submit") Save Changes
 				.row
 					.col
 						.box.box-b
@@ -138,6 +141,24 @@ block content
 									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission['video-info'])
 					.col
 						.box.box-b
+							if submission.imageUrl
+								.box-banner
+									img.box-banner-image(alt="Submission Photo" src=submission.imageUrl)
+								.box-block.text-right.delete-image-box
+									a#delete-image.btn.btn-danger(href=submission.deleteImageUrl target="_blank" onclick="resetView()") Delete image
+							else
+								input#image-url(type="hidden" name="image-url")
+								#custom-file
+									.custom-file
+										input#file-input.custom-file-input(type="file" accept="image/*")
+										label.custom-file-label(for="file-input") Select Image
+									p.form-text
+										em Image hosting powered by 
+											a(href="https://imgur.com/") Imgur
+											| .
+								p.message
+								.progress
+									.progress-bar.bg-primary
 							.box-block.box-rounded-top.box-bb
 								h4 Primary Contact
 								.form-group.row
@@ -241,10 +262,6 @@ block content
 										.form-group.text-right
 											button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
 										hr
-				.row
-					.col
-						.text-center.m-5
-							button.btn.btn-primary.btn-lg Save
 							
 	script.
 		// Get template for state dropdown

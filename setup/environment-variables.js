@@ -1,39 +1,43 @@
-const log = require('winston')
+module.exports = async function() {
 
-function setupEnvironment() {
+	// Dependencies
+	const log = require('winston')
 
-	// Get .env data if not Heroku
+	// Setup
+	// If we're not running on Heroku, load Environment variables from .env file
 	if (process.env.HEROKU !== "1") {
-		log.info("Loading .env file")
+		log.info("💁‍♂️  Using .env file for environment variables")
 		dotenvResult = require('dotenv').load()
 		if (dotenvResult.error) {
-			log.error("DotEnv failed")
+			log.error("⛔️  DotEnv failed")
 			if(dotenvResult.error.code == 'ENOENT') {
-				log.error("Could not find .env file")
+				log.error("⛔️  Could not find .env file")
 				throw new Error("No .env file")
 			}
 			else {
-				log.error(dotenvResult)
+				log.error("⛔️  Error with dotenv!", dotenvResult)
 				throw new Error("Dotenv error")
 			}
 		}
 	}
+	else {
+		log.info("Heroku detected!")
+	}
 
-	// Check for missing variables
-	let expectedEnvironmentVariables = [
-		'PORT',
-		'MONGO_CONNECTION',
-		'RECAPTCHA_SECRET_KEY',
+	// Confirm we have all environment variables
+	const expectedEnvironmentVariables = [
+		'PORT', 
+		'MONGO_CONNECTION', 
+		'RECAPTCHA_SECRET_KEY', 
 		'NO_REPLY_PASSWORD'
 	]
-	
-	expectedEnvironmentVariables.forEach((variable) => {
-	  if (!process.env[variable]) {
-	    throw new Error(`Environment variable ${variable} is missing!`)
-	  }
-	})
 
-	log.info("Environment Variables ✅")
+	for(let i=0; i<expectedEnvironmentVariables.length; i++) {
+		let environmentVariable = process.env[expectedEnvironmentVariables[i]]
+		let environmentVariableIsMissing = (typeof environmentVariable === 'undefined')
+		if (environmentVariableIsMissing) throw new Error(`⛔️  Environment variable ${variable} is missing!`)
+	}
+
+	// Log
+	log.info("✅  Environment Variables")
 }
-
-module.exports = setupEnvironment

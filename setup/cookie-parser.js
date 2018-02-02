@@ -1,9 +1,12 @@
-const log = require('winston')
+module.exports = async function(app) {
 
-function setupCookieParser(app) {
+	// Dependencies
+	const log = require('winston')
 	const cookieParser = require('cookie-parser')
-	app.use(cookieParser())
-	log.info("Cookie Parser ✅")
-}
 
-module.exports = setupCookieParser
+	// Setup
+	app.use(cookieParser())
+
+	// Log
+	log.info("✅ Cookie Parser")
+}

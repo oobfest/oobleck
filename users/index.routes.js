@@ -29,7 +29,6 @@ router.get('/logout', (request, response)=> {
 // GET /hax0rz
 // Demo app home screen
 router.get('/hax0rz', authenticateUser, (request, response)=> {
-	console.log(request.user)
 	response.render('index', { username: 'Carlton' })
 })
 
