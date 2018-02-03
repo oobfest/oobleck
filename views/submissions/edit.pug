@@ -7,7 +7,7 @@ block content
 					span.dash-titlebar-title Edit Submission
 
 			form.container(method="POST" action="/submissions/edit")
-				input#submission-id(type="hidden" value=submission._id)
+				input#submission-id(type="hidden" value=submission._id name="submission-id")
 				.block-heading.m-3
 					h2.block-title= submission.actName
 				.row
@@ -157,7 +157,7 @@ block content
 										label.custom-file-label(for="image-upload-input") Select Image
 									p.form-text
 										em Image hosting powered by 
-											a(href="https://imgur.com/") Imgur
+											a(href="https://imgur.com/" target="_blank") Imgur
 											| .
 								p#image-upload-message
 								#image-upload-progress.progress
@@ -334,7 +334,7 @@ block content
 			// Delete image urls from database
 			var objectId = $("#submission-id").val()
 			$.post('/submissions/delete-image/' + objectId, function(response) {
-				alert("Image removed")
+				alert("Image removed from submission")
 			}, "json")
 
 			$("#image-upload-message").html("")
@@ -392,6 +392,7 @@ block content
 
 				$.ajax(request)
 					.done(function(response){
+					$("#image-upload-message").html("Saving image...")
 						let imageUrl = response.data.link
 						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
 						$("#image-upload-message").html(
@@ -405,7 +406,7 @@ block content
 						$("#image-url").val(imageUrl)
 						$("#delete-image-url").val(deleteImageUrl)
 						$("#delete-image-button").attr('href', deleteImageUrl)
-						$("#image-preview").show()
+						$("#image-preview-element").attr('src', imageUrl)
 
 						// Update image urls in database
 						var objectId = $("#submission-id").val()
@@ -414,8 +415,7 @@ block content
 							'delete-image-url': deleteImageUrl
 						}
 						$.post('/submissions/add-image/' + objectId, data, function(response) {
-							console.log(response)
-							alert("Image added")
+							$("#image-preview").show()						
 						}, "json")
 					})
 					.fail(function(response){ 

@@ -4,7 +4,7 @@ module.exports = function (request, response, next) {
 	log.verbose("Checking user authentication")
 	if (request.isAuthenticated()) {
 		log.verbose("User passed authentication")
-		request.app.locals.user = request.user
+		response.locals.user = request.user
 		return next()
 	}
 	else {

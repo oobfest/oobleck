@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const authenticateUser = require('../utilities/authenticate-user')
 const submissionApi = require('./submission.api')
+const limax = require('limax')
 
 // GET /submissions
 router.get('/', authenticateUser, (request, response)=> {
@@ -54,8 +55,76 @@ router.get('/edit/:objectId', (request, response)=> {
 })
 
 router.post('/edit', (request, response)=> {
-	let submission = request.body.submission
-	submissionApi.updateSubmission()
+	let submission = { 
+		id: request.body['submission-id'],
+		actName: request.body['act-name'],
+		domain: limax(request.body['act-name']),
+		showType: request.body['show-type'],
+		informalDescription: request.body['informal-description'],
+		publicDescription: request.body['public-description'],
+		accolades: request.body['accolades'],
+		country: request.body['country'],
+		city: request.body['city'],
+		state: request.body['state'],
+		homeTheater: request.body['home-theater'],
+		primaryContactName: request.body['primary-contact-name'],
+		primaryContactEmail: request.body['primary-contact-email'],
+		primaryContactPhone: request.body['primary-contact-phone'],
+		primaryContactRole: request.body['primary-contact-role'],
+		showLength: -100,
+		specialNeeds: request.body['special-needs'],
+		photoUrl: request.body['photo-url'],
+		deletePhotoUrl: request.body['delete-photo-url'],
+		videoUrl: request.body['video-url'],
+		videoInfo: request.body['video-info'],
+		available: request.body['available'],
+		conflicts: request.body['conflicts'],
+
+		additionalMembers: flattenPersonnel(
+			request.body['personnel-name'], 
+			request.body['personnel-email'], 
+			request.body['personnel-role']
+		),
+
+		socialMedia: flattenSocialMedia(
+			request.body['social-media-type'],
+			request.body['social-media-url']
+		),
+
+	}
+
+	submissionApi.updateSubmission(submission, (newSubmission)=> {
+		response.redirect('/submissions/edit/' + submission.id)
+	})
 })
+
+function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {
+	if (socialMediaTypes) {
+		let socialMedia = []
+		for(let i=0; i<socialMediaTypes.length; i++) {
+			socialMedia.push({
+				type: socialMediaTypes[i],
+				url: socialMediaUrls[i]
+			})
+		}
+		return socialMedia
+	}
+	return []
+}
+
+function flattenPersonnel(personnelNames, personnelEmails, personnelRoles) {
+	if(personnelNames) {
+		let personnel = []
+		for(let i=0; i<personnelNames.length; i++) {
+			personnel.push({
+				name: personnelNames[i],
+				email: personnelEmails[i],
+				role: personnelRoles[i]
+			})
+		}
+		return personnel
+	}
+	return []
+}
 
 module.exports = router

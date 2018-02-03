@@ -31,12 +31,34 @@ let submissionApi = {
 	},
 
 	updateSubmission: function(updatedSubmission, callback) {
-		this.getSubmission(submission.id, (submission)=> {
+		this.getSubmission(updatedSubmission.id, (oldSubmission)=> {
 
-			submission.actName = updatedSubmission.actName
-			//etc...
+			oldSubmission.actName				= updatedSubmission.actName,
+  			oldSubmission.domain				= updatedSubmission.domain,
+  			oldSubmission.showType				= updatedSubmission.showType,
+  			oldSubmission.informalDescription	= updatedSubmission.informalDescription,
+  			oldSubmission.publicDescription		= updatedSubmission.publicDescription,
+  			oldSubmission.accolades				= updatedSubmission.accolades,
+  			oldSubmission.country				= updatedSubmission.country,
+  			oldSubmission.city					= updatedSubmission.city,
+  			oldSubmission.state					= updatedSubmission.state,
+  			oldSubmission.homeTheater			= updatedSubmission.homeTheater
+  			oldSubmission.primaryContactName	= updatedSubmission.primaryContactName,
+  			oldSubmission.primaryContactEmail	= updatedSubmission.primaryContactEmail,
+  			oldSubmission.primaryContactPhone	= updatedSubmission.primaryContactPhone,
+  			oldSubmission.primaryContactRole	= updatedSubmission.primaryContactRole,
+  			oldSubmission.additionalMembers		= updatedSubmission.additionalMembers,
+  			oldSubmission.showLength			= updatedSubmission.showLength,
+  			oldSubmission.specialNeeds			= updatedSubmission.specialNeeds,
+  			oldSubmission.imageUrl				= updatedSubmission.imageUrl,
+  			oldSubmission.deleteImageUrl		= updatedSubmission.deleteImageUrl,
+  			oldSubmission.videoUrl				= updatedSubmission.videoUrl
+  			oldSubmission.videoInfo				= updatedSubmission.videoInfo
+  			oldSubmission.socialMedia			= updatedSubmission.socialMedia,
+  			oldSubmission.available				= updatedSubmission.available,
+  			oldSubmission.conflicts				= updatedSubmission.conflicts,
 			
-			this.saveSubmission(submission, (savedSubmission)=> {
+			this.saveSubmission(oldSubmission, (savedSubmission)=> {
 				callback(savedSubmission)
 			})
 		})

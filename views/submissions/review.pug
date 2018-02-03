@@ -15,7 +15,7 @@ block content
 					p.alert.alert-light=submission.informalDescription
 					h4 Video Link
 					pre.alert.alert-light
-						a(href=submission.videoUrl target="_blank")=submission.videoUrl
+						a#video-url(href=submission.videoUrl target="_blank")=submission.videoUrl
 					if submission.videoInfo
 						h4 Video Information
 						p.alert.alert-light=submission.videoInfo

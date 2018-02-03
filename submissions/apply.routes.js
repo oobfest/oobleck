@@ -94,6 +94,7 @@ function saveSubmission(submissionRequest, callback) {
 
 		// Photo
 		photoUrl: null,
+		deletePhotoUrl: null,
 
 		// Video
 		videoUrl: submissionRequest['video-url'],
