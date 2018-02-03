@@ -3,3 +3,12 @@ block form
 	.box-block.box-bt
 		h2 Success!
 		p Thank you for applying 🙂
+		p An email has been sent to 
+			pre=submission.primaryContactEmail
+		h3 Updating Your Application
+		p If you need to make changes to your application you can do so with this URL:
+		pre.alert.alert-light http://app.oobfest.com/submissions/edit#{submission.id}
+		p
+			strong ⚠️ WARNING!  
+			| Anyone with this link can edit your application, so keep it  
+			em secret!
