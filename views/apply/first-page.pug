@@ -1,0 +1,15 @@
+extends _layout
+block form
+	form(action="/apply" method="POST")
+		.box-head.box-head-accent-oob
+		if errors 
+			include partials/errors
+		include partials/act-details
+		include partials/location
+		include partials/personnel
+		include partials/performance-needs
+		include partials/video
+		include partials/social-media
+		include partials/availability
+		include partials/flight-agreement
+		include partials/next

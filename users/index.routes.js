@@ -27,10 +27,4 @@ router.get('/logout', (request, response)=> {
 	response.render('login', { info: "You have been logged out!" })
 })
 
-// GET /hax0rz
-// Demo app home screen
-router.get('/hax0rz', authenticateUser, (request, response)=> {
-	response.render('index', { username: 'Carlton' })
-})
-
 module.exports = router

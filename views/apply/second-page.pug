@@ -1,0 +1,8 @@
+extends _layout
+block form
+	form(action="/apply/finish" method="POST")
+		input(type="hidden" value=submission._id name="id")
+		.box-head.box-head-accent-oob
+		include partials/photo-upload
+		include partials/application-fee
+		include partials/submit

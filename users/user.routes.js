@@ -7,7 +7,7 @@ const onlyAllowRoles = require('../utilities/only-allow-roles')
 
 router.get('/', authenticateUser, onlyAllowRoles(['admin']), (request, response)=> {
 	userApi.getAllUsers((users)=> {
-		response.render('users', {username: 'clark', users: users })
+		response.render('users/view-all', {username: 'clark', users: users })
 	})
 })
 

@@ -1,19 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const nodemailer = require('nodemailer')
 const checkRecaptcha = require('../utilities/check-recaptcha')
+const log = require('winston')
+const transporter = require('./transporter')
 
 router.post('/contact', checkRecaptcha, (request, response)=> {
-
-	console.log("EMAIL!")
-
-	let transporter = nodemailer.createTransport({
-		service: 'Gmail',
-		auth: {
-			user: 'no-reply@oobfest.com',
-			pass: process.env.NO_REPLY_PASSWORD
-		}
-	})
 
 	let mailOptions = {
 		from: `"${request.body['name']}" <${request.body['email']}>`,
@@ -22,17 +13,18 @@ router.post('/contact', checkRecaptcha, (request, response)=> {
 		text: `From: ${request.body['name']}, ${request.body['email']} \n${request.body['message']}`
 	}
 
+	log.info("Attempting to send email from contact form...")
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
-			console.log("EMAIL ERROR", error)
+			log.error("Failed to send email", error)
 			response.send(error)
 		}
 		else {
-			console.log("Email sent!", info)
+			log.info("Email sent!", info)
 			response.send(info)
 		} 
 	})
-
+	
 })
 
 module.exports = router

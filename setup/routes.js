@@ -7,7 +7,7 @@ module.exports = async function(app) {
 
 	// Setup
 	app.use('/', 			require('../users/index.routes'))
-	app.use('/', 			require('../utilities/emailer'))
+	app.use('/', 			require('../email/email.routes'))
 	app.use('/apply', 		require('../submissions/apply.routes'))
 	app.use('/submissions', require('../submissions/submission.routes'))
 	app.use('/users', 		require('../users/user.routes'))

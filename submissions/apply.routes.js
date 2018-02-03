@@ -9,7 +9,7 @@ const log = require('winston')
 
 // GET /apply
 router.get('/', (request, response) => {
-	response.render('apply', { 
+	response.render('apply/first-page', { 
 		recaptcha: true, 
 		submission: {available: []}, 
 		socialMedia: [], 
@@ -28,11 +28,11 @@ router.post('/', submissionValidation, (request, response) => {
 
 	if (submissionIsErrorFree) {
 		saveSubmission(request.body, function(submission) {
-			response.render('apply', {secondPage: true, submission: submission})
+			response.render('apply/second-page', {submission: submission})
 		})
 	}
 	else {
-		response.render('apply', {
+		response.render('apply/first-page', {
 			recaptcha: true,
 			errors: errors.array(),
 			socialMedia: flattenSocialMedia(
@@ -55,7 +55,7 @@ router.post('/finish', (request, response)=>{
 	let deleteImageUrl = request.body['delete-image-url']
 	console.log("POST", objectId, imageUrl, deleteImageUrl)
 	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
-		response.render('apply', {thirdPage: true, submission: submission})
+		response.render('apply/thank-you', {submission: submission})
 	})
 })
 
@@ -92,10 +92,6 @@ function saveSubmission(submissionRequest, callback) {
 		showLength: -100,
 		specialNeeds: submissionRequest['special-needs'],
 
-		// Photo
-		photoUrl: null,
-		deletePhotoUrl: null,
-
 		// Video
 		videoUrl: submissionRequest['video-url'],
 		videoInfo: submissionRequest['video-info'],
@@ -114,7 +110,6 @@ function saveSubmission(submissionRequest, callback) {
 		payedFee: false
 	}
 
-	console.log("Step one", submission)
 	submissionApi.createSubmission(submission, callback)
 }
 
