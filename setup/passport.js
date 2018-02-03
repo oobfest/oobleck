@@ -1,8 +1,8 @@
+const log = require('winston')
 
 module.exports = async function(app) {
 
 	// Dependencies
-	const log = require('winston')
 	const passport = require('passport')
 	let localStrategy = require('passport-local')
 	let user = require('../users/user.schema')

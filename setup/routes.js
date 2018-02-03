@@ -1,7 +1,8 @@
+const log = require('winston')
+
 module.exports = async function(app) {
 
 	// Dependencies
-	const log = require('winston')
 	const express = require('express')
 	const router = express.Router()
 

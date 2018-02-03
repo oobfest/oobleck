@@ -1,3 +1,5 @@
+const log = require('winston')
+
 module.exports = async function(app) {
 
 	// Dependencies
@@ -16,5 +18,7 @@ module.exports = async function(app) {
 			tokens.method(request, response),
 			tokens.url(request, response),
 		].join(' '))
-	}))	
+	}))
+
+	log.info("✅  Morgan (route logging)")
 }

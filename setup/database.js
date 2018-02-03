@@ -1,7 +1,8 @@
+const log = require('winston')
+
 module.exports = async function() {
 
 	// Dependencies
-	const log = require('winston')
 	const mongoose = require('mongoose')
 
 	// Setup

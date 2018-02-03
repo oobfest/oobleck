@@ -1,7 +1,6 @@
-module.exports = async function(app) {
+const log = require('winston')
 
-	// Dependencies
-	const log = require('winston')
+module.exports = async function(app) {
 
 	// Setup
 	app.use(require('express-session')({

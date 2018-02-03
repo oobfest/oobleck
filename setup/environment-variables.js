@@ -1,7 +1,6 @@
-module.exports = async function() {
+const log = require('winston')
 
-	// Dependencies
-	const log = require('winston')
+module.exports = async function() {
 
 	// Setup
 	// If we're not running on Heroku, load Environment variables from .env file
