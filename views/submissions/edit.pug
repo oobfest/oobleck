@@ -7,6 +7,7 @@ block content
 					span.dash-titlebar-title Edit Submission
 
 			form.container(method="POST" action="/submissions/edit")
+				input#submission-id(type="hidden" value=submission._id)
 				.block-heading.m-3
 					h2.block-title= submission.actName
 				.row
@@ -141,25 +142,27 @@ block content
 									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission['video-info'])
 					.col
 						.box.box-b
-							if submission.imageUrl
+							input#image-url(type="hidden" name="image-url" value=submission.imageUrl)
+							input#delete-image-url(type="hidden" name="image-url" value=submission.deleteImageUrl)
+							#image-preview
 								.box-banner
-									img.box-banner-image(alt="Submission Photo" src=submission.imageUrl)
-								.box-block.text-right.delete-image-box
-									a#delete-image.btn.btn-danger(href=submission.deleteImageUrl target="_blank" onclick="resetView()") Delete image
-							else
-								input#image-url(type="hidden" name="image-url")
-								#custom-file
+									img#image-preview-element.box-banner-image(alt="Submission Photo" src=submission.imageUrl)
+								.box-block.box-bb.text-right
+									a#delete-image-button.btn.btn-danger(href=submission.deleteImageUrl target="_blank" onclick="deleteImage()") Delete image
+							#image-upload.box-block.box-rounded-top.box-bb
+								h4 Image Upload
+								#image-upload-controls
 									.custom-file
-										input#file-input.custom-file-input(type="file" accept="image/*")
-										label.custom-file-label(for="file-input") Select Image
+										input#image-upload-input.custom-file-input(type="file" accept="image/*")
+										label.custom-file-label(for="image-upload-input") Select Image
 									p.form-text
 										em Image hosting powered by 
 											a(href="https://imgur.com/") Imgur
 											| .
-								p.message
-								.progress
-									.progress-bar.bg-primary
-							.box-block.box-rounded-top.box-bb
+								p#image-upload-message
+								#image-upload-progress.progress
+									#image-upload-progress-bar.progress-bar.bg-primary
+							.box-block.box-bb
 								h4 Primary Contact
 								.form-group.row
 									label.col-form-label.col-3.required-field(for="primary-contact-name") Name
@@ -312,4 +315,112 @@ block content
 		})
 		$("#social-media").on('click', '.remove-social-media-button', function() {
 			$(this).closest(".social-media-item").remove()
+		})
+
+	script.
+		var submissionHasImage = $("#image-url").val() !== ""
+		if (submissionHasImage) {
+			$("#image-upload").hide()
+		}
+		else {
+			$("#image-preview").hide()
+			$("#image-upload-progress").hide()
+		}
+
+		function deleteImage() {
+			$("#image-url").removeAttr('value')
+			$("#delete-image-url").removeAttr('value')
+
+			// Delete image urls from database
+			var objectId = $("#submission-id").val()
+			$.post('/submissions/delete-image/' + objectId, function(response) {
+				alert("Image removed")
+			}, "json")
+
+			$("#image-upload-message").html("")
+			$("#image-upload-progress").hide()
+			$("#image-upload-progress-bar").width(0)
+
+			$("#image-upload-controls").show()
+			$("#image-upload").show()
+			$("#image-preview").hide()
+		}
+
+
+		$("#image-upload-input").on('change', () => {
+			var image = $("#image-upload-input").prop('files')[0]
+			if(image.size > (1024 * 1000 * 10)) {
+				alert("Image cannot be larger than 10MB")
+				return;
+			}
+			else {
+				$("#image-upload-controls").hide()
+				$("#image-upload-progress").show()
+				$("#image-upload-message").html("Uploading to Imgur...")
+				formData = new FormData()
+				formData.append('image', image)
+
+				var request = {
+				    url: 'https://imgur-apiv3.p.mashape.com/3/image',
+					type: 'POST',
+					mimeType: 'multipart/form-data',
+					crossDomain: true,
+					processData: false,
+					contentType: false,
+					dataType: 'json',
+					headers: {
+						'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+				        'Authorization': 'Client-ID c60e83c906306c5'
+					},
+					data: formData,
+					xhr: function() {
+						var xhr = new window.XMLHttpRequest()
+
+						// This block of code is for the progress bar
+						xhr.upload.addEventListener("progress", function(evt) {
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total
+								percentComplete = parseInt(percentComplete * 100)
+								$("#image-upload-progress-bar").width(percentComplete + '%')
+								if (percentComplete === 100) $("#image-upload-message").html("Waiting for response from Imgur...")
+							}
+						}, false)
+
+						return xhr
+					}
+				}
+
+				$.ajax(request)
+					.done(function(response){
+						let imageUrl = response.data.link
+						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
+						$("#image-upload-message").html(
+							"Upload complete! <br> Link: <a href='http://imgur.com/" 
+							+ response.data.id 
+							+ "'>http://imgur.com/" 
+							+ response.data.id + "</a>"
+						)
+						$("#image-upload").hide()
+						$("#image-preview-element").attr('src', imageUrl)
+						$("#image-url").val(imageUrl)
+						$("#delete-image-url").val(deleteImageUrl)
+						$("#delete-image-button").attr('href', deleteImageUrl)
+						$("#image-preview").show()
+
+						// Update image urls in database
+						var objectId = $("#submission-id").val()
+						var data = {
+							'image-url': imageUrl,
+							'delete-image-url': deleteImageUrl
+						}
+						$.post('/submissions/add-image/' + objectId, data, function(response) {
+							console.log(response)
+							alert("Image added")
+						}, "json")
+					})
+					.fail(function(response){ 
+						console.log("Upload failed", response)
+						alert(response.data.error)
+					})
+			}
 		})

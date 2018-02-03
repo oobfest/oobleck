@@ -11,7 +11,7 @@ router.get('/', authenticateUser, onlyAllowRoles(['admin']), (request, response)
 	})
 })
 
-router.post('/', (request, response)=> {
+router.post('/', onlyAllowRoles(['admin']), (request, response)=> {
 	let user = { 
 		username: request.body.username,
 		password: request.body.password,

@@ -55,7 +55,7 @@ router.post('/finish', (request, response)=>{
 	let deleteImageUrl = request.body['delete-image-url']
 	console.log("POST", objectId, imageUrl, deleteImageUrl)
 	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
-		response.send("Success!")
+		response.render('apply', {thirdPage: true, submission: submission})
 	})
 })
 

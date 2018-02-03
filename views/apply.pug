@@ -12,6 +12,12 @@ block content
 		.row
 			.col-lg-8.mx-auto.pb-5
 				.box
+
+					if thirdPage
+						.box-block.box-bt
+							h2 Success!
+							p Thank you for applying 🙂
+
 					if secondPage
 						form(action="/apply/finish" method="POST")
 							input(type="hidden" value=submission._id name="id")
