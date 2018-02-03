@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const authenticateUser = require('../utilities/authenticate-user')
+const isLoggedIn = require('../middleware/is-logged-in')
 const submissionApi = require('./submission.api')
 const limax = require('limax')
 
 // GET /submissions
-router.get('/', authenticateUser, (request, response)=> {
+router.get('/', isLoggedIn, (request, response)=> {
 	submissionApi.getAllSubmissions((submissions)=> {
 		response.render('submissions/view-all', {username: 'fake', submissions: submissions} )
 	})
@@ -38,7 +38,7 @@ router.post('/add-image/:objectId', (request, response)=> {
 	})
 })
 
-router.get('/review/:objectId', authenticateUser, (request, response)=> {
+router.get('/review/:objectId', isLoggedIn, (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.getSubmission(objectId, (submission)=> {
 		response.render('submissions/review', {submission: submission})

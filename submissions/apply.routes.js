@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const checkRecaptcha = require('../utilities/check-recaptcha')
 const { validationResult } = require('express-validator/check')
 const submissionValidation = require('./submission.validation')
 const submissionApi = require('./submission.api')

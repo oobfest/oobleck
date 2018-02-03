@@ -7,13 +7,11 @@ const path = require('path')
 app.use(express.static(path.join(__dirname, 'public/')))
 
 require('./setup/express')(app)
-//require('./setup/cookie-parser')(app)		// Curently not used!
 require('./setup/body-parser')(app)
 require('./setup/express-session')(app)
 require('./setup/logging')(app)
 require('./setup/passport')(app)
 require('./setup/routes')(app)
-require('./setup/app-locals')(app)
 require('./setup/database')()
 
 // Listen!

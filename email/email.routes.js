@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const checkRecaptcha = require('../utilities/check-recaptcha')
+const isNotARobot = require('../middleware/is-not-a-robot')
 const log = require('winston')
 const transporter = require('./transporter')
 
-router.post('/contact', checkRecaptcha, (request, response)=> {
+router.post('/contact', isNotARobot, (request, response)=> {
 
 	let mailOptions = {
 		from: `"${request.body['name']}" <${request.body['email']}>`,
