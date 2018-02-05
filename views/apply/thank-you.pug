@@ -1,13 +1,14 @@
 extends _layout
 block form
 	.box-head.box-head-accent-oob
-	.box-block.box-bt.box-rounded-top
-		h2 Success!
+	.box-block.box-bb
+		h3 Success!
 		p Thank you for applying 🙂
 		p An email has been sent to &nbsp;
 			span.code=submission.primaryContactEmail
 	.box-block.box-bb
 		h3 Updating Your Application
 		p If you need to make changes to your application you can do so with this URL:
-		pre.alert.alert-light http://app.oobfest.com/submissions/edit#{submission.id}
+		pre.alert.alert-light http://app.oobfest.com/submissions/edit/#{submission.id}
+		p This link has also been emailed to you. 
 		p Anyone with this link can edit your application, so keep it safe!

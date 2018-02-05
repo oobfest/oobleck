@@ -11,10 +11,12 @@ block content
 				thead
 					tr
 						th Name
+						th Type
 				tbody
 					for submission in submissions
 						tr
 							td=submission.actName
+							td=submission.showType
 							td
 								a(href="/submissions/reviews/"+submission._id) Reviews
 							td

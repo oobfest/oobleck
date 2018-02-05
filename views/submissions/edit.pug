@@ -136,10 +136,10 @@ block content
 								h4 Video Link
 								.form-group
 									label.col-form-label.required-field(for="video-url") Link to Video
-									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission['video-url'])
+									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission.videoUrl)
 								.form-group
 									label.col-form-label(for="video-info") Password or other information for accessing video
-									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission['video-info'])
+									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission.videoInfo)
 					.col
 						.box.box-b.mb-4
 							input#image-url(type="hidden" name="image-url" value=submission.imageUrl)
@@ -148,7 +148,7 @@ block content
 								.box-banner
 									img#image-preview-element.box-banner-image(alt="Submission Photo" src=submission.imageUrl)
 								.box-block.box-bb.text-right
-									a#delete-image-button.btn.btn-danger(href=submission.deleteImageUrl target="_blank" onclick="deleteImage()") Delete image
+									button#delete-image-button.btn.btn-danger(href=submission.deleteImageUrl target="_blank" onclick="deleteImage()") Delete image
 							#image-upload.box-block.box-rounded-top.box-bb
 								h4 Image Upload
 								#image-upload-controls
@@ -177,8 +177,8 @@ block content
 									label.col-form-label.col-3.required-field(for="primary-contact-role") Role
 									select#primary-contact-role.form-control.col-9(name="primary-contact-role" selected=submission.primaryContactRole)
 										option(selected=(submission.primaryContactRole==='Performer'	)) Performer
-										option(selected=(submission.primaryContactRole==='Crew'		)) Crew
-										option(selected=(submission.primaryContactRole==='Director'	)) Director
+										option(selected=(submission.primaryContactRole==='Crew'			)) Crew
+										option(selected=(submission.primaryContactRole==='Director'		)) Director
 										option(selected=(submission.primaryContactRole==='Other'		)) Other
 							.box-block.box-bb
 								h4 Additional Members

@@ -83,7 +83,7 @@ router.post('/edit', (request, response)=> {
 		primaryContactEmail: request.body['primary-contact-email'],
 		primaryContactPhone: request.body['primary-contact-phone'],
 		primaryContactRole: request.body['primary-contact-role'],
-		showLength: -100,
+		showLength: request.body['show-length'],
 		specialNeeds: request.body['special-needs'],
 		imageUrl: request.body['image-url'],
 		deleteImageUrl: request.body['delete-image-url'],

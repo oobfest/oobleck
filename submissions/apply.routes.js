@@ -20,8 +20,9 @@ router.get('/', (request, response) => {
 // POST /apply
 router.post('/', submissionValidation, (request, response) => {
 
-	if (!request.body['available']) 
-		request.body['available'] = []
+	request.body['available'] = request.body['available']
+		? request.body['available']
+		: []
 
 	let errors = validationResult(request)
 	let submissionIsErrorFree = errors.isEmpty()
@@ -94,7 +95,7 @@ function saveSubmission(submissionRequest, callback) {
 		),
 
 		// Performance Needs
-		showLength: -100,
+		showLength: submissionRequest['show-length'],
 		specialNeeds: submissionRequest['special-needs'],
 
 		// Video
@@ -111,13 +112,10 @@ function saveSubmission(submissionRequest, callback) {
 		available: submissionRequest['available'],
 		conflicts: submissionRequest['conflicts'],
 
-		videoUrl: submissionRequest['video-url'],
-		videoInfo: submissionRequest['video-info'],
-
 		// Application Fee
 		payedFee: false
 	}
-
+	console.log("What's being saved: ", submission)
 	submissionApi.createSubmission(submission, callback)
 }
 
