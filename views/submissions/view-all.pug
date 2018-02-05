@@ -3,7 +3,7 @@ block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
 			span.dash-titlebar-title Submissions
-		//button.btn.btn-secondary.ml-md-auto Add Submission
+		button.btn.btn-secondary.ml-md-auto(href="#") Add Submission
 
 	.dash-boxes.container-fluid
 		.box.box-b
@@ -16,7 +16,7 @@ block content
 						tr
 							td=submission.actName
 							td
-								a(href="/submissions/review/"+submission._id) Review
+								a(href="/submissions/reviews/"+submission._id) Reviews
 							td
 								a(href="/submissions/edit/"+submission._id) Edit
 							td

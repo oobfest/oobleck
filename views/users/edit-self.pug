@@ -1,0 +1,28 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title Account Settings
+
+	.dash-boxes.container
+		.row.justify-content-center
+			.col-6
+				form.box.box-b.box-block(method="POST" action="/users/edit/"+user._id)
+					h3
+						pre=user.username
+					.form-group
+						label.col-form-label(for="add-password") Change Password
+						input#add-password.form-control(type="password" name="password")
+					.form-group
+						label.col-form-label(for="confirm-password") Confirm Password
+						input#confirm-password.form-control(type="password" name="password")
+					if user.roles.count > 0
+						p Roles
+						ul
+							for role in user.roles
+								li=role
+					else
+						p You don't have any roles! 
+					hr
+					.text-right
+						button#add-user-button.btn.btn-primary(type="submit") Save

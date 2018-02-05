@@ -5,7 +5,13 @@ const passport = require('passport')
 // POST /login
 // Log user in
 router.post('/login', passport.authenticate('local'), (request, response)=> {
-	response.redirect(request.body['attempted-url'] || 'submissions')
+
+	if (request.body['attempted-url']) 				response.redirect(request.body['attempted-url'])
+	if (request.user.roles.includes('admin')) 		response.redirect('submissions')
+	if (request.user.roles.includes('reviewer')) 	response.redirect('submissions/review')
+	
+	response.redirect('users/account')
+
 })
 
 // GET /logout

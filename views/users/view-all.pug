@@ -3,8 +3,7 @@ block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
 			span.dash-titlebar-title Users
-		if user.roles.includes('admin')
-			button.btn.btn-secondary.ml-md-auto(data-toggle="modal" data-target="#add-user-modal") Add User
+		button.btn.btn-secondary.ml-md-auto(data-toggle="modal" data-target="#add-user-modal") Add User
 
 	.dash-boxes.container-fluid
 		.box.box-b
@@ -14,11 +13,13 @@ block content
 						th Name
 						th
 						th
+						th
 						th Roles
 				tbody
 					for user in users
 						tr
 							td=user.username
+							td.text-muted=user._id
 							td
 								a(href="users/edit/"+user._id) Edit
 							td
@@ -27,11 +28,6 @@ block content
 								for role in user.roles
 									span.badge.badge-info=role
 									| &nbsp;
-
-		if user.roles.includes('admin')
-			.box.box-b.box-block
-				h3 Fancy admin stuff
-				p Only an admin can see this part
 
 	#add-user-modal.modal.fade
 		.modal-dialog

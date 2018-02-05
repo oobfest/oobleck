@@ -1,0 +1,36 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title Edit User
+
+	.dash-boxes.container
+		.row.justify-content-center
+			.col-6
+				form.box.box-b.box-block(method="POST" action="/users/edit/"+user._id)
+					.form-group
+						label.col-form-label(for="username") Username
+						input#username.form-control(name="username" value=user.username)
+					//.form-group
+						label.col-form-label(for="add-password") Password
+						input#add-password.form-control(type="password" name="password")
+					p Roles
+					.form-check
+						input#admin-role-checkbox.form-check-input.input(
+							type="checkbox" 
+							name="roles" 
+							value="admin" 
+							checked=user.roles.includes('admin')
+						)
+						label.form-check-label(for="admin-role-checkbox") Admin
+					.form-check
+						input#reviewer-role-checkbox.form-check-input.input(
+							type="checkbox" 
+							name="roles" 
+							value="reviewer"
+							checked=user.roles.includes('reviewer')
+						)
+						label.form-check-label(for="reviewer-role-checkbox") Reviewer
+					hr
+					.text-right
+						button#add-user-button.btn.btn-primary(type="submit") Save

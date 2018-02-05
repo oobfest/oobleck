@@ -1,6 +1,7 @@
+const log = require('winston')
 const transporter = require('./transporter')
 
-module.exports = function(recipient, subject, message) {
+module.exports = function(recipient, subject, message, callback) {
 
 	let mailOptions = {
 		from: 'no-reply@oobfest.com',
@@ -9,15 +10,15 @@ module.exports = function(recipient, subject, message) {
 		text: message
 	}
 
-	log.info("Attempting to send emailx...")
-	transporter.sendMail(mailOptions, (error, info) => {
+	log.info("Attempting to send email...")
+	transporter.sendMail(mailOptions, (error, email) => {
 		if (error) {
 			log.error("Failed to send email", error)
-			response.send(error)
+			throw new Error(error)
 		}
 		else {
-			log.info("Email sent!", info)
-			response.send(info)
+			log.info("Email sent!", email)
+			callback(email)
 		} 
 	})
 

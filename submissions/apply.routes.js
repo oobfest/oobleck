@@ -5,6 +5,7 @@ const submissionValidation = require('./submission.validation')
 const submissionApi = require('./submission.api')
 const limax = require('limax')
 const log = require('winston')
+const sendEmail = require('../email/send-email')
 
 // GET /apply
 router.get('/', (request, response) => {
@@ -54,7 +55,12 @@ router.post('/finish', (request, response)=>{
 	let deleteImageUrl = request.body['delete-image-url']
 	console.log("POST", objectId, imageUrl, deleteImageUrl)
 	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
-		response.render('apply/thank-you', {submission: submission})
+		let subject = "Thank you for applying to Out of Bounds!"
+		let message = "Link: http://app.oobfest.com/submissions/edit/" + submission._id
+		sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
+			console.log("Sent email: ", email)
+			response.render('apply/thank-you', {submission: submission})
+		})
 	})
 })
 
@@ -104,6 +110,9 @@ function saveSubmission(submissionRequest, callback) {
 		// Availability
 		available: submissionRequest['available'],
 		conflicts: submissionRequest['conflicts'],
+
+		videoUrl: submissionRequest['video-url'],
+		videoInfo: submissionRequest['video-info'],
 
 		// Application Fee
 		payedFee: false

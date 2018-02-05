@@ -4,7 +4,10 @@ block content
 		.dash-app
 			header.dash-titlebar
 				.mb-md-0.mb-3
-					span.dash-titlebar-title Review Submission
+					span.dash-titlebar-title 
+						a.text-muted(href="/submissions/") Submissions
+						|  /
+						| Review Submission
 
 			form.container(method="POST" action="/submissions/review")
 				.block-heading.m-4
@@ -22,7 +25,7 @@ block content
 
 
 				if user.roles.includes('reviewer')
-					.box.box-b.box-block
+					.box.box-b.box-block.mb-4
 						h3 Your Score
 						.d-none.d-lg-block
 							.row.no-gutters.justify-content-between

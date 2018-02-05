@@ -1,0 +1,19 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title Submissions
+
+	.dash-boxes.container-fluid
+		.box.box-b
+			table.box-table.table
+				thead
+					tr
+						th Name
+						th Your Score
+				tbody
+					for submission in submissions
+						tr
+							td
+								a(href="/submissions/review/"+submission._id)=submission.actName
+							td 100

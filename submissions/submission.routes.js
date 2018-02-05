@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/is-logged-in')
+const isRole = require('../middleware/is-role')
 const submissionApi = require('./submission.api')
 const limax = require('limax')
 
 // GET /submissions
 router.get('/', isLoggedIn, (request, response)=> {
 	submissionApi.getAllSubmissions((submissions)=> {
-		response.render('submissions/view-all', {username: 'fake', submissions: submissions} )
+		response.render('submissions/view-all', {submissions: submissions})
 	})
 })
 
@@ -38,6 +39,12 @@ router.post('/add-image/:objectId', (request, response)=> {
 	})
 })
 
+router.get('/review', isLoggedIn, isRole('reviewer'), (request, response)=> {
+	submissionApi.getAllSubmissions((submissions)=> {
+		response.render('submissions/review-all', {submissions: submissions})
+	})
+})
+
 router.get('/review/:objectId', isLoggedIn, (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.getSubmission(objectId, (submission)=> {
@@ -45,12 +52,17 @@ router.get('/review/:objectId', isLoggedIn, (request, response)=> {
 	})
 })
 
+router.get('/reviews/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
+	let objectId = request.params.objectId
+	response.send("TODO: show reviews for " + objectId)
+})
+
 // Normally this path would be restricted by roles & signed-in users,
 // It's kept public so troup members can edit the form
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.getSubmission(objectId, (submission)=> {
-		response.render('submissions/edit', {submission: submission})
+		response.render('submissions/edit', {submission: submission, user: request.user})
 	})
 })
 
