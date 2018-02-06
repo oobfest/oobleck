@@ -6,11 +6,11 @@ const passport = require('passport')
 // Log user in
 router.post('/login', (request, response, next)=> {
 	passport.authenticate('local', (error, user, info)=> {
-		if (error) next(new Error(error))
+		if (error) next(error)
 		console.log(info)
 		if (!user) return response.render('login', {info: info.message})
 		request.logIn(user, (loginError)=> {
-			if (loginError) next(new Error(loginError))
+			if (loginError) next(loginError)
 
 			// Redirect to page depending on user's role
 			if (request.body['attempted-url']) 				return response.redirect(request.body['attempted-url'])

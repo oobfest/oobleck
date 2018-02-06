@@ -28,11 +28,9 @@ module.exports = async function(app) {
 
 	// Error page!
 	app.use((error, request, response, next)=> {
-		// response.status(error.status || 500)
-		// In production, we won't output a stack trace from {error: error}
-		// log.error("Errorrrrr :(", error)
+		response.status(error.status || 500)
+		log.error("Errorrrrr :(", error)
 		response.render('error', { error: error })
-		next(error)
 	})
 
 	log.info("✅  Routes")
