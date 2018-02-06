@@ -76,6 +76,18 @@ let submissionApi = {
 		})
 	},
 
+	updatePayment: function(objectId, paymentInfo, callback) {
+		this.getSubmission(objectId, (submission)=> {
+
+			submission.paymentInfo = paymentInfo
+			submission.markModified('paymentInfo')
+			
+			this.saveSubmission(submission, (savedSubmission)=> {
+				callback(savedSubmission)
+			})
+		})
+	},
+
 	deleteSubmission: function(objectId, callback) {
 		this.getSubmission(objectId, (submission)=> {
 			submission.remove((error, submission)=> {

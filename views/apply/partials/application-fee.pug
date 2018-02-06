@@ -1,8 +1,9 @@
 .box-block.box-bt
-	input#attendee-count(name="attendee-count" value=submission['additional-members'].length + 1)
+	input#submission-id(name="submission-id" value=submission._id)
+	input#attendee-count(name="attendee-count" value=submission.additionalMembers.length + 1 type="hidden")
 	h3 Application Fee
-	p This year we're charging $8 per person. Your act has #{submission['additional-members'].length + 1} people. Thus your application fee is
-		code $#{(submission['additional-members'].length + 1) * 8}.00
+	p This year we're charging $8 per person and your act has #{submission.additionalMembers.length + 1} members. Thus your application fee is  
+		code $#{(submission.additionalMembers.length + 1) * 8}.00
 	p#payment-received(style="display:none") Payment Received! ✅
 	#paypal-buttons
 	script(src="https://www.paypalobjects.com/api/checkout.js")
@@ -31,7 +32,7 @@
 			commit: true, // Show a 'Pay Now' button
 
 			payment: function(data, actions) {
-				var earlyBirdPrice = 7
+				var earlyBirdPrice = 8
 				var attendeeCount = parseInt($("#attendee-count").val())
 				var charge = attendeeCount * earlyBirdPrice
 				return actions.payment.create({
@@ -46,12 +47,18 @@
 			},
 
 			onAuthorize: function(data, actions) {
-				return actions.payment.execute().then(function(payment) {
+				return actions.payment.execute().then(function(paymentInfo) {
 					// The payment is complete!
 					// You can now show a confirmation message to the customer
-					console.log(payment)
-					$("#payment-received").show()
 					$("#paypal-buttons").hide()
+					$("#submit-button").prop('disabled', false)
+					$("#payment-received").show()
+
+					var objectId = $("#submission-id").val()
+					$.post('/apply/pay/' + objectId, {paymentInfo: paymentInfo}, function(paymentResponse) {
+						console.log("Payment response", paymentResponse)
+						alert("YAY")
+					}, "json")
 				})
 			}
 

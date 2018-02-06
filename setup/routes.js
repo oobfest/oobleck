@@ -22,16 +22,17 @@ module.exports = async function(app) {
 	// Catch-all, creates 404 error
 	app.use((request, response, next)=> {
 		let error = new Error("Not found")
-		error.status = 404
+		//error.status = 404
 		next(error)
 	})
 
 	// Error page!
 	app.use((error, request, response, next)=> {
-		response.status(error.status || 500)
+		// response.status(error.status || 500)
 		// In production, we won't output a stack trace from {error: error}
-		log.error("Errorrrrr :(", error)
+		// log.error("Errorrrrr :(", error)
 		response.render('error', { error: error })
+		next(error)
 	})
 
 	log.info("✅  Routes")

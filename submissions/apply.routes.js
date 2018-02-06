@@ -50,6 +50,15 @@ router.post('/', submissionValidation, (request, response) => {
 	}
 })
 
+router.post('/pay/:objectId', (request, response)=> {
+	let objectId = request.params.objectId
+	let paymentInfo = request.body.paymentInfo
+	submissionApi.updatePayment(objectId, paymentInfo, (submission)=> {
+		console.log("Saved payment", submission.paymentInfo)
+		response.send({'cool-message': "YAY!"})
+	})
+})
+
 router.post('/finish', (request, response)=>{
 	let objectId = request.body['id']
 	let imageUrl = request.body['image-url']
@@ -113,7 +122,7 @@ function saveSubmission(submissionRequest, callback) {
 		conflicts: submissionRequest['conflicts'],
 
 		// Application Fee
-		payedFee: false
+		paymentInfo: null
 	}
 	console.log("What's being saved: ", submission)
 	submissionApi.createSubmission(submission, callback)

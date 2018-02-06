@@ -1,4 +1,4 @@
-const renderErrorPage = require('../utilities/render-error-page')
+const renderErrorPage = require('../utilities/handle-error')
 
 // Checks if the user has permission
 module.exports = function(allowedRoles) {

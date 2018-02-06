@@ -7,9 +7,15 @@ const limax = require('limax')
 
 // GET /submissions
 router.get('/', isLoggedIn, (request, response)=> {
-	submissionApi.getAllSubmissions((submissions)=> {
-		response.render('submissions/view-all', {submissions: submissions})
-	})
+
+	if(true) throw new Error("FML")
+	else {
+
+		submissionApi.getAllSubmissions((submissions)=> {
+			response.render('submissions/view-all', {submissions: submissions})
+		})
+		
+	}
 })
 
 // Todo: HTTP DELETE

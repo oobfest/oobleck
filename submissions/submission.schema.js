@@ -43,7 +43,15 @@ let submissionSchema = mongoose.Schema({
 	conflicts: String,
 
 	// Application Fee
-	payedFee: Boolean
+	paymentInfo: {}	
+
+	// Mongoose loses the ability to auto-detect and save changes of Mixed type.
+	// To tell Mongoose that the value of a Mixed type has changed call `.markModified(path)`
+
+	// For example...
+	// submission.paymentInfo = { ... }
+	// submission.markModified('paymentInfo')
+	// submission.save()
 
 })
 
