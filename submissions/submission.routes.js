@@ -8,7 +8,7 @@ const limax = require('limax')
 // GET /submissions
 router.get('/', isLoggedIn, (request, response)=> {
 
-	if(true) throw new Error("FML")
+	if(false) throw new Error("FML")
 	else {
 
 		submissionApi.getAllSubmissions((submissions)=> {
