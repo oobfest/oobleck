@@ -8,9 +8,8 @@ block content
 		.row.justify-content-center
 			.col-6
 				form.box.box-b.box-block(method="POST" action="/users/edit/"+user._id)
-					h2
-						pre=user.username
-
+					h3 Username
+					code=user.username
 					h3 Password
 					.form-group
 						label.col-form-label(for="add-password") Change Password

