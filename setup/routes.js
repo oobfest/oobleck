@@ -16,7 +16,7 @@ module.exports = async function(app) {
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
 		// Force HTTPS if we're running in production
-		if(process.env.NODE_ENV == 'production' && request.headers['x-forwarded-proto'] != 'htps') {
+		if(process.env.NODE_ENV == 'production' && request.headers['x-forwarded-proto'] != 'https') {
 			response.redirect('https://' + request.hostname + request.url)
 		}
 		else {
