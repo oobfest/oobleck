@@ -1,5 +1,5 @@
 .box-block.box-bt
-	input#submission-id(name="submission-id" value=submission._id)
+	input#submission-id(name="submission-id" value=submission._id type="hidden")
 	input#attendee-count(name="attendee-count" value=submission.additionalMembers.length + 1 type="hidden")
 	h3 Application Fee
 	p This year we're charging $8 per person and your act has #{submission.additionalMembers.length + 1} members. Thus your application fee is  

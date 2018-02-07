@@ -79,7 +79,7 @@ script.
 					let imageUrl = response.data.link
 					let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
 					$(".message").html(
-						"Upload complete! <br> Link: <a href='http://imgur.com/" 
+						"Upload complete! <br> Link: <a target='_blank' href='http://imgur.com/" 
 						+ response.data.id 
 						+ "'>http://imgur.com/" 
 						+ response.data.id + "</a>"

@@ -140,6 +140,20 @@ block content
 								.form-group
 									label.col-form-label(for="video-info") Password or other information for accessing video
 									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission.videoInfo)
+							.box-block.box-bb
+								h4 Payment Info
+								if (submission.paymentInfo != null)
+									- var payment = submission.paymentInfo
+									| Payment ID
+									pre=payment.transactions[0].related_resources[0].sale.id
+									| Email
+									pre=payment.payer.payer_info.email
+									| Amount
+									pre $#{payment.transactions[0].amount.total}
+									| Time of Payment
+									pre= new Date(payment.create_time).toLocaleString("en-US")
+								else
+									p No payment information found D:
 					.col
 						.box.box-b.mb-4
 							input#image-url(type="hidden" name="image-url" value=submission.imageUrl)
@@ -225,46 +239,51 @@ block content
 											hr
 								.form-group
 									button#add-social-media-button.btn.btn-secondary(type="button") Add Link
-								script#region-template(type="text/x-template")
-									.form-group
-										label.col-form-label(for="state") State / Province / Region
-										input#state.form-control(type="text" name="state" required maxlength="280" value=submission.state)
-								
-								script#additional-contact-template(type="text/x-template")
-									.personnel-item
-										.form-group.row
-											label.col-form-label.col-3 Name
-											input.form-control.col-9(type="text" name="personnel-name[]" maxlength="280")
-										.form-group.row
-											label.col-form-label.col-3 Email
-											input.form-control.col-9(type="email" name="personnel-email[]" maxlength="280")
-										.form-group.row
-											label.col-form-label.col-3 Role
-											select.form-control.col-9(name="personnel-role[]")
-												option Performer
-												option Tech
-												option Director
-												option Other
-										.form-group.text-right
-											button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
-										hr
+				.row
+					.col
+						.text-center.mb-4
+							button.btn.btn-primary.btn-lg(type="submit") Save Changes
 
-								script#social-media-template(type="text/x-template")
-									.social-media-item
-										.form-group
-											.input-group
-												.input-group-prepend
-													select.form-control(name="social-media-type[]")
-														option Twitter
-														option Facebook
-														option YouTube
-														option Instagram
-														option Website
-														option Other
-												input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280")
-										.form-group.text-right
-											button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
-										hr
+	script#region-template(type="text/x-template")
+		.form-group
+			label.col-form-label(for="state") State / Province / Region
+			input#state.form-control(type="text" name="state" required maxlength="280" value=submission.state)
+
+	script#additional-contact-template(type="text/x-template")
+		.personnel-item
+			.form-group.row
+				label.col-form-label.col-3 Name
+				input.form-control.col-9(type="text" name="personnel-name[]" maxlength="280")
+			.form-group.row
+				label.col-form-label.col-3 Email
+				input.form-control.col-9(type="email" name="personnel-email[]" maxlength="280")
+			.form-group.row
+				label.col-form-label.col-3 Role
+				select.form-control.col-9(name="personnel-role[]")
+					option Performer
+					option Tech
+					option Director
+					option Other
+			.form-group.text-right
+				button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
+			hr
+
+	script#social-media-template(type="text/x-template")
+		.social-media-item
+			.form-group
+				.input-group
+					.input-group-prepend
+						select.form-control(name="social-media-type[]")
+							option Twitter
+							option Facebook
+							option YouTube
+							option Instagram
+							option Website
+							option Other
+					input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280")
+			.form-group.text-right
+				button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
+			hr
 							
 	script.
 		// Get template for state dropdown
