@@ -18,6 +18,7 @@ let submissionApi = {
 
 	getSubmission: function(objectId, callback) {
 		Submission.findById(objectId, (error, submission)=> {
+			console.log("GET Submission", objectId, error)
 			if(error) throw Error("FJLFS!!1")
 			callback(submission)
 		})

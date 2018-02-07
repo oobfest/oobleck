@@ -15,8 +15,13 @@ module.exports = async function(app) {
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
-		// Todo: Checks that user is signed in, goes to page apropriate for role
-		response.render('login')
+		// Force HTTPS if we're running in production
+		if(process.env.NODE_ENV == 'production' && request.headers['x-forwarded-proto'] != 'htps') {
+			response.redirect('https://' + request.hostname + request.url)
+		}
+		else {
+			response.render('login')
+		}
 	}))
 
 	// Catch-all, creates 404 error

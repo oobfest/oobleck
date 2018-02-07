@@ -151,7 +151,7 @@ block content
 									| Amount
 									pre $#{payment.transactions[0].amount.total}
 									| Time of Payment
-									pre= new Date(payment.create_time).toLocaleString("en-US")
+									pre= new Date(payment.create_time).toLocaleString("en-US", {timeZone: 'America/Chicago'})
 								else
 									p No payment information found D:
 					.col
