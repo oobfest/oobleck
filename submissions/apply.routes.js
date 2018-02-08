@@ -65,12 +65,18 @@ router.post('/finish', (request, response)=>{
 	let deleteImageUrl = request.body['delete-image-url']
 	console.log("POST", objectId, imageUrl, deleteImageUrl)
 	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
-		let subject = "Thank you for applying to Out of Bounds!"
-		let message = "Link: http://app.oobfest.com/submissions/edit/" + submission._id
-		sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-			console.log("Sent email: ", email)
-			response.render('apply/thank-you', {submission: submission})
-		})
+		// Double-check that they payed
+		if (submission.paymentInfo !== null) {
+			let subject = "Thank you for applying to Out of Bounds 2018!"
+			let message = `We received your application for ${submission.actName}\nTo view & edit your profile, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}\nAnyone with this URL can edit your application, so keep it safe!!`
+			sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
+				console.log("Sent email: ", email)
+				response.render('apply/thank-you', {submission: submission})
+			})
+			else {
+				response.render('apply/second-page', {submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
+			}
+		}
 	})
 })
 
