@@ -56,8 +56,7 @@
 
 					var objectId = $("#submission-id").val()
 					$.post('/apply/pay/' + objectId, {paymentInfo: paymentInfo}, function(paymentResponse) {
-						console.log("Payment response", paymentResponse)
-						alert("YAY")
+						alert("Payment received!")
 					}, "json")
 				})
 			}

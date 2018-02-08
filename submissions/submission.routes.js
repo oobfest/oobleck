@@ -6,7 +6,7 @@ const submissionApi = require('./submission.api')
 const limax = require('limax')
 
 // GET /submissions
-router.get('/', isLoggedIn, (request, response, next)=> {
+router.get('/', isLoggedIn, isRole('admin'), (request, response, next)=> {
 	submissionApi.getAllSubmissions((submissions)=> {
 		response.render('submissions/view-all', {submissions: submissions})
 	})

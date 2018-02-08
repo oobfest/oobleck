@@ -30,7 +30,7 @@ router.post('/', isLoggedIn, isRole('admin'), (request, response)=> {
 router.get('/edit/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
 	let objectId = request.params.objectId
 	userApi.get(objectId, (user)=> {
-		response.render('users/edit', { user: user })
+		response.render('users/edit', { editUser: user })
 	})
 })
 
