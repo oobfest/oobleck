@@ -73,9 +73,9 @@ router.post('/finish', (request, response)=>{
 				console.log("Sent email: ", email)
 				response.render('apply/thank-you', {submission: submission})
 			})
-			else {
-				response.render('apply/second-page', {submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
-			}
+		}
+		else {
+			response.render('apply/second-page', {submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
 		}
 	})
 })
