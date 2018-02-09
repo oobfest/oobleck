@@ -7,7 +7,7 @@ const limax = require('limax')
 
 // GET /submissions
 router.get('/', isLoggedIn, isRole('admin'), (request, response, next)=> {
-	submissionApi.getAllSubmissions((submissions)=> {
+	submissionApi.getAll((submissions)=> {
 		response.render('submissions/view-all', {submissions: submissions})
 	})
 })
@@ -15,7 +15,7 @@ router.get('/', isLoggedIn, isRole('admin'), (request, response, next)=> {
 // Todo: HTTP DELETE
 router.get('/delete/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.deleteSubmission(objectId, ()=> {
+	submissionApi.delete(objectId, ()=> {
 		console.log("Deleted", objectId)
 		response.redirect('/submissions')
 	})
@@ -23,7 +23,7 @@ router.get('/delete/:objectId', (request, response)=> {
 
 router.post('/delete-image/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.updateSubmissionImage(objectId, null, null, ()=> {
+	submissionApi.updateImage(objectId, null, null, ()=> {
 		console.log("Deleted image from", objectId)
 		response.send({message: "Borat Voice: 'Great success!'"})
 	})
@@ -33,21 +33,21 @@ router.post('/add-image/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
-	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, ()=> {
+	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, ()=> {
 		console.log("Updated image URLs for", objectId)
 		response.send({message: "Borat Voice: 'Very nice!'"})
 	})
 })
 
 router.get('/review', isLoggedIn, isRole('reviewer'), (request, response)=> {
-	submissionApi.getAllSubmissions((submissions)=> {
+	submissionApi.getAll((submissions)=> {
 		response.render('submissions/review-all', {submissions: submissions})
 	})
 })
 
 router.get('/review/:objectId', isLoggedIn, (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.getSubmission(objectId, (submission)=> {
+	submissionApi.get(objectId, (submission)=> {
 		response.render('submissions/review', {submission: submission})
 	})
 })
@@ -61,7 +61,7 @@ router.get('/reviews/:objectId', isLoggedIn, isRole('admin'), (request, response
 // It's kept public so troup members can edit the form
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.getSubmission(objectId, (submission)=> {
+	submissionApi.get(objectId, (submission)=> {
 		response.render('submissions/edit', {submission: submission, user: request.user})
 	})
 })
@@ -105,7 +105,7 @@ router.post('/edit', (request, response)=> {
 
 	}
 
-	submissionApi.updateSubmission(submission, (newSubmission)=> {
+	submissionApi.update(submission, (newSubmission)=> {
 		response.redirect('/submissions/edit/' + submission.id)
 	})
 })

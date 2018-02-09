@@ -64,7 +64,7 @@ router.post('/finish', (request, response)=>{
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
 	console.log("POST", objectId, imageUrl, deleteImageUrl)
-	submissionApi.updateSubmissionImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
+	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
 		// Double-check that they payed
 		if (submission.paymentInfo !== null) {
 			let subject = "Thank you for applying to Out of Bounds 2018!"
@@ -131,7 +131,7 @@ function saveSubmission(submissionRequest, callback) {
 		paymentInfo: null
 	}
 	console.log("What's being saved: ", submission)
-	submissionApi.createSubmission(submission, callback)
+	submissionApi.create(submission, callback)
 }
 
 function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {

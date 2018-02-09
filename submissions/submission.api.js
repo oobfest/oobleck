@@ -2,21 +2,21 @@ const Submission = require('../submissions/submission.schema')
 
 let submissionApi = {
 
-	createSubmission: function(submission, callback) {
+	create: function(submission, callback) {
 		let newSubmission = Submission(submission)
-		this.saveSubmission(newSubmission, (savedSubmission)=> {
+		this.save(newSubmission, (savedSubmission)=> {
 			callback(savedSubmission)
 		})
 	},
 
-	saveSubmission: function(submission, callback) {
+	save: function(submission, callback) {
 		submission.save((error, submission)=> {
 			if (error) throw Error("Failed to save submission")
 			callback(submission)
 		})
 	},
 
-	getSubmission: function(objectId, callback) {
+	get: function(objectId, callback) {
 		Submission.findById(objectId, (error, submission)=> {
 			console.log("GET Submission", objectId, error)
 			if(error) throw Error("FJLFS!!1")
@@ -24,15 +24,15 @@ let submissionApi = {
 		})
 	},
 
-	getAllSubmissions: function(callback) {
+	getAll: function(callback) {
 		Submission.find((error, submissions)=> {
 			if (error) throw Error("OH MY GOD")
 			callback(submissions)
 		})
 	},
 
-	updateSubmission: function(updatedSubmission, callback) {
-		this.getSubmission(updatedSubmission.id, (oldSubmission)=> {
+	update: function(updatedSubmission, callback) {
+		this.get(updatedSubmission.id, (oldSubmission)=> {
 
 			oldSubmission.actName				= updatedSubmission.actName,
   			oldSubmission.domain				= updatedSubmission.domain,
@@ -59,38 +59,38 @@ let submissionApi = {
   			oldSubmission.available				= updatedSubmission.available,
   			oldSubmission.conflicts				= updatedSubmission.conflicts,
 			
-			this.saveSubmission(oldSubmission, (savedSubmission)=> {
+			this.save(oldSubmission, (savedSubmission)=> {
 				callback(savedSubmission)
 			})
 		})
 	},
 
-	updateSubmissionImage: function(objectId, imageUrl, deleteImageUrl, callback) {
-		this.getSubmission(objectId, (submission)=> {
+	updateImage: function(objectId, imageUrl, deleteImageUrl, callback) {
+		this.get(objectId, (submission)=> {
 
 			submission.imageUrl = imageUrl
 			submission.deleteImageUrl = deleteImageUrl
 			
-			this.saveSubmission(submission, (savedSubmission)=> {
+			this.save(submission, (savedSubmission)=> {
 				callback(savedSubmission)
 			})
 		})
 	},
 
 	updatePayment: function(objectId, paymentInfo, callback) {
-		this.getSubmission(objectId, (submission)=> {
+		this.get(objectId, (submission)=> {
 
 			submission.paymentInfo = paymentInfo
 			submission.markModified('paymentInfo')
 			
-			this.saveSubmission(submission, (savedSubmission)=> {
+			this.save(submission, (savedSubmission)=> {
 				callback(savedSubmission)
 			})
 		})
 	},
 
-	deleteSubmission: function(objectId, callback) {
-		this.getSubmission(objectId, (submission)=> {
+	delete: function(objectId, callback) {
+		this.get(objectId, (submission)=> {
 			submission.remove((error, submission)=> {
 				if (error) throw Error("AHH NO WAY")
 				callback(submission)

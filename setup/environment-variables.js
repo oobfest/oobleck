@@ -1,6 +1,6 @@
 const log = require('winston')
 
-module.exports = async function() {
+module.exports = function() {
 
 	// Setup
 	// If we're not running on Heroku, load Environment variables from .env file
