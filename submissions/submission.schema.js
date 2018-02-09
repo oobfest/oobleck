@@ -48,6 +48,7 @@ let submissionSchema = mongoose.Schema({
 	// Reviews!
 	reviews: [{ 
 		userId: String, 
+		username: String,
 		score: Number, 
 		notes: String
 	}]

@@ -56,6 +56,7 @@ router.post('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, respo
 	let objectId = request.params.objectId
 	let review = {
 		userId: request.user._id,
+		username: request.user.username,
 		score: request.body['score'],
 		notes: request.body['notes']
 	}
@@ -66,7 +67,10 @@ router.post('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, respo
 
 router.get('/reviews/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
 	let objectId = request.params.objectId
-	response.send("TODO: show reviews for " + objectId)
+	submissionApi.get(objectId, (submission)=> {
+		console.log("HUH", submission.reviews)
+		response.render('submissions/reviews', {submission: submission})
+	})
 })
 
 // Normally this path would be restricted by roles & signed-in users,
