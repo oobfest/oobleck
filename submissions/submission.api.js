@@ -18,7 +18,6 @@ let submissionApi = {
 
 	get: function(objectId, callback) {
 		Submission.findById(objectId, (error, submission)=> {
-			console.log("GET Submission", objectId, error)
 			if(error) throw Error("FJLFS!!1")
 			callback(submission)
 		})
@@ -28,6 +27,20 @@ let submissionApi = {
 		Submission.find((error, submissions)=> {
 			if (error) throw Error("OH MY GOD")
 			callback(submissions)
+		})
+	},
+
+	saveReview: function(objectId, newReview, callback) {
+		this.get(objectId, (submission)=> {
+
+			// Update the review if it already exists
+			reviewIndex = submission.reviews.findIndex(review => review.userId == newReview.userId)
+			if (reviewIndex === -1) submission.reviews.push(newReview)
+			else submission.reviews[reviewIndex] = newReview
+
+			this.save(submission, (savedSubmission)=> {
+				callback(savedSubmission)
+			})
 		})
 	},
 

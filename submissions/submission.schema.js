@@ -46,7 +46,11 @@ let submissionSchema = mongoose.Schema({
 	paymentInfo: {},
 
 	// Reviews!
-	reviews: Array
+	reviews: [{ 
+		userId: String, 
+		score: Number, 
+		notes: String
+	}]
 
 	// Mongoose loses the ability to auto-detect and save changes of Mixed type.
 	// To tell Mongoose that the value of a Mixed type has changed call `.markModified(path)`

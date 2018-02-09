@@ -6,16 +6,18 @@ block content
 
 	.dash-boxes.container-fluid
 		.box.box-b
-			table.box-table.table.table-striped
-				thead
-					tr
-						th Name
-						th Your Score
-						th Notes
-				tbody
-					for submission in submissions
+			.table-responsive
+				table.box-table.table
+					thead
 						tr
-							td
-								a(href="/submissions/review/"+submission._id)=submission.actName
-							td 100
-							td=user._id
+							th Name
+							th Your Score
+							th Notes
+					tbody
+						for submission in submissions
+							- var review = submission.reviews.find(review => review.userId == user._id) || {score: 'N/A', notes: ''};
+							tr
+								td
+									a(href="/submissions/review/"+submission._id)=submission.actName
+								td=review.score
+								td.text-truncate(style="max-width: 150px")=review.notes

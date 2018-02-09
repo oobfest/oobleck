@@ -45,10 +45,22 @@ router.get('/review', isLoggedIn, isRole('reviewer'), (request, response)=> {
 	})
 })
 
-router.get('/review/:objectId', isLoggedIn, (request, response)=> {
+router.get('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.get(objectId, (submission)=> {
 		response.render('submissions/review', {submission: submission})
+	})
+})
+
+router.post('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, response)=> {
+	let objectId = request.params.objectId
+	let review = {
+		userId: request.user._id,
+		score: request.body['score'],
+		notes: request.body['notes']
+	}
+	submissionApi.saveReview(objectId, review, (submission)=> {
+		response.redirect('/submissions/review')
 	})
 })
 
