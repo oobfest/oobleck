@@ -28,7 +28,10 @@ module.exports = function() {
 		'PORT', 
 		'MONGO_CONNECTION', 
 		'RECAPTCHA_SECRET_KEY', 
-		'NO_REPLY_PASSWORD'
+		'NO_REPLY_PASSWORD',
+		'TWILIO_SID',
+		'TWILIO_TOKEN',
+		'TWILIO_RECIPIENT'
 	]
 
 	for(let i=0; i<expectedEnvironmentVariables.length; i++) {

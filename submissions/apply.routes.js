@@ -5,7 +5,7 @@ const submissionValidation = require('./submission.validation')
 const submissionApi = require('./submission.api')
 const limax = require('limax')
 const log = require('winston')
-const sendEmail = require('../email/send-email')
+const sendEmail = require('../utilities/send-email')
 
 // GET /apply
 router.get('/', (request, response) => {

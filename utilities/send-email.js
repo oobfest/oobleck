@@ -1,5 +1,5 @@
 const log = require('winston')
-const transporter = require('./transporter')
+const transporter = require('./email/transporter')
 
 module.exports = function(recipient, subject, message, callback) {
 
