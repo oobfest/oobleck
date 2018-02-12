@@ -21,11 +21,14 @@ let submissionSchema = mongoose.Schema({
 	primaryContactEmail: String,
 	primaryContactPhone: String,
 	primaryContactRole: String,
+	primaryContactAttending: Boolean,
 	additionalMembers: Array,
 
 	// Performance Needs
-	showLength: Number,
+	minimumShowLength: Number,
+	maximumShowLength: Number,
 	specialNeeds: String,
+	noFood: Boolean,
 
 	// Photo
 	imageUrl: String,

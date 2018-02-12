@@ -11,6 +11,7 @@
 			option(selected=(submission['show-type']==='Stand-Up' 	)) Stand-Up
 			option(selected=(submission['show-type']==='Variety' 	)) Variety
 			option(selected=(submission['show-type']==='Podcast' 	)) Podcast
+			option(value='Individual' selected=(submission['show-type']==='Individual'	)) Teacher / Performer
 			option(selected=(submission['show-type']==='Other' 		)) Other
 	.form-group
 		label.col-form-label.required-field(for="informal-description") Describe Your Act to Us
@@ -23,6 +24,6 @@
 			| .
 		textarea#public-description.form-control(maxlength="1400" name="public-description" required)= submission['public-description']
 	.form-group
-		label.col-form-label(for="accolades") Previous Festival Apperances, Awards, etc.
+		label.col-form-label(for="accolades") Festival Apperances, Awards and Reviews
 		small.form-text.text-muted List any previous festival appearances, awards you've won, and any additional press materials (quotes, links to reviews, etc)
 		textarea#accolades.form-control(maxlength="1400" name="accolades")= submission['accolades']

@@ -1,7 +1,7 @@
 .box-block.box-bt
 	h3 Cast &amp; Crew Contact Information
 	h4 Primary Contact
-	p In case we need to get a hold of you, who is the best person to contact?
+	p In case we need to get ahold of you, who is the best person to contact?
 	.form-group.row
 		label.col-form-label.col-2.required-field(for="primary-contact-name") Name
 		input#primary-contact-name.form-control.col-10(type="text" name="primary-contact-name" required maxlength="280" value=submission['primary-contact-name'])
@@ -17,7 +17,13 @@
 			option(selected=(submission['primary-contact-role']==='Performer'	)) Performer
 			option(selected=(submission['primary-contact-role']==='Crew'		)) Crew
 			option(selected=(submission['primary-contact-role']==='Director'	)) Director
+			option(selected=(submission['primary-contact-role']==='Producer'	)) Producer
 			option(selected=(submission['primary-contact-role']==='Other'		)) Other
+	.form-group.row
+		label.col-form-label.col-2 Attending
+		select.form-control.col-10(name="primary-contact-attending")
+			option Yes
+			option(selected=submission['primary-contact-attending']) No
 	h4 Additional Members
 	p Please list everyone that will be attending the festival.
 	#additional-members
@@ -35,7 +41,13 @@
 						option(selected=contact.role==='Performer'	) Performer
 						option(selected=contact.role==='Tech'		) Tech
 						option(selected=contact.role==='Director'	) Director
+						option(selected=contact.role==='Producer'	) Producer
 						option(selected=contact.role==='Other'		) Other
+				.form-group.row
+					label.col-form-label.col-2 Attending
+					select.form-control.col-10(name="personnel-attending[]")
+						option(selected=contact.attending) Yes
+						option(selected=!contact.attending) No
 				.form-group.text-right
 					button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
 				hr
@@ -57,7 +69,13 @@
 					option Performer
 					option Tech
 					option Director
+					option Producer
 					option Other
+			.form-group.row
+				label.col-form-label.col-2 Attending
+				select.form-control.col-10(name="personnel-attending[]")
+					option(selected) Yes
+					option No
 			.form-group.text-right
 				button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
 			hr

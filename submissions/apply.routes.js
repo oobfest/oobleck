@@ -18,6 +18,7 @@ router.get('/', (request, response) => {
 })
 
 // POST /apply
+// From first page to second page
 router.post('/', submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
@@ -103,18 +104,26 @@ function saveSubmission(submissionRequest, callback) {
 		primaryContactEmail: submissionRequest['primary-contact-email'],
 		primaryContactPhone: submissionRequest['primary-contact-phone'],
 		primaryContactRole: submissionRequest['primary-contact-role'],
+		primaryContactAttending: submissionRequest['primary-contact-attending'].toLowerCase() === "yes"
 		additionalMembers: flattenPersonnel(
 			submissionRequest['personnel-name'], 
 			submissionRequest['personnel-email'], 
-			submissionRequest['personnel-role']
+			submissionRequest['personnel-role'],
+			submissionRequest['personnel-attending']
 		),
 
 		// Performance Needs
-		showLength: submissionRequest['show-length'],
+		minimumShowLength: submissionRequest['minimum-show-length'],
+		maximumShowLength: submissionRequest['maximum-show-length'],
 		specialNeeds: submissionRequest['special-needs'],
+		noFood: submissionRequest['no-food'],
 
 		// Video
-		videoUrl: submissionRequest['video-url'],
+		videoUrls: [
+			submissionRequest['video-url-0'],
+			submissionRequest['video-url-1'],
+			submissionRequest['video-url-2']
+		],
 		videoInfo: submissionRequest['video-info'],
 
 		// Social Media
@@ -148,14 +157,15 @@ function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {
 	return []
 }
 
-function flattenPersonnel(personnelNames, personnelEmails, personnelRoles) {
+function flattenPersonnel(personnelNames, personnelEmails, personnelRoles, personnelAttending) {
 	if(personnelNames) {
 		let personnel = []
 		for(let i=0; i<personnelNames.length; i++) {
 			personnel.push({
 				name: personnelNames[i],
 				email: personnelEmails[i],
-				role: personnelRoles[i]
+				role: personnelRoles[i],
+				attending: personnelAttending[i].toLowerCase() === "yes"
 			})
 		}
 		return personnel
