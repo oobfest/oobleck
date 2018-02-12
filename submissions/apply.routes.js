@@ -13,13 +13,15 @@ router.get('/', (request, response) => {
 		recaptcha: true, 
 		submission: {available: []}, 
 		socialMedia: [], 
-		personnel: [] 
+		personnel: []
 	})
 })
 
 // POST /apply
 // From first page to second page
 router.post('/', submissionValidation, (request, response) => {
+
+	console.log("DATA IN\n", request.body)
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
@@ -30,6 +32,7 @@ router.post('/', submissionValidation, (request, response) => {
 
 	if (submissionIsErrorFree) {
 		saveSubmission(request.body, function(submission) {
+			console.log("SAVED OBJECT\n", submission)
 			response.render('apply/second-page', {submission: submission})
 		})
 	}
@@ -44,7 +47,8 @@ router.post('/', submissionValidation, (request, response) => {
 			personnel: flattenPersonnel(
 				request.body['personnel-name'], 
 				request.body['personnel-email'], 
-				request.body['personnel-role']
+				request.body['personnel-role'],
+				request.body['personnel-attending']
 			),
 			submission: request.body
 		})	
@@ -104,7 +108,7 @@ function saveSubmission(submissionRequest, callback) {
 		primaryContactEmail: submissionRequest['primary-contact-email'],
 		primaryContactPhone: submissionRequest['primary-contact-phone'],
 		primaryContactRole: submissionRequest['primary-contact-role'],
-		primaryContactAttending: submissionRequest['primary-contact-attending'].toLowerCase() === "yes"
+		primaryContactAttending: submissionRequest['primary-contact-attending'].toLowerCase() === "yes",
 		additionalMembers: flattenPersonnel(
 			submissionRequest['personnel-name'], 
 			submissionRequest['personnel-email'], 
@@ -139,7 +143,7 @@ function saveSubmission(submissionRequest, callback) {
 		// Application Fee
 		paymentInfo: null
 	}
-	console.log("What's being saved: ", submission)
+	console.log("SAVING OBJECT\n", submission)
 	submissionApi.create(submission, callback)
 }
 

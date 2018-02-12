@@ -35,7 +35,7 @@ let submissionSchema = mongoose.Schema({
 	deleteImageUrl: String,
 
 	// Video
-	videoUrl: String,
+	videoUrls: Array,
 	videoInfo: String,
 
 	// Social Media

@@ -136,7 +136,13 @@ block content
 								h4 Video Link
 								.form-group
 									label.col-form-label.required-field(for="video-url") Link to Video
-									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission.videoUrl)
+									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission.videoUrls[0])
+								.form-group
+									label.col-form-label.required-field(for="video-url") Second Video (optional)
+									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission.videoUrls[1])
+								.form-group
+									label.col-form-label.required-field(for="video-url") Third Video (optional)
+									input#video-url.form-control(type="text" name="video-url" maxlength="1400" value=submission.videoUrls[2])
 								.form-group
 									label.col-form-label(for="video-info") Password or other information for accessing video
 									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission.videoInfo)
@@ -211,6 +217,7 @@ block content
 													option(selected=contact.role==='Performer'	) Performer
 													option(selected=contact.role==='Tech'		) Tech
 													option(selected=contact.role==='Director'	) Director
+													option(selected=contact.role==='Producer'	) Producer
 													option(selected=contact.role==='Other'		) Other
 											.form-group.text-right
 												button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
@@ -227,11 +234,12 @@ block content
 												.input-group
 													.input-group-prepend
 														select.form-control(name="social-media-type[]" selected=sm.type)
+															option(selected=(sm.type==='Website'	)) Website
 															option(selected=(sm.type==='Twitter'	)) Twitter
 															option(selected=(sm.type==='Facebook'	)) Facebook
 															option(selected=(sm.type==='YouTube'	)) YouTube
 															option(selected=(sm.type==='Instagram'	)) Instagram
-															option(selected=(sm.type==='Website'	)) Website
+															option(selected=(sm.type==='Snapchat'	)) Snapchat
 															option(selected=(sm.type==='Other'		)) Other
 													input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280" value=sm.url)
 											.form-group.text-right

@@ -99,11 +99,16 @@ router.post('/edit', (request, response)=> {
 		primaryContactEmail: request.body['primary-contact-email'],
 		primaryContactPhone: request.body['primary-contact-phone'],
 		primaryContactRole: request.body['primary-contact-role'],
+		primaryContactAttending: request.body['primary-contact-attending'],
 		showLength: request.body['show-length'],
 		specialNeeds: request.body['special-needs'],
 		imageUrl: request.body['image-url'],
 		deleteImageUrl: request.body['delete-image-url'],
-		videoUrl: request.body['video-url'],
+		videoUrl: [
+			request.body['video-url-0'],
+			request.body['video-url-1'],
+			request.body['video-url-2']
+		],
 		videoInfo: request.body['video-info'],
 		available: request.body['available'],
 		conflicts: request.body['conflicts'],
@@ -111,7 +116,8 @@ router.post('/edit', (request, response)=> {
 		additionalMembers: flattenPersonnel(
 			request.body['personnel-name'], 
 			request.body['personnel-email'], 
-			request.body['personnel-role']
+			request.body['personnel-role'],
+			request.body['personnel-attending']
 		),
 
 		socialMedia: flattenSocialMedia(

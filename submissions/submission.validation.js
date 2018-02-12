@@ -52,7 +52,11 @@ let validationSchema = [
 		.exists().withMessage("Public description is missing")
 		.not().isEmpty().withMessage("Public description cannot be empty")
 		.isLength({max:1400}).withMessage("Public description is too long"),
-	check('show-length')
+	check('minimum-show-length')
+		.exists().withMessage("Show length must exist")
+		.not().isEmpty().withMessage("Show length cannot be empty")
+		.isNumeric().withMessage("Show length must be numeric"),
+	check('maximum-show-length')
 		.exists().withMessage("Show length must exist")
 		.not().isEmpty().withMessage("Show length cannot be empty")
 		.isNumeric().withMessage("Show length must be numeric"),
@@ -66,7 +70,7 @@ let validationSchema = [
 		.isURL().withMessage("Social Media URL is not a valid URL"),
 	check('special-needs')
 		.isLength({max:1400}).withMessage("Special needs is too long"),
-	check('video-url')
+	check('video-url-1')
 		.exists().withMessage("Video URL must exist")
 		.not().isEmpty().withMessage("Video URL cannot be empty")
 		.isURL().withMessage("Video URL must be a valid URL"),
