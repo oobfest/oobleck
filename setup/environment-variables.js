@@ -24,7 +24,7 @@ module.exports = function() {
 	}
 
 	// Confirm we have all environment variables
-	const expectedEnvironmentVariables = [
+	const variableNameList = [
 		'PORT', 
 		'MONGO_CONNECTION', 
 		'RECAPTCHA_SECRET_KEY', 
@@ -34,10 +34,11 @@ module.exports = function() {
 		'TWILIO_RECIPIENT'
 	]
 
-	for(let i=0; i<expectedEnvironmentVariables.length; i++) {
-		let environmentVariable = process.env[expectedEnvironmentVariables[i]]
-		let environmentVariableIsMissing = (typeof environmentVariable === 'undefined')
-		if (environmentVariableIsMissing) throw new Error(`⛔️  Environment variable ${variable} is missing!`)
+	for(let i=0; i<variableNameList.length; i++) {
+		let variableName = variableNameList[i]
+		let variableValue = process.env[variableName]
+		let variableIsMissing = (typeof variableValue === 'undefined')
+		if (variableIsMissing) throw new Error(`⛔️  Environment variable ${variableName} is missing!`)
 	}
 
 	// Log
