@@ -1,0 +1,27 @@
+extends _layout
+block form
+	form(action="/hosts" method="POST")
+		.box-head.box-head-accent-oob
+		if errors 
+			include partials/errors
+		.box-block
+			h3.mb-4 Host Application
+			.form-group
+				label.col-form-label.required-field(for="name") Full Name
+				input#name.form-control(type="text" required autofocus name="name" maxlength="280" value=host['name'])
+			.form-group
+				label.col-form-label.required-field(for="email") Email
+				input#email.form-control(type="email" required autofocus name="email" maxlength="280" value=host['email'])
+			.form-group
+				label.col-form-label(for="experience") Previous Hosting Experience
+				textarea#experience.form-control(maxlength="1500" name="experience")=host['experience']
+			.form-group
+				label.col-form-label.required-field(for="bio") Biography
+				small.form-text.text-muted Hosts may have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." 
+				textarea#bio.form-control(maxlength="1500" name="bio" required)=host['bio']
+			.form-group
+				label.col-form-label(for="text") Video URL (optional)
+				small.form-text.text-muted If you have video of you hosting we'd like to see it!
+				input#video-url.form-control(type="text" autofocus name="video-url" maxlength="280" value=host['video-url'])
+		.box-block.box-bt.text-right
+			button#submit-button.btn.btn-md.btn-primary(type="submit") Submit

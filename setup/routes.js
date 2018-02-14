@@ -12,6 +12,7 @@ module.exports = async function(app) {
 	app.use('/apply', 		require('../submissions/apply.routes'))
 	app.use('/submissions', require('../submissions/submission.routes'))
 	app.use('/users', 		require('../users/user.routes'))
+	app.use('/hosts',		require('../hosts/host.routes'))
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
