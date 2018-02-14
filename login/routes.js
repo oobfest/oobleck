@@ -7,17 +7,23 @@ const passport = require('passport')
 router.post('/login', (request, response, next)=> {
 	passport.authenticate('local', (error, user, info)=> {
 		if (error) next(error)
-		console.log(info)
+
+		// user === false if login failed
 		if (!user) return response.render('login', {info: info.message})
+
 		request.logIn(user, (loginError)=> {
 			if (loginError) next(loginError)
 
-			// Redirect to page depending on user's role
-			if (request.body['attempted-url']) 				return response.redirect(request.body['attempted-url'])
-			if (request.user.roles.includes('admin')) 		return response.redirect('submissions')
-			if (request.user.roles.includes('reviewer')) 	return response.redirect('submissions/review')
-			return response.redirect('users/account')
-
+			// If user was trying to get to a specific page, redirect to it
+			if (request.body['attempted-url']) {
+				return response.redirect(request.body['attempted-url'])
+			}
+			else {
+				// Go to landing page depending on user's role
+				if (request.user.roles.includes('admin')) return response.redirect('submissions')
+				if (request.user.roles.includes('reviewer')) return response.redirect('submissions/review')
+				else return response.redirect('users/account')
+			}
 		})
 	})(request, response, next)
 })
@@ -28,9 +34,8 @@ router.get('/login', (request, response)=> {
 })
 
 // GET /logout
-// Log user out
+// Log user out, get login page
 router.get('/logout', (request, response)=> {
-	request.app.locals.user = null
 	request.logout()
 	response.render('login', { info: "You have been logged out!" })
 })

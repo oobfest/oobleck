@@ -1,4 +1,4 @@
-const User = require('../users/user.schema')
+const User = require('../users/schema')
 
 let userApi = {
 

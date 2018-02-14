@@ -1,0 +1,16 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title Hosts
+
+	.dash-boxes.container-fluid
+		.box.box-b
+			table.box-table.table
+				thead
+					tr
+						th Name
+				tbody
+					for host in hosts
+						tr
+							td=host.name

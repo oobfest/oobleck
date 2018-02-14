@@ -1,4 +1,4 @@
-const Submission = require('../submissions/submission.schema')
+const Submission = require('../submissions/schema')
 
 let submissionApi = {
 

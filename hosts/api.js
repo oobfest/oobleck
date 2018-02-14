@@ -1,4 +1,4 @@
-const Host = require('../hosts/host.schema')
+const Host = require('../hosts/schema')
 
 module.exports = {
 

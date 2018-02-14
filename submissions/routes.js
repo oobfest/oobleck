@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
-const submissionApi = require('./submission.api')
+const submissionApi = require('../submissions/api')
 const limax = require('limax')
 
 // GET /submissions

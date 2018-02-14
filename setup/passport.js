@@ -5,7 +5,7 @@ module.exports = async function(app) {
 	// Dependencies
 	const passport = require('passport')
 	let localStrategy = require('passport-local')
-	let user = require('../users/user.schema')
+	let user = require('../users/schema')
 
 	// Setup
 	app.use(passport.initialize())

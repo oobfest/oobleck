@@ -2,14 +2,13 @@ const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
-
-const hostApi = require('../hosts/host.api')
+const hostApi = require('../hosts/api')
 
 // GET /hosts
 // Get all hosts
 router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
 	hostApi.getAll((hosts)=> {
-		response.render('hosts/view-all', { users: users })
+		response.render('hosts/view-all', { hosts: hosts })
 	})
 })
 

@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 const isLoggedIn = require('../middleware/is-logged-in')
-const userApi = require('../users/user.api')
 const isRole = require('../middleware/is-role')
+const userApi = require('../users/api')
+
 
 // GET /user
 // Get all users

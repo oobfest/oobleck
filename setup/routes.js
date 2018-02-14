@@ -7,21 +7,23 @@ module.exports = async function(app) {
 	const router = express.Router()
 
 	// Setup
-	app.use('/', 			require('../users/login.routes'))
-	app.use('/', 			require('../email/email.routes'))
-	app.use('/apply', 		require('../submissions/apply.routes'))
-	app.use('/submissions', require('../submissions/submission.routes'))
-	app.use('/users', 		require('../users/user.routes'))
-	app.use('/hosts',		require('../hosts/host.routes'))
+	app.use('/', 			require('../login/routes'))
+	app.use('/', 			require('../email/routes'))
+	app.use('/apply', 		require('../apply/routes'))
+	app.use('/submissions', require('../submissions/routes'))
+	app.use('/users', 		require('../users/routes'))
+	app.use('/hosts',		require('../hosts/routes'))
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
-		// Force HTTPS if we're running in production
-		if(process.env.NODE_ENV == 'production' && request.headers['x-forwarded-proto'] != 'https') {
+
+		let isProductionEnvironment = (process.env.NODE_ENV == 'production')
+		let isHttps = (request.headers['x-forwarded-proto'] == 'https')
+		if (isProductionEnvironment && !isHttps) {
 			response.redirect('https://' + request.hostname + request.url)
 		}
 		else {
-			response.render('login')
+			response.redirect('/login')
 		}
 	}))
 
