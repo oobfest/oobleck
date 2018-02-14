@@ -17,6 +17,11 @@ router.get('/', (request, response) => {
 	})
 })
 
+// GET /apply/hosting
+router.get('/hosting', (request, response)=> {
+	response.render('apply/host-application', { host: {} })
+})
+
 // POST /apply
 // From first page to second page
 router.post('/', submissionValidation, (request, response) => {
