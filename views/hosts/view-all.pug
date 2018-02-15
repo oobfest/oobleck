@@ -2,7 +2,7 @@ extends ../_layout
 block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
-			span.dash-titlebar-title Hosts
+			span.dash-titlebar-title Host Submissions
 
 	.dash-boxes.container-fluid
 		.box.box-b
@@ -10,7 +10,11 @@ block content
 				thead
 					tr
 						th Name
+						th Delete
 				tbody
 					for host in hosts
 						tr
-							td=host.name
+							td
+								a(href="/hosts/"+host._id)=host.name
+							td
+								a(href="/hosts/delete/" + host._id) Delete

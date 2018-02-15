@@ -5,10 +5,10 @@ const passport = require('passport')
 // POST /login
 // Log user in
 router.post('/login', (request, response, next)=> {
-	passport.authenticate('local', (error, user, info)=> {
-		if (error) next(error)
+	passport.authenticate('local', (authenticationError, user, info)=> {
+		if (authenticationError) next(authenticationError)
 
-		// user === false if login failed
+		// (user === false) if authentication failed
 		if (!user) return response.render('login', {info: info.message})
 
 		request.logIn(user, (loginError)=> {

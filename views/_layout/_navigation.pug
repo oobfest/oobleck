@@ -12,7 +12,8 @@ nav.dash-nav
 		- var isReviewer = user.roles.includes('reviewer') 
 
 		if isAdmin
-			a.dash-nav-item(href="/submissions") Submissions
+			a.dash-nav-item(href="/submissions") Act Submissions
+			a.dash-nav-item(href='/hosts') Host Submissions
 			a.dash-nav-item(href="/users") Users
 		if isReviewer
 			a.dash-nav-item(href="/submissions/review") Review Submissions

@@ -27,8 +27,13 @@ module.exports = {
 		})
 	},
 
+	update: function(callback) {
+		callback({error: "Method not implemented yet!"})
+	},
+
 	delete: function(objectId, callback) {
-		this.get(objectId, (host)=> {
+		this.get(objectId, (error, host)=> {
+			if(error) callback(error)
 			host.remove((error, host)=> {
 				callback(error, host)
 			})

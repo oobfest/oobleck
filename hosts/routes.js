@@ -4,35 +4,46 @@ const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
 const hostApi = require('../hosts/api')
 
-// GET /hosts
-// Get all hosts
 router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
-	hostApi.getAll((hosts)=> {
+	hostApi.getAll((error, hosts)=> {
 		response.render('hosts/view-all', { hosts: hosts })
 	})
 })
 
-// POST /hosts
-// Create host
+router.get('/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
+	let objectId = request.params.objectId
+	hostApi.get(objectId, (error, host)=> {
+		if(error) response.render('error', {error: error})
+		else response.render('hosts/view', {host: host})
+	})
+})
+
 router.post('/', (request, response)=> {
 
 	let host = { 
-		name: request.body.name,
-		email: request.body.email,
-		bio: request.body.bio,
-		experience: request.body.experience
+
+		name: request.body['name'],
+		email: request.body['email'],
+		phone: request.body['phone'],
+		bio: request.body['bio'],
+		experience: request.body['experience'],
+		imageUrl: request.body['image-url'],
+		deleteImageUrl: request.body['delete-image-url'],
+		videoUrl: request.body['video-url']
 	}
 
 	hostApi.create(host, (newHost)=> {
-		response.redirect('/hosts')
+		response.render('apply/thank-you-host', { host: host })
 	})
 
 })
 
-
-// GET /hosts/apply
-router.get('/apply', (request, response)=> {
-	response.render('apply/host-application', { host: {} })
+router.get('/delete/:objectId', (request, response)=> {
+	let objectId = request.params.objectId
+	hostApi.delete(objectId, (error)=> {
+		if(error) response.render('error', {error: error})
+		else response.redirect('/hosts')
+	})
 })
 
  module.exports = router

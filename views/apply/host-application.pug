@@ -5,23 +5,129 @@ block form
 		if errors 
 			include partials/errors
 		.box-block
-			h3.mb-4 Host Application
+			h3 Host/MC Application
 			.form-group
 				label.col-form-label.required-field(for="name") Full Name
-				input#name.form-control(type="text" required autofocus name="name" maxlength="280" value=host['name'])
+				input#name.form-control(type="text" required autofocus maxlength="280" name="name")
 			.form-group
 				label.col-form-label.required-field(for="email") Email
-				input#email.form-control(type="email" required autofocus name="email" maxlength="280" value=host['email'])
+				input#email.form-control(type="email" required  maxlength="280" name="email")
 			.form-group
-				label.col-form-label(for="experience") Previous Hosting Experience
-				textarea#experience.form-control(maxlength="1500" name="experience")=host['experience']
+				label.col-form-label.required-field(for="phone") Phone Number
+				input#phone.form-control(type="tel" required maxlength="280" name="phone")
 			.form-group
-				label.col-form-label.required-field(for="bio") Biography
-				small.form-text.text-muted Hosts may have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." 
-				textarea#bio.form-control(maxlength="1500" name="bio" required)=host['bio']
+				label.col-form-label.required-field(for="bio") Bio
+				small.form-text.text-muted Hosts may have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." and limit it to 3-4 sentences. 
+				textarea#bio.form-control(maxlength="1500" name="bio" required)
+			.form-group
+				label.col-form-label(for="experience") Previous Hosting/MC Experience
+				textarea#experience.form-control(maxlength="1500" name="experience")
 			.form-group
 				label.col-form-label(for="text") Video URL (optional)
 				small.form-text.text-muted If you have video of you hosting we'd like to see it!
-				input#video-url.form-control(type="text" autofocus name="video-url" maxlength="280" value=host['video-url'])
+				input#video-url.form-control(type="text" name="video-url" maxlength="280")
+
+		.box-block.box-bt
+			h3 Headshot
+			p Please upload a photo of your face that we can use publicly. 
+			#image-upload.custom-file
+				label.custom-file-label(for="file-input") Select Image
+				input#file-input.custom-file-input(type="file" accept="image/*")
+				input#image-url(type="hidden" name="image-url")
+				input#delete-image-url(type="hidden" name="delete-image-url")
+				p.form-text
+					em Image hosting powered by 
+						a(href="https://imgur.com/" target="_blank") Imgur
+						| .
+			p#image-message
+			#image-progress.progress
+				.progress-bar.bg-primary
+		.box-banner.image-preview
+			img#image-preview-element.box-banner-image(alt="Image preview")
+		.box-block.text-right.delete-image-box.image-preview
+			a#delete-image-button.btn.btn-danger(href="#" target="_blank" onclick="resetView()") Delete image
+
 		.box-block.box-bt.text-right
 			button#submit-button.btn.btn-md.btn-primary(type="submit") Submit
+
+	script.
+		function resetView() {
+			$(".image-preview, #image-progress, #image-message").hide()
+			$("#image-upload").show()
+		}
+
+		resetView()
+
+		$("#file-input").on('change', function() {
+			var image = $("#file-input").prop('files')[0]
+			if(image.size > (1024 * 1000 * 10)) {
+				alert("Image cannot be larger than 10MB")
+				return;
+			}
+			else {
+				$("#image-progress, #image-message").show()
+				$("#image-upload").hide()
+				$("#image-message").html("Uploading to Imgur...")
+
+				formData = new FormData()
+				formData.append('image', image)
+
+				var request = {
+				    url: 'https://imgur-apiv3.p.mashape.com/3/image',
+					type: 'POST',
+					mimeType: 'multipart/form-data',
+					crossDomain: true,
+					processData: false,
+					contentType: false,
+					dataType: 'json',
+					headers: {
+						'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+				        'Authorization': 'Client-ID c60e83c906306c5'
+					},
+					data: formData,
+					xhr: function() {
+						var xhr = new window.XMLHttpRequest()
+
+						// This block of code is for the progress bar
+						xhr.upload.addEventListener("progress", function(evt) {
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total
+								percentComplete = parseInt(percentComplete * 100)
+								$(".progress-bar").width(percentComplete + '%')
+								if (percentComplete === 100) $("#image-message").html("Waiting for response from Imgur...")
+							}
+						}, false)
+
+						return xhr
+					}
+				}
+
+				$.ajax(request)
+					.done(function(response){
+						let imageUrl = response.data.link
+						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
+						console.log("Linky:", imageUrl, deleteImageUrl)
+						
+						$("#image-url").val(imageUrl)
+						$("#delete-image-url").val(deleteImageUrl)
+						$("#delete-image-button").attr('href', deleteImageUrl)
+
+						$("#image-message").html(
+							"Upload complete! <br> Link: <a target='_blank' href='http://imgur.com/" 
+							+ response.data.id 
+							+ "'>http://imgur.com/" 
+							+ response.data.id + "</a>"
+						)
+
+						$("#image-preview-element").attr('src', imageUrl)
+						$("#image-upload").hide()
+						$("#image-progress").hide()
+						$(".image-preview").show()
+					})
+					.fail(function(response){ 
+						console.log("Upload failed", response)
+						alert(response.data.error)
+					})
+
+			}
+		})

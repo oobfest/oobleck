@@ -1,0 +1,26 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title Host Details
+
+	.dash-boxes.container
+		.row.justify-content-center
+			.col-6
+				.box.box-b
+					.box-block.box-bb.box-rounded-top
+						h2=host.name
+						pre=host.email
+						pre=host.phone
+					.box-banner
+						img.box-banner-image(src=host.imageUrl)
+					.box-block
+						h3 Bio
+						p=host.bio
+						
+						h3 Experience
+						p=host.experience
+
+						if host.videoUrl
+							h3 Video Url
+							pre=host.videoUrl

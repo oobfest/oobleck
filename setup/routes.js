@@ -14,16 +14,22 @@ module.exports = async function(app) {
 	app.use('/users', 		require('../users/routes'))
 	app.use('/hosts',		require('../hosts/routes'))
 
+	// API! Experimental!
+	app.use('/api/host', require('../hosts/api.routes'))
+
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
 
 		let isProductionEnvironment = (process.env.NODE_ENV == 'production')
+		console.log("is production", isProductionEnvironment)
 		let isHttps = (request.headers['x-forwarded-proto'] == 'https')
+		console.log("ishttps", isHttps)
 		if (isProductionEnvironment && !isHttps) {
+			console.log("Redirect: " + 'https://' + request.hostname + request.url)
 			response.redirect('https://' + request.hostname + request.url)
 		}
 		else {
-			response.redirect('/login')
+			response.render('/login')
 		}
 	}))
 
