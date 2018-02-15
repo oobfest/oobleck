@@ -16,23 +16,15 @@ module.exports = async function(app) {
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
-
-		/*
 		let isProductionEnvironment = (process.env.NODE_ENV == 'production')
-		console.log("is production", isProductionEnvironment)
 		let isHttps = (request.headers['x-forwarded-proto'] == 'https')
-		console.log("ishttps", isHttps)
 		if (isProductionEnvironment && !isHttps) {
 			console.log("Redirect: " + 'https://' + request.hostname + request.url)
 			response.redirect('https://' + request.hostname + request.url)
 		}
 		else {
-
 			response.render('login')
 		}
-		*/
-
-		response.render('login')
 	}))
 
 	// Catch-all, creates 404 error

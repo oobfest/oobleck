@@ -8,7 +8,8 @@ let hostSchema = mongoose.Schema({
 	experience: String,
 	videoUrl: String,
 	imageUrl: String,
-	deleteImageUrl: String
+	deleteImageUrl: String,
+	canAttendMeeting: Boolean
 })
 
 let Host = mongoose.model('Host', hostSchema)

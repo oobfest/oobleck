@@ -12,7 +12,8 @@ router.post('/', (request, response)=> {
 		name: request.body.name,
 		email: request.body.email,
 		bio: request.body.bio,
-		experience: request.body.experience
+		experience: request.body.experience,
+		canAttendMeeting: request.body.canAttendMeeting
 	}
 
 	hostApi.create(host, (error)=> {

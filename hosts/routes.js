@@ -12,6 +12,7 @@ router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
 
 router.get('/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
 	let objectId = request.params.objectId
+	console.log(objectId)
 	hostApi.get(objectId, (error, host)=> {
 		if(error) response.render('error', {error: error})
 		else response.render('hosts/view', {host: host})
@@ -29,7 +30,8 @@ router.post('/', (request, response)=> {
 		experience: request.body['experience'],
 		imageUrl: request.body['image-url'],
 		deleteImageUrl: request.body['delete-image-url'],
-		videoUrl: request.body['video-url']
+		videoUrl: request.body['video-url'],
+		canAttendMeeting: request.body['can-attend-meeting'] == 'on'
 	}
 
 	hostApi.create(host, (newHost)=> {
