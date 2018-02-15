@@ -29,7 +29,7 @@ module.exports = async function(app) {
 			response.redirect('https://' + request.hostname + request.url)
 		}
 		else {
-			response.render('/login')
+			response.render('login')
 		}
 	}))
 
