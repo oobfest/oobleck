@@ -10,7 +10,8 @@ module.exports = function(request, response, next) {
 			json: true 
 		},
 		function(error, httpResponse, body) {
+			if(error) response.render('error', {error: error})
 			if(body.success) next()
-			else response.render('error', {error: new Error("Recaptcha failed")})
+			else response.render('error', {error: new Error("Recaptcha failed. Click \"back\" and try again!")})
 		})
 }

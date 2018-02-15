@@ -8,7 +8,7 @@ block form
 
 		.box-block
 			h3 Host/MC Application
-			p This application is for people interested in being a host or MC for Out of Bounds. There includes a mandatory meeting on Sunday afternoon, August 26th.
+			p This application is for people interested in being a host or MC for Out of Bounds. There will be a mandatory meeting on Sunday afternoon, August 26th.
 			p The form for submitting an act to the festival is  
 				a(href="/apply") here
 				| .
@@ -32,9 +32,6 @@ block form
 				label.col-form-label(for="text") Video URL (optional)
 				small.form-text.text-muted If you have video of you hosting we'd like to see it!
 				input#video-url.form-control(type="text" name="video-url" maxlength="280")
-			.custom-control.custom-checkbox
-				input#can-attend-meeting.custom-control-input(type="checkbox" name="can-attend-meeting")
-				label.custom-control-label(for="can-attend-meeting") I can attend the mandatory Sunday afternoon meeting on August 26th
 
 		.box-block.box-bt
 			h3 Headshot
@@ -55,6 +52,72 @@ block form
 			img#image-preview-element.box-banner-image(alt="Image preview")
 		.box-block.text-right.delete-image-box.image-preview
 			a#delete-image-button.btn.btn-danger(href="#" target="_blank" onclick="resetView()") Delete image
+
+		.box-block.box-bt
+			h3 Availability
+			p.help-text Which days of the festival are you able to host/MC?
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-tuesday.custom-control-input(
+						type="checkbox" 
+						value="tuesday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-tuesday") Tuesday, August 28th
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-wednesday.custom-control-input(
+						type="checkbox" 
+						value="wednesday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-wednesday") Wednesday, August 29th
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-thursday.custom-control-input(
+						type="checkbox" 
+						value="thursday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-thursday") Thursday, August 30th
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-friday.custom-control-input(
+						type="checkbox" 
+						value="friday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-friday") Friday, August 31st
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-saturday.custom-control-input(
+						type="checkbox" 
+						value="saturday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-saturday") Saturday, September 1st
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-sunday.custom-control-input(
+						type="checkbox" 
+						value="sunday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-sunday") Sunday, September 2nd
+			.form-group
+				.custom-control.custom-checkbox
+					input#available-monday.custom-control-input(
+						type="checkbox" 
+						value="monday" 
+						name="available[]"
+					)
+					label.custom-control-label(for="available-monday") Monday, September 3rd
+			h4 Mandatory Orientation Meeting
+			.form-group
+				.custom-control.custom-checkbox
+					input#can-attend-meeting.custom-control-input(type="checkbox" name="can-attend-meeting")
+					label.custom-control-label(for="can-attend-meeting") I am available Sunday afternoon, August 26th
+
 
 		.box-block.box-bt.text-right
 			button#submit-button.btn.btn-md.btn-primary(type="submit") Submit

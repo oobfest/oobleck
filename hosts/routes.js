@@ -22,7 +22,6 @@ router.get('/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
 router.post('/', (request, response)=> {
 
 	let host = { 
-
 		name: request.body['name'],
 		email: request.body['email'],
 		phone: request.body['phone'],
@@ -31,6 +30,7 @@ router.post('/', (request, response)=> {
 		imageUrl: request.body['image-url'],
 		deleteImageUrl: request.body['delete-image-url'],
 		videoUrl: request.body['video-url'],
+		available: request.body['available'],
 		canAttendMeeting: request.body['can-attend-meeting'] == 'on'
 	}
 

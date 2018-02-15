@@ -6,6 +6,7 @@ const submissionApi = require('../submissions/api')
 const limax = require('limax')
 const log = require('winston')
 const sendEmail = require('../utilities/send-email')
+const isNotARobot = require('../middleware/is-not-a-robot')
 
 // GET /apply
 router.get('/', (request, response) => {
@@ -24,9 +25,7 @@ router.get('/hosting', (request, response)=> {
 
 // POST /apply
 // From first page to second page
-router.post('/', submissionValidation, (request, response) => {
-
-	console.log("DATA IN\n", request.body)
+router.post('/', isNotARobot, submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
@@ -37,7 +36,6 @@ router.post('/', submissionValidation, (request, response) => {
 
 	if (submissionIsErrorFree) {
 		saveSubmission(request.body, function(submission) {
-			console.log("SAVED OBJECT\n", submission)
 			response.render('apply/second-page', {submission: submission})
 		})
 	}
@@ -64,7 +62,6 @@ router.post('/pay/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let paymentInfo = request.body.paymentInfo
 	submissionApi.updatePayment(objectId, paymentInfo, (submission)=> {
-		console.log("Saved payment", submission.paymentInfo)
 		response.send({'cool-message': "YAY!"})
 	})
 })
@@ -73,14 +70,12 @@ router.post('/finish', (request, response)=>{
 	let objectId = request.body['id']
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
-	console.log("POST", objectId, imageUrl, deleteImageUrl)
 	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
 		// Double-check that they payed
 		if (submission.paymentInfo !== null) {
 			let subject = "Thank you for applying to Out of Bounds 2018!"
 			let message = `We received your application for ${submission.actName}\nTo view & edit your profile, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}\nAnyone with this URL can edit your application, so keep it safe!!`
 			sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-				console.log("Sent email: ", email)
 				response.render('apply/thank-you', {submission: submission})
 			})
 		}
@@ -148,7 +143,6 @@ function saveSubmission(submissionRequest, callback) {
 		// Application Fee
 		paymentInfo: null
 	}
-	console.log("SAVING OBJECT\n", submission)
 	submissionApi.create(submission, callback)
 }
 

@@ -70,7 +70,7 @@ let validationSchema = [
 		.isURL().withMessage("Social Media URL is not a valid URL"),
 	check('special-needs')
 		.isLength({max:1400}).withMessage("Special needs is too long"),
-	check('video-url-1')
+	check('video-url-0')
 		.exists().withMessage("Video URL must exist")
 		.not().isEmpty().withMessage("Video URL cannot be empty")
 		.isURL().withMessage("Video URL must be a valid URL"),

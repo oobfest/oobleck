@@ -27,3 +27,9 @@ block content
 						if host.videoUrl
 							h4 Video Url
 							pre=host.videoUrl
+
+						h4 Availability
+						p=host.canAttendMeeting ? 'Can make the meeting' : 'Unavailable on 26th'
+						ul
+							for date in host.available
+								li=date

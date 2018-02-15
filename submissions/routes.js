@@ -68,7 +68,6 @@ router.post('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, respo
 router.get('/reviews/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.get(objectId, (submission)=> {
-		console.log("HUH", submission.reviews)
 		response.render('submissions/reviews', {submission: submission})
 	})
 })
@@ -83,6 +82,7 @@ router.get('/edit/:objectId', (request, response)=> {
 })
 
 router.post('/edit', (request, response)=> {
+
 	let submission = { 
 		id: request.body['submission-id'],
 		actName: request.body['act-name'],
@@ -99,7 +99,7 @@ router.post('/edit', (request, response)=> {
 		primaryContactEmail: request.body['primary-contact-email'],
 		primaryContactPhone: request.body['primary-contact-phone'],
 		primaryContactRole: request.body['primary-contact-role'],
-		primaryContactAttending: request.body['primary-contact-attending'],
+		primaryContactAttending: (request.body['primary-contact-attending'].toLowerCase() == 'yes'),
 		showLength: request.body['show-length'],
 		specialNeeds: request.body['special-needs'],
 		imageUrl: request.body['image-url'],
@@ -146,14 +146,15 @@ function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {
 	return []
 }
 
-function flattenPersonnel(personnelNames, personnelEmails, personnelRoles) {
+function flattenPersonnel(personnelNames, personnelEmails, personnelRoles, personnelAttending) {
 	if(personnelNames) {
 		let personnel = []
 		for(let i=0; i<personnelNames.length; i++) {
 			personnel.push({
 				name: personnelNames[i],
 				email: personnelEmails[i],
-				role: personnelRoles[i]
+				role: personnelRoles[i],
+				attending: (personnelAttending[i].toLowerCase() == 'yes')
 			})
 		}
 		return personnel
