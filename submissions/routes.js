@@ -104,7 +104,7 @@ router.post('/edit', (request, response)=> {
 		specialNeeds: request.body['special-needs'],
 		imageUrl: request.body['image-url'],
 		deleteImageUrl: request.body['delete-image-url'],
-		videoUrl: [
+		videoUrls: [
 			request.body['video-url-0'],
 			request.body['video-url-1'],
 			request.body['video-url-2']
