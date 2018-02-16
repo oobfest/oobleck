@@ -111,7 +111,10 @@ router.post('/edit', (request, response)=> {
 		],
 		videoInfo: request.body['video-info'],
 		available: request.body['available'],
-		conflicts: request.body['conflicts'],
+		conflicts: flattenConflicts(
+			request.body['conflict-act'],
+			request.body['conflict-person']
+		),
 
 		additionalMembers: flattenPersonnel(
 			request.body['personnel-name'], 
@@ -158,6 +161,20 @@ function flattenPersonnel(personnelNames, personnelEmails, personnelRoles, perso
 			})
 		}
 		return personnel
+	}
+	return []
+}
+
+function flattenConflicts(conflictActs, conflictPersons) {
+	if(conflictActs) {
+		let conflicts = []
+		for(let i=0; i<conflictActs.length; i++) {
+			conflicts.push({
+				act: conflictActs[i],
+				person: conflictPersons[i]
+			})
+		}
+		return conflicts
 	}
 	return []
 }

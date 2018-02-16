@@ -67,7 +67,7 @@ let validationSchema = [
 	check('social-media-type.*')
 		.isLength({max:280}).withMessage("Social media type is too long"),
 	check('social-media-url.*')
-		.isURL().withMessage("Social Media URL is not a valid URL"),
+		.isLength({max:2800}).withMessage("Social media URL is too long"),
 	check('special-needs')
 		.isLength({max:1400}).withMessage("Special needs is too long"),
 	check('video-url-0')

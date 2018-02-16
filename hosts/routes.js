@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
+const isNotARobot = require('../middleware/is-not-a-robot')
 const hostApi = require('../hosts/api')
 
 router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
@@ -19,7 +20,9 @@ router.get('/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
 	})
 })
 
-router.post('/', (request, response)=> {
+// POST /hosts
+// Create host submission!
+router.post('/', isNotARobot, (request, response)=> {
 
 	let host = { 
 		name: request.body['name'],

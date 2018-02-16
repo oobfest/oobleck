@@ -64,6 +64,46 @@
 				checked=(submission['available'].includes('monday'))
 			)
 			label.custom-control-label(for="available-monday") Monday, September 3rd
-	p To prevent scheduling conflicts, what other acts are any of your members submitting for?
+	
+	h4 Conflicts
+	p To prevent scheduling conflicts, what are the other acts your members are submitting for?
+	#conflicts
+		- conflicts = conflicts || []
+		for conflict in conflicts
+			.row.conflict-item
+				.col-sm-6
+					.form-group
+						label.col-form-label.required-field Act Name
+						input.form-control(type="text" required name="conflict-act[]" maxlength="280" value=conflict.act)
+				.col-sm-6
+					.form-group.text-right
+						label.col-form-label.required-field Person(s) with Conflict
+						input.form-control(type="text" required name="conflict-person[]" maxlength="280" value=conflict.person)
+			.form-group
+				button.remove-conflict-button.btn.btn-danger(type="button") Remove
 	.form-group
-		textarea.form-control(maxlength="1500" name="conflicts")= submission['conflicts']
+		button#add-conflict-button.btn.btn-secondary(type="button") Add Conflict
+
+	script#conflict-template(type="text/x-template")
+		.conflict-item
+			.row
+				.col-sm-6
+					.form-group
+						label.col-form-label.required-field Act Name
+						input.form-control(type="text" required name="conflict-act[]" maxlength="280")
+				.col-sm-6
+					.form-group
+						label.col-form-label.required-field Person(s) with Conflict
+						input.form-control(type="text" required name="conflict-person[]" maxlength="280")
+			.form-group.text-right
+				button.remove-conflict-button.btn.btn-danger(type="button") Remove
+			hr
+	
+	script.
+		var conflictTemplate = $("#conflict-template").html()
+		$("#add-conflict-button").click(function() {
+			$("#conflicts").append(conflictTemplate)
+		})
+		$("#conflicts").on('click', '.remove-conflict-button', function() {
+			$(this).closest(".conflict-item").remove()
+		})

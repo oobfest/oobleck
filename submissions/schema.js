@@ -43,7 +43,7 @@ let submissionSchema = mongoose.Schema({
 
 	// Availability
 	available: Array,
-	conflicts: String,
+	conflicts: Array,
 
 	// Application Fee
 	paymentInfo: {},

@@ -136,9 +136,51 @@ block content
 											checked=(submission.available.includes('monday'))
 										)
 										label.custom-control-label(for="available-monday") Monday
+								h4 Conflicts
+								#conflicts
+									for conflict in submission.conflicts
+										.conflict-item
+											.row
+												.col
+													.form-group
+														label.col-form-label.required-field Act Name
+														input.form-control(type="text" required name="conflict-act[]" maxlength="280" value=conflict.act)
+												.col
+
+													.form-group
+														label.col-form-label.required-field Person(s) with Conflict
+														input.form-control(type="text" required name="conflict-person[]" maxlength="280" value=conflict.person)
+
+											.form-group.text-right
+												button.remove-conflict-button.btn.btn-danger(type="button") Remove
+											hr
 								.form-group
-									label.col-form-label(for="conflicts") Potential Conflicts (what other acts are your members in?)
-									textarea#conflicts.form-control(maxlength="1500" name="conflicts")= submission.conflicts
+									button#add-conflict-button.btn.btn-secondary(type="button") Add Conflict
+
+								script#conflict-template(type="text/x-template")
+									.conflict-item
+										.row
+											.col-sm-6
+												.form-group
+													label.col-form-label.required-field Act Name
+													input.form-control(type="text" required name="conflict-act[]" maxlength="280")
+											.col-sm-6
+												.form-group
+													label.col-form-label.required-field Person(s) with Conflict
+													input.form-control(type="text" required name="conflict-person[]" maxlength="280")
+										.form-group.text-right
+											label.col-form-label &nbsp;
+											button.remove-conflict-button.btn.btn-danger(type="button") Remove
+										hr
+								
+								script.
+									var conflictTemplate = $("#conflict-template").html()
+									$("#add-conflict-button").click(function() {
+										$("#conflicts").append(conflictTemplate)
+									})
+									$("#conflicts").on('click', '.remove-conflict-button', function() {
+										$(this).closest(".conflict-item").remove()
+									})
 							.box-block.box-bb
 								h4 Video Link
 								.form-group

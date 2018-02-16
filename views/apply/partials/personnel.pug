@@ -30,11 +30,11 @@
 		for contact in personnel
 			.personnel-item
 				.form-group.row
-					label.col-form-label.col-2 Name
-					input.form-control.col-10(type="text" name="personnel-name[]" maxlength="280" value=contact.name)
+					label.col-form-label.col-2.required-field Name
+					input.form-control.col-10(type="text" name="personnel-name[]" maxlength="280" required value=contact.name)
 				.form-group.row
-					label.col-form-label.col-2 Email
-					input.form-control.col-10(type="email" name="personnel-email[]" maxlength="280" value=contact.email)
+					label.col-form-label.col-2.required-field Email
+					input.form-control.col-10(type="email" name="personnel-email[]" maxlength="280" required value=contact.email)
 				.form-group.row
 					label.col-form-label.col-2 Role
 					select.form-control.col-10(name="personnel-role[]")
@@ -58,11 +58,11 @@
 	script#additional-contact-template(type="text/x-template")
 		.personnel-item
 			.form-group.row
-				label.col-form-label.col-2 Name
-				input.form-control.col-10(type="text" name="personnel-name[]" maxlength="280")
+				label.col-form-label.col-2.required-field Name
+				input.form-control.col-10(type="text" name="personnel-name[]" maxlength="280" required)
 			.form-group.row
-				label.col-form-label.col-2 Email
-				input.form-control.col-10(type="email" name="personnel-email[]" maxlength="280")
+				label.col-form-label.col-2.required-field Email
+				input.form-control.col-10(type="email" name="personnel-email[]" maxlength="280" required)
 			.form-group.row
 				label.col-form-label.col-2 Role
 				select.form-control.col-10(name="personnel-role[]")

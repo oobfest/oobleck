@@ -20,12 +20,12 @@ router.get('/', (request, response) => {
 
 // GET /apply/hosting
 router.get('/hosting', (request, response)=> {
-	response.render('apply/host-application', { host: {} })
+	response.render('apply/host-application', { recaptcha: true })
 })
 
 // POST /apply
 // From first page to second page
-router.post('/', isNotARobot, submissionValidation, (request, response) => {
+router.post('/', /*isNotARobot,*/ submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
@@ -36,7 +36,8 @@ router.post('/', isNotARobot, submissionValidation, (request, response) => {
 
 	if (submissionIsErrorFree) {
 		saveSubmission(request.body, function(submission) {
-			response.render('apply/second-page', {submission: submission})
+			let applicationFee = calculateApplicationFee(submission)
+			response.render('apply/second-page', {submission: submission, applicationFee: applicationFee})
 		})
 	}
 	else {
@@ -52,6 +53,10 @@ router.post('/', isNotARobot, submissionValidation, (request, response) => {
 				request.body['personnel-email'], 
 				request.body['personnel-role'],
 				request.body['personnel-attending']
+			),
+			conflicts: flattenConflicts(
+				request.body['conflict-act'],
+				request.body['conflict-person']
 			),
 			submission: request.body
 		})	
@@ -138,7 +143,10 @@ function saveSubmission(submissionRequest, callback) {
 
 		// Availability
 		available: submissionRequest['available'],
-		conflicts: submissionRequest['conflicts'],
+		conflicts: flattenConflicts(
+			submissionRequest['conflict-act'],
+			submissionRequest['conflict-person'],
+		),
 
 		// Application Fee
 		paymentInfo: null
@@ -176,4 +184,44 @@ function flattenPersonnel(personnelNames, personnelEmails, personnelRoles, perso
 	return []
 }
 
+function flattenConflicts(conflictActs, conflictPersons) {
+	if(conflictActs) {
+		let conflicts = []
+		for(let i=0; i<conflictActs.length; i++) {
+			conflicts.push({
+				act: conflictActs[i],
+				person: conflictPersons[i]
+			})
+		}
+		return conflicts
+	}
+	return []
+}
+
+function calculateApplicationFee(submission) {
+	
+	let attendeeCount = 0
+
+	for (let i=0; i<submission.additionalMembers.length; i++)
+		if (submission.additionalMembers[i].attending)
+			attendeeCount++
+
+	if (submission.primaryContactAttending)
+		attendeeCount++
+
+	let applicationFee = (attendeeCount <= 2) ? 15 : 35
+
+	let earlyBirdDeadline = new Date(1519884000000)
+	let regularDeadline = new Date(1522558800000)
+	let lateDeadline = new Date(1523768400000)
+	let currentDate = new Date(Date.now())
+
+	if (currentDate > earlyBirdDeadline) 	applicationFee += 10
+	if (currentDate > regularDeadline)		applicationFee += 10
+	if (currentDate > lateDeadline)			applicationFee += 10
+
+	console.log(applicationFee)
+
+	return applicationFee
+}
 module.exports = router
