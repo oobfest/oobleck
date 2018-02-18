@@ -27,7 +27,7 @@ router.get('/hosting', (request, response)=> {
 
 // POST /apply
 // From first page to second page
-router.post('/', /*isNotARobot,*/ submissionValidation, (request, response) => {
+router.post('/', isNotARobot, submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
