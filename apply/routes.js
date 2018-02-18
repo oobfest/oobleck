@@ -25,7 +25,7 @@ router.get('/hosting', (request, response)=> {
 
 // POST /apply
 // From first page to second page
-router.post('/', isNotARobot, submissionValidation, (request, response) => {
+router.post('/', /*isNotARobot,*/ submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
@@ -84,6 +84,10 @@ router.post('/finish', (request, response)=>{
 			sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
 				response.render('apply/thank-you', {submission: submission})
 			})
+
+			// Dave Buckmaaan
+			//sendEmail()
+
 		}
 		else {
 			response.render('apply/second-page', {submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})

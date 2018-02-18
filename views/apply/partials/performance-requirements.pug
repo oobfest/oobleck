@@ -18,7 +18,8 @@
 					input#maximum-show-length.form-control(type="number" min="0" max="2400" name="maximum-show-length" value=submission['maximum-show-length'] || 60)
 					.input-group-append
 						span.input-group-text minutes
-	h4 Special Requirements
+	h4 Special Requirements  
+		small (Improv &amp; Sketch Only)
 	.form-group
 		label.col-form-label(for="special-needs") What are the essential requirements you'll need from us for your act? Examples include video projection, sound effects, props (that you can't bring yourself) furniture and equipment. Be specific. 
 		textarea#special-needs.form-control(maxlength="1500" name="special-needs")=submission['special-needs']
@@ -30,4 +31,4 @@
 				name="no-food"
 				checked=(submission['no-food'])
 			)
-			label.custom-control-label(for="no-food") Our show won't involve making a huge mess onstage.
+			label.custom-control-label(for="no-food") I promise our show does not include food, liquid or anything else that will create a mess on stage.
