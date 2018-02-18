@@ -12,6 +12,7 @@ const isNotARobot = require('../middleware/is-not-a-robot')
 router.get('/', (request, response) => {
 	response.render('apply/first-page', { 
 		recaptcha: true, 
+		hotjar: true,
 		submission: {available: []}, 
 		socialMedia: [], 
 		personnel: []
@@ -20,12 +21,12 @@ router.get('/', (request, response) => {
 
 // GET /apply/hosting
 router.get('/hosting', (request, response)=> {
-	response.render('apply/host-application', { recaptcha: true })
+	response.render('apply/host-application', { recaptcha: true, hotjar: true })
 })
 
 // POST /apply
 // From first page to second page
-router.post('/', /*isNotARobot,*/ submissionValidation, (request, response) => {
+router.post('/', isNotARobot, submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
