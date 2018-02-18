@@ -31,7 +31,8 @@ module.exports = function() {
 		'NO_REPLY_PASSWORD',
 		'TWILIO_SID',
 		'TWILIO_TOKEN',
-		'TWILIO_RECIPIENT'
+		'TWILIO_RECIPIENT',
+		'SUBMISSION_EMAIL'
 	]
 
 	for(let i=0; i<variableNameList.length; i++) {

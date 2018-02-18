@@ -27,7 +27,7 @@ router.get('/hosting', (request, response)=> {
 
 // POST /apply
 // From first page to second page
-router.post('/', isNotARobot, submissionValidation, (request, response) => {
+router.post('/', /*isNotARobot,*/ submissionValidation, (request, response) => {
 
 	request.body['available'] = request.body['available']
 		? request.body['available']
@@ -78,16 +78,31 @@ router.post('/finish', (request, response)=>{
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
 	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
-		// Double-check that they payed
-		if (submission.paymentInfo !== null) {
+		// Double-check that they payed (if in production)
+		let isProduction = process.env.NODE_ENV == 'production'
+		console.log(isProduction)
+		if (submission.paymentInfo !== null || !isProduction) {
 			let subject = "Thank you for applying to Out of Bounds 2018!"
-			let message = `We received your application for ${submission.actName}\nTo view & edit your profile, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}\nAnyone with this URL can edit your application, so keep it safe!!`
+			let message = 
+				`We received your application for ${submission.actName}<br>` +
+				`Acceptance emails will be sent out in the beginning of July<br>` + 
+				`To view & edit your application, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}<br>` +
+				`Anyone with this URL can edit your application, so keep it safe!!`
 			sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
 				response.render('apply/thank-you', {submission: submission, trackPage: true})
 			})
 
-			// Dave Buckmaaan
-			//sendEmail()
+			let archiveMessage = 
+				`<b>Act name:</b> 		${submission.actName}<br>` +
+				`<b>Type:</b> 			${submission.showType}<br>` + 
+				`<b>Bio:</b>  			${submission.publicDescription}<br>` + 
+				`<b>Description:</b>  	${submission.informalDescription}<br>` +
+				`<b>Hometown:</b> 		${submission.homeTheater ? submission.homeTheater + ' in' : ''} ${submission.city}, ${submission.state}, ${submission.country}<br>` +
+				`<b>Contact:</b>  		${submission.primaryContactName}, ${submission.primaryContactEmail}<br>` +
+				`<b>Image URL:</b>		${submission.imageUrl ? submission.imageUrl : 'No image uploaded'}<br>` +
+				`<b>Availability:</b> 	${submission.available.join(' ')}<br>` + 
+				`<b>Video URLs:</b><br>	${submission.videoUrls.join('<br>')}`
+			sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application', archiveMessage)
 
 		}
 		else {

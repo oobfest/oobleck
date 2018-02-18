@@ -2,6 +2,8 @@ const httpRequest = require('request')
 
 module.exports = function(request, response, next) {
 
+	if(process.env.NODE_ENV != 'production') next()
+
 	let recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY
 	let gRecaptchaResponse = request.body['g-recaptcha-response']
 

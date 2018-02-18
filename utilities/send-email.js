@@ -7,7 +7,7 @@ module.exports = function(recipient, subject, message, callback) {
 		from: 'no-reply@oobfest.com',
 		to: recipient,
 		subject: subject,
-		text: message
+		html: message
 	}
 
 	log.info("Attempting to send email...")
