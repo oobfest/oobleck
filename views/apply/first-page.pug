@@ -14,3 +14,9 @@ block form
 		include partials/availability
 		include partials/travel-agreement
 		include partials/next
+	
+	script.
+		// Initialize popovers
+		$(function () {
+		  $('[data-toggle="popover"]').popover()
+		})

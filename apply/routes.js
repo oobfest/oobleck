@@ -13,6 +13,7 @@ router.get('/', (request, response) => {
 	response.render('apply/first-page', { 
 		recaptcha: true, 
 		hotjar: true,
+		trackPage: true,
 		submission: {available: []}, 
 		socialMedia: [], 
 		personnel: []
@@ -21,7 +22,7 @@ router.get('/', (request, response) => {
 
 // GET /apply/hosting
 router.get('/hosting', (request, response)=> {
-	response.render('apply/host-application', { recaptcha: true, hotjar: true })
+	response.render('apply/host-application', { recaptcha: true, hotjar: true, trackPage: true })
 })
 
 // POST /apply
@@ -37,9 +38,8 @@ router.post('/', isNotARobot, submissionValidation, (request, response) => {
 
 	if (submissionIsErrorFree) {
 		saveSubmission(request.body, function(submission) {
-			console.log("SAVE", submission)
 			let applicationFee = calculateApplicationFee(submission)
-			response.render('apply/second-page', {submission: submission, applicationFee: applicationFee})
+			response.render('apply/second-page', {submission: submission, applicationFee: applicationFee, trackPage: true})
 		})
 	}
 	else {
@@ -83,7 +83,7 @@ router.post('/finish', (request, response)=>{
 			let subject = "Thank you for applying to Out of Bounds 2018!"
 			let message = `We received your application for ${submission.actName}\nTo view & edit your profile, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}\nAnyone with this URL can edit your application, so keep it safe!!`
 			sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-				response.render('apply/thank-you', {submission: submission})
+				response.render('apply/thank-you', {submission: submission, trackPage: true})
 			})
 
 			// Dave Buckmaaan
@@ -91,7 +91,7 @@ router.post('/finish', (request, response)=>{
 
 		}
 		else {
-			response.render('apply/second-page', {submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
+			response.render('apply/second-page', {trackPage: true, submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
 		}
 	})
 })
@@ -225,8 +225,6 @@ function calculateApplicationFee(submission) {
 	if (currentDate > earlyBirdDeadline) 	applicationFee += 10
 	if (currentDate > regularDeadline)		applicationFee += 10
 	if (currentDate > lateDeadline)			applicationFee += 10
-
-	console.log(applicationFee)
 
 	return applicationFee
 }

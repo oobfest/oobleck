@@ -8,11 +8,14 @@ html(lang="en")
 		link(rel="stylesheet" href="/css/custom.css")
 		title Out of Bounds Comedy Festival
 		script(src="/js/jquery.min.js")
-		include _layout/_google-analytics
+
 		if recaptcha 
 			script(src='https://www.google.com/recaptcha/api.js')
 		if hotjar
 			include _layout/_hotjar
+		if trackPage
+			include _layout/_google-analytics
+
 	body.bg-accent-oob
 		if user
 			.dash.dash-fixed
@@ -27,8 +30,3 @@ html(lang="en")
 		script(src="/js/popper.min.js")
 		script(src="/js/bootstrap.min.js")
 		script(src="/js/charming-pro.min.js")
-		script.
-			// Initialize popovers
-			$(function () {
-			  $('[data-toggle="popover"]').popover()
-			})
