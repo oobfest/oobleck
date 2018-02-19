@@ -102,7 +102,7 @@ router.post('/finish', (request, response)=>{
 				`<b>Image URL:</b>		${submission.imageUrl ? submission.imageUrl : 'No image uploaded'}<br>` +
 				`<b>Availability:</b> 	${submission.available.join(' ')}<br>` + 
 				`<b>Video URLs:</b><br>	${submission.videoUrls.join('<br>')}`
-			sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application', archiveMessage)
+			sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
 
 		}
 		else {
