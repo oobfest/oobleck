@@ -26,7 +26,8 @@ module.exports = function() {
 	// Confirm we have all environment variables
 	const variableNameList = [
 		'PORT', 
-		'MONGO_CONNECTION', 
+		'MONGO_CONNECTION',
+		'SESSION_SECRET', 
 		'RECAPTCHA_SECRET_KEY', 
 		'NO_REPLY_PASSWORD',
 		'TWILIO_SID',
