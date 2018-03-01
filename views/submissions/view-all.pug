@@ -17,7 +17,22 @@ block content
 						tr
 							td=submission.actName
 							td=submission.showType
-							td
-								a(href="/submissions/reviews/"+submission._id) Reviews
+							if submission.reviews && submission.reviews.length > 0
+								td
+									a(href="/submissions/reviews/"+submission._id) Reviews
+									+showReviews(submission.reviews)
+							else
+								td 
 							td
 								a(href="/submissions/edit/"+submission._id) Edit
+
+mixin showReviews(reviews)
+	|  (
+	for review in reviews
+		case review.score
+			when  2: |😍
+			when  1: |😬
+			when  0: |😕
+			when -1: |😡
+			default: break
+	| )

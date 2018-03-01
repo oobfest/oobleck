@@ -9,11 +9,11 @@ nav.dash-nav
 	.dash-nav-list
 
 		- var isAdmin = user.roles.includes('admin')
-		- var isReviewer = user.roles.includes('reviewer') 
+		- var isPanelist = user.roles.includes('panelist') || user.roles.includes('standup-panelist')
 
 		if isAdmin
 			a.dash-nav-item(href="/submissions") Act Submissions
 			a.dash-nav-item(href='/hosts') Host Submissions
 			a.dash-nav-item(href="/users") Users
-		if isReviewer
+		if isPanelist
 			a.dash-nav-item(href="/submissions/review") Review Submissions

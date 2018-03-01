@@ -1,0 +1,56 @@
+extends ../_layout
+block content
+	.dash.dash-fixed
+		.dash-app
+			header.dash-titlebar
+				.mb-md-0.mb-3
+					span.dash-titlebar-title 
+						a.text-muted(href="/submissions/review") Review Submissions
+						|  /
+						| Review Submission
+
+			form.container(method="POST" action="/submissions/review/"+submission.id)
+				.block-heading.m-4
+					h2.block-title=submission.actName
+					h3.block-subtitle=submission.showType
+				.box.box-b.box-block.mb-4
+					h4 How They Describe Their Act
+					p.alert.alert-light=submission.informalDescription
+					h4 Video Links
+					for videoUrl in submission.videoUrls
+						unless videoUrl == ''
+							pre.alert.alert-light
+								a#video-url(href=videoUrl target="_blank")=videoUrl
+					if submission.videoInfo
+						h4 Video Information
+						p.alert.alert-light=submission.videoInfo
+
+				- var review = submission.reviews.find(review => review.userId == user._id) || { score: null, notes: null };
+				.box.box-b.box-block.mb-4
+					h3 Your Score
+					.custom-control.custom-radio
+						input#yes.custom-control-input(type="radio" name="score" value="2" checked=review.score==2)
+						label.custom-control-label(for="yes") 😍 Yes! 
+					.custom-control.custom-radio
+						input#meh.custom-control-input(type="radio" name="score" value="1" checked=review.score==1)
+						label.custom-control-label(for="meh") 😬 Meh
+					.custom-control.custom-radio
+						input#nah.custom-control-input(type="radio" name="score" value="0" checked=review.score==0)
+						label.custom-control-label(for="nah") 😕 Nah 
+					.custom-control.custom-radio
+						input#veto.custom-control-input(type="radio" name="score" value="-1" checked=review.score==-1)
+						label.custom-control-label(for="veto") 😡 Veto
+					hr
+					h3 Notes
+					p 
+						| What was the best part?
+						br
+						| What was the worst part? 
+						br
+						| Why should they be in the festival? 
+						br
+						| Why should they not be in the festival?
+					textarea#notes.form-control(name="notes" rows="3")=review.notes
+
+				.text-right.mb-4
+					button.btn.btn-primary(type="submit") Save

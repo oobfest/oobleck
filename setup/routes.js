@@ -11,15 +11,17 @@ module.exports = async function(app) {
 	app.use('/', 			require('../email/routes'))
 	app.use('/apply', 		require('../apply/routes'))
 	app.use('/submissions', require('../submissions/routes'))
+	app.use('/panelist',	require('../submissions/panelist.routes'))
 	app.use('/users', 		require('../users/routes'))
 	app.use('/hosts',		require('../hosts/routes'))
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {
+
+		// If we're in production, use HTTPS 
 		let isProductionEnvironment = (process.env.NODE_ENV == 'production')
 		let isHttps = (request.headers['x-forwarded-proto'] == 'https')
 		if (isProductionEnvironment && !isHttps) {
-			console.log("Redirect: " + 'https://' + request.hostname + request.url)
 			response.redirect('https://' + request.hostname + request.url)
 		}
 		else {
@@ -30,7 +32,6 @@ module.exports = async function(app) {
 	// Catch-all, creates 404 error
 	app.use((request, response, next)=> {
 		let error = new Error("Not found")
-		//error.status = 404
 		next(error)
 	})
 

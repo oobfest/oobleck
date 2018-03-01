@@ -7,7 +7,8 @@ const limax = require('limax')
 
 // GET /submissions
 router.get('/', isLoggedIn, isRole('admin'), (request, response, next)=> {
-	submissionApi.getAll((submissions)=> {
+	submissionApi.getAll((error, submissions)=> {
+		if(error) response.render('error', {error: error})
 		response.render('submissions/view-all', {submissions: submissions})
 	})
 })
@@ -39,20 +40,46 @@ router.post('/add-image/:objectId', (request, response)=> {
 	})
 })
 
-router.get('/review', isLoggedIn, isRole('reviewer'), (request, response)=> {
-	submissionApi.getAll((submissions)=> {
-		response.render('submissions/review-all', {submissions: submissions})
-	})
+router.get('/review', isLoggedIn, (request, response)=> {
+
+	let callback = function(error, submissions) {
+		if(error) response.render('error', {error: error})
+		response.render('submissions/review-submissions', {submissions: submissions})
+	}
+
+	// Behavior depends on role
+	let userRoles = request.user.roles
+
+	if (userRoles.includes('admin')) {
+		submissionApi.getAll((error, submissions)=> {
+			callback(error, submissions)
+		})
+	}
+	else if (userRoles.includes('panelist')) {
+		submissionApi.getAllPaidExceptStandup((error, submissions)=> {
+			callback(error, submissions)
+		})		
+	}
+	else if (userRoles.includes('standup-panelist')) {
+		submissionApi.getAllPaidStandup((error, submissions)=> {
+			callback(error, submissions)
+		})
+	}
+	else {
+		renderErrorPage(response, "You do not have permission to do that :(")
+	}
+
+
 })
 
-router.get('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, response)=> {
+router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.get(objectId, (submission)=> {
-		response.render('submissions/review', {submission: submission})
+		response.render('submissions/review-submission', {submission: submission})
 	})
 })
 
-router.post('/review/:objectId', isLoggedIn, isRole('reviewer'), (request, response)=> {
+router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response)=> {
 	let objectId = request.params.objectId
 	let review = {
 		userId: request.user._id,
@@ -77,6 +104,7 @@ router.get('/reviews/:objectId', isLoggedIn, isRole('admin'), (request, response
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.get(objectId, (submission)=> {
+		let imgurUrlConverter = require('../utilities/imgur')
 		response.render('submissions/edit', {submission: submission, user: request.user})
 	})
 })

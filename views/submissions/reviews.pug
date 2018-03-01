@@ -3,7 +3,7 @@ block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
 			span.dash-titlebar-title 
-				a.text-muted(href="/submissions/") Submissions
+				a.text-muted(href="/submissions") Submissions
 				|  /
 				| Submission Reviews
 
@@ -19,5 +19,14 @@ block content
 					for review in submission.reviews
 						tr
 							td=review.username
-							td=review.score
+							td
+								+showReview(review.score)
 							td=review.notes
+
+mixin showReview(score)
+	case score
+		when  2: |😍 Yes!
+		when  1: |😬 Meh
+		when  0: |😕 Nah
+		when -1: |😡 Veto
+		default: break
