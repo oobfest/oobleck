@@ -28,14 +28,7 @@ block content
 								else
 									span.badge.badge-primary=reviewCount
 							td
-								+showReview(review.score)
+								+renderReview(review.score)
 							td.text-truncate(style="max-width: 150px")=review.notes
 
-mixin showReview(score)
-	case score
-		when  2: | 😍 Yes! 
-		when  1: | 😬 Meh
-		when  0: | 😕 Nah 
-		when -1: | 😡 Veto
-		default
-			- break
+include _render-review

@@ -3,27 +3,30 @@ block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
 			span.dash-titlebar-title Submissions
-		button.btn.btn-secondary.ml-md-auto(href="#") Add Submission
+		button.btn.btn-secondary.ml-md-auto(href="#" onclick="alert('I do nothing :\(')") Add Submission
 
 	.dash-boxes.container-fluid
 		.box.box-b
 			table.box-table.table
 				thead
 					tr
-						th Name
+						th Act
+						th Score
 						th Type
 				tbody
 					for submission in submissions
 						tr
+							td=submission.actName
 							td
-								a(href="/submissions/reviews/"+submission.domain)=submission.actName
-								span.float-right
-									+showReviews(submission.reviews)
+								a(href="/submissions/reviews/"+submission.domain)
+									+renderReviews(submission.reviews)
 							td=submission.showType
 							td
 								a(href="/submissions/edit/"+submission._id) Edit
+							td
+								a(href="/submissions/reviews/"+submission.domain) Reviews
 
-mixin showReviews(reviews)
+mixin renderReviews(reviews)
 	for review in reviews
 		case review.score
 			when  2: |😍

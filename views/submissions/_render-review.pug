@@ -1,0 +1,7 @@
+mixin renderReview(score)
+	case score
+		when  2: |😍 Yes!
+		when  1: |😬 Meh
+		when  0: |😕 Nah
+		when -1: |😡 Veto
+		default: break

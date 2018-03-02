@@ -2,7 +2,8 @@ extends ../_layout
 block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
-			a.text-muted(href="/submissions") Submissions
+			span.dash-titlebar-title
+				a.text-muted(href="/submissions") Submissions
 				|  /
 				| Reviews by User
 
@@ -23,13 +24,7 @@ block content
 						tr
 							td=submission.actName
 							td
-								+showReview(review.score)
+								+renderReview(review.score)
 							td=review.notes
 
-mixin showReview(score)
-	case score
-		when  2: |😍 Yes!
-		when  1: |😬 Meh
-		when  0: |😕 Nah
-		when -1: |😡 Veto
-		default: break
+include _render-review

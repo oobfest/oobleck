@@ -21,13 +21,7 @@ block content
 							td
 								a(href="/submissions/reviews-by-user/"+review.username)=review.username
 							td
-								+showReview(review.score)
+								+renderReview(review.score)
 							td=review.notes
 
-mixin showReview(score)
-	case score
-		when  2: |😍 Yes!
-		when  1: |😬 Meh
-		when  0: |😕 Nah
-		when -1: |😡 Veto
-		default: break
+include _render-review

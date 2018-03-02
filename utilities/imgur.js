@@ -11,7 +11,7 @@ module.exports = (function(){
 	})
 
 	function convertImageUrl(imgurUrl, thumbnailType) {
-		return imgurUrl.substr(0, imgurUrl.length-4) + thumbnailType + imgurUrl.substr(imgurUrl.length-4, s.length)
+		return imgurUrl.substr(0, imgurUrl.length-4) + thumbnailType + '.jpeg' //imgurUrl.substr(imgurUrl.length-4, s.length)
 	}
 
 	return {
