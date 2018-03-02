@@ -2,7 +2,10 @@ extends ../_layout
 block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
-			span.dash-titlebar-title Edit User
+			span.dash-titlebar-title 
+				a.text-muted(href="/users") Users
+				|  /
+				| Edit User
 
 	.dash-boxes.container
 		.row.justify-content-center
@@ -11,9 +14,9 @@ block content
 					.form-group
 						label.col-form-label(for="username") Username
 						input#username.form-control(name="username" value=editUser.username)
-					//.form-group
-						label.col-form-label(for="add-password") Password
-						input#add-password.form-control(type="password" name="password")
+					.form-group
+						label.col-form-label(for="email") Email
+						input#email.form-control(name="email" value=editUser.email)
 					p Roles
 					.form-check
 						input#admin-role-checkbox.form-check-input.input(
@@ -23,14 +26,33 @@ block content
 							checked=editUser.roles.includes('admin')
 						)
 						label.form-check-label(for="admin-role-checkbox") Admin
+
 					.form-check
-						input#reviewer-role-checkbox.form-check-input.input(
+						input#schedule-role-checkbox.form-check-input.input(
 							type="checkbox" 
 							name="roles" 
-							value="reviewer"
-							checked=editUser.roles.includes('reviewer')
+							value="schedule"
+							checked=editUser.roles.includes('schedule')
 						)
-						label.form-check-label(for="reviewer-role-checkbox") Reviewer
+						label.form-check-label(for="schedule-role-checkbox") Schedule
+
+					.form-check
+						input#panelist-role-checkbox.form-check-input.input(
+							type="checkbox" 
+							name="roles" 
+							value="panelist"
+							checked=editUser.roles.includes('panelist')
+						)
+						label.form-check-label(for="panelist-role-checkbox") Panelist
+					.form-check
+						input#standup-panelist-role-checkbox.form-check-input.input(
+							type="checkbox" 
+							name="roles" 
+							value="standup-panelist"
+							checked=editUser.roles.includes('standup-panelist')
+						)
+						label.form-check-label(for="standup-panelist-role-checkbox") Standup Panelist
+
 					hr
 					.text-right
 						button#add-user-button.btn.btn-primary(type="submit") Save

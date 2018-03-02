@@ -7,25 +7,16 @@ block content
 	.dash-boxes.container
 		.row.justify-content-center
 			.col-6
-				form.box.box-b.box-block(method="POST" action="/users/edit/"+user._id)
-					h3
-						pre=user.username
-
-					//
-						h3 Password
-						.form-group
-							label.col-form-label(for="add-password") Change Password
-							input#add-password.form-control(type="password" name="password")
-						.form-group
-							label.col-form-label(for="confirm-password") Confirm Password
-							input#confirm-password.form-control(type="password" name="password")
-					h3 Roles
+				.box.box-b.box-block
+					h4 Username
+					pre=user.username
+					h4 Email
+					pre=user.email
+					h4 Roles
 					if user.roles
-						ul
+						p
 							for role in user.roles
-								li=role
+								span.badge.badge-primary=role
+								| &nbsp;
 					else
 						p You don't have any roles! 
-					hr
-					//.text-right
-						button#add-user-button.btn.btn-primary(type="submit") Save

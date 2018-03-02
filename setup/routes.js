@@ -11,7 +11,6 @@ module.exports = async function(app) {
 	app.use('/', 			require('../email/routes'))
 	app.use('/apply', 		require('../apply/routes'))
 	app.use('/submissions', require('../submissions/routes'))
-	app.use('/panelist',	require('../submissions/panelist.routes'))
 	app.use('/users', 		require('../users/routes'))
 	app.use('/hosts',		require('../hosts/routes'))
 

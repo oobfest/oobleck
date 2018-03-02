@@ -11,7 +11,8 @@ block content
 				thead
 					tr
 						th Name
-						th
+						th Email
+						th Password Set
 						th
 						th
 						th Roles
@@ -19,11 +20,10 @@ block content
 					for user in users
 						tr
 							td=user.username
-							td.text-muted=user._id
+							td=user.email
+							td=user.isPasswordSet
 							td
-								a(href="users/edit/"+user._id) Edit
-							td
-								a(href="users/delete/"+user._id) Delete
+								a(href="/users/edit/"+user._id) Edit
 							td
 								for role in user.roles
 									span.badge.badge-info=role
@@ -41,8 +41,8 @@ block content
 						label.col-form-label(for="add-username") Username
 						input#add-username.form-control(type="text" name="username")
 					.form-group
-						label.col-form-label(for="add-password") Password
-						input#add-password.form-control(type="password" name="password")
+						label.col-form-label(for="add-email") Email
+						input#add-email.form-control(type="email" name="email")
 					p Roles
 					.form-check
 						input#admin-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="admin")
