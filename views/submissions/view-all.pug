@@ -15,19 +15,15 @@ block content
 				tbody
 					for submission in submissions
 						tr
-							td=submission.actName
-							td=submission.showType
-							if submission.reviews && submission.reviews.length > 0
-								td
-									a(href="/submissions/reviews/"+submission._id) Reviews
+							td
+								a(href="/submissions/reviews/"+submission.domain)=submission.actName
+								span.float-right
 									+showReviews(submission.reviews)
-							else
-								td 
+							td=submission.showType
 							td
 								a(href="/submissions/edit/"+submission._id) Edit
 
 mixin showReviews(reviews)
-	|  (
 	for review in reviews
 		case review.score
 			when  2: |😍
@@ -35,4 +31,3 @@ mixin showReviews(reviews)
 			when  0: |😕
 			when -1: |😡
 			default: break
-	| )

@@ -23,6 +23,12 @@ let submissionApi = {
 		})
 	},
 
+	getByDomain: function(domain, callback) {
+		Submission.findOne({domain: domain}, (error, submission)=> {
+			callback(error, submission)
+		})
+	},
+
 	getAll: function(callback) {
 		Submission.find((error, submissions)=> {
 			callback(error, submissions)

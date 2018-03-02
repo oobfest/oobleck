@@ -5,7 +5,7 @@ block content
 			span.dash-titlebar-title 
 				a.text-muted(href="/submissions") Submissions
 				|  /
-				| Submission Reviews
+				| Reviews by Submission
 
 	.dash-boxes.container-fluid
 		.box.box-b
@@ -18,7 +18,8 @@ block content
 				tbody
 					for review in submission.reviews
 						tr
-							td=review.username
+							td
+								a(href="/submissions/reviews-by-user/"+review.username)=review.username
 							td
 								+showReview(review.score)
 							td=review.notes

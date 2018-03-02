@@ -92,10 +92,26 @@ router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'stand
 	})
 })
 
-router.get('/reviews/:objectId', isLoggedIn, isRole('admin'), (request, response)=> {
-	let objectId = request.params.objectId
-	submissionApi.get(objectId, (submission)=> {
-		response.render('submissions/reviews', {submission: submission})
+router.get('/reviews/:domain', isLoggedIn, isRole('admin'), (request, response)=> {
+	let domain = request.params.domain
+	submissionApi.getByDomain(domain, (error, submission)=> {
+		if(error) response.render('error', {error: error})
+		else response.render('submissions/reviews-by-submission', {submission: submission})
+	})
+})
+
+router.get('/reviews-by-user/:username', isLoggedIn, isRole('admin'), (request, response)=> {
+	let username = request.params.username
+	submissionApi.getAll((error, submissions)=> {
+		if(error) response.render('error', {error: error})
+		else {
+			let releventSubmissions = []
+			for(let i=0; i<submissions.length; i++)
+				for(let j=0; j<submissions[i].reviews.length; j++)
+					if (submissions[i].reviews[j].username === username)
+						releventSubmissions.push(submissions[i])
+			response.render('submissions/reviews-by-user', {submissions: releventSubmissions, username: username})
+		}
 	})
 })
 

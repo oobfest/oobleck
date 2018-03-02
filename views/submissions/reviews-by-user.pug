@@ -1,0 +1,35 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			a.text-muted(href="/submissions") Submissions
+				|  /
+				| Reviews by User
+
+	.dash-boxes.container-fluid
+		.box.box-b
+			.box-head.box-head-sm.box-bb
+				h4 Submission Reviews by 
+					code #{username}
+			table.box-table.table
+				thead
+					tr
+						th Act Name
+						th Review Score
+						th Review Notes
+				tbody
+					for submission in submissions
+						- var review = submission.reviews.find(function(review){ return review.username == username})
+						tr
+							td=submission.actName
+							td
+								+showReview(review.score)
+							td=review.notes
+
+mixin showReview(score)
+	case score
+		when  2: |😍 Yes!
+		when  1: |😬 Meh
+		when  0: |😕 Nah
+		when -1: |😡 Veto
+		default: break
