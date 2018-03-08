@@ -16,7 +16,8 @@ block content
 				tbody
 					for submission in submissions
 						tr
-							td=submission.actName
+							td
+								a(href="/submissions/submission/"+submission.domain)=submission.actName
 							td
 								a(href="/submissions/reviews/"+submission.domain)
 									+renderReviews(submission.reviews)

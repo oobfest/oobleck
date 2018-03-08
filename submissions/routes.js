@@ -6,18 +6,25 @@ const submissionApi = require('../submissions/api')
 const limax = require('limax')
 
 // GET /submissions
-router.get('/', isLoggedIn, isRole('admin'), (request, response, next)=> {
+router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	submissionApi.getAll((error, submissions)=> {
 		if(error) response.render('error', {error: error})
 		response.render('submissions/view-all', {submissions: submissions})
 	})
 })
 
+router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
+	let domain = request.params.domain
+	submissionApi.getByDomain(domain, (error, submission)=> {
+		if(error) response.render('error', {error: error})
+		else response.render('submissions/view', {submission: submission})
+	})
+})
+
 // Todo: HTTP DELETE
-router.get('/delete/:objectId', (request, response)=> {
+router.get('/delete/:objectId', isRole(['admin']), (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.delete(objectId, ()=> {
-		console.log("Deleted", objectId)
 		response.redirect('/submissions')
 	})
 })
@@ -25,7 +32,6 @@ router.get('/delete/:objectId', (request, response)=> {
 router.post('/delete-image/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	submissionApi.updateImage(objectId, null, null, ()=> {
-		console.log("Deleted image from", objectId)
 		response.send({message: "Borat Voice: 'Great success!'"})
 	})
 })
@@ -35,7 +41,6 @@ router.post('/add-image/:objectId', (request, response)=> {
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
 	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, ()=> {
-		console.log("Updated image URLs for", objectId)
 		response.send({message: "Borat Voice: 'Very nice!'"})
 	})
 })
@@ -74,8 +79,9 @@ router.get('/review', isLoggedIn, (request, response)=> {
 
 router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.get(objectId, (submission)=> {
-		response.render('submissions/review-submission', {submission: submission})
+	submissionApi.get(objectId, (error, submission)=> {
+		if(error) response.render('error', {error: error})
+		else response.render('submissions/review-submission', {submission: submission})
 	})
 })
 
@@ -92,7 +98,7 @@ router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'stand
 	})
 })
 
-router.get('/reviews/:domain', isLoggedIn, isRole('admin'), (request, response)=> {
+router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
 	let domain = request.params.domain
 	submissionApi.getByDomain(domain, (error, submission)=> {
 		if(error) response.render('error', {error: error})
@@ -100,7 +106,7 @@ router.get('/reviews/:domain', isLoggedIn, isRole('admin'), (request, response)=
 	})
 })
 
-router.get('/reviews-by-user/:username', isLoggedIn, isRole('admin'), (request, response)=> {
+router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
 	let username = request.params.username
 	submissionApi.getAll((error, submissions)=> {
 		if(error) response.render('error', {error: error})
@@ -119,9 +125,12 @@ router.get('/reviews-by-user/:username', isLoggedIn, isRole('admin'), (request, 
 // It's kept public so troup members can edit the form
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.get(objectId, (submission)=> {
-		let imgurUrlConverter = require('../utilities/imgur')
-		response.render('submissions/edit', {submission: submission, user: request.user})
+	submissionApi.get(objectId, (error, submission)=> {
+		if(error) response.render('error', {error: error})
+		else {
+			let imgurUrlConverter = require('../utilities/imgur')
+			response.render('submissions/edit', {submission: submission, user: request.user})
+		}
 	})
 })
 
@@ -174,7 +183,18 @@ router.post('/edit', (request, response)=> {
 
 	}
 
-	submissionApi.update(submission, (newSubmission)=> {
+	submissionApi.update(submission, (newSubmission)=> {		
+		let archiveMessage = 
+			`<b>Act name:</b> 		${newSubmission.actName}<br>` +
+			`<b>Type:</b> 			${newSubmission.showType}<br>` + 
+			`<b>Bio:</b>  			${newSubmission.publicDescription}<br>` + 
+			`<b>Description:</b>  	${newSubmission.informalDescription}<br>` +
+			`<b>Hometown:</b> 		${newSubmission.homeTheater ? newSubmission.homeTheater + ' in' : ''} ${newSubmission.city}, ${newSubmission.state}, ${newSubmission.country}<br>` +
+			`<b>Contact:</b>  		${newSubmission.primaryContactName}, ${newSubmission.primaryContactEmail}<br>` +
+			`<b>Image URL:</b>		${newSubmission.imageUrl ? newSubmission.imageUrl : 'No image uploaded'}<br>` +
+			`<b>Availability:</b> 	${newSubmission.available.join(' ')}<br>` + 
+			`<b>Video URLs:</b><br>	${newSubmission.videoUrls.join('<br>')}`
+		sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
 		response.redirect('/submissions/edit/' + submission.id)
 	})
 })

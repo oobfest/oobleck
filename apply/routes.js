@@ -80,7 +80,6 @@ router.post('/finish', (request, response)=>{
 	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
 		// Double-check that they payed (if in production)
 		let isProduction = process.env.NODE_ENV == 'production'
-		console.log(isProduction)
 		if (submission.paymentInfo !== null || !isProduction) {
 			let subject = "Thank you for applying to Out of Bounds 2018!"
 			let message = 

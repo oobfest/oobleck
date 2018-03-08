@@ -5,7 +5,7 @@ const isRole = require('../middleware/is-role')
 const isNotARobot = require('../middleware/is-not-a-robot')
 const hostApi = require('../hosts/api')
 
-router.get('/', isLoggedIn, isRole('admin'), (request, response)=> {
+router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
 	hostApi.getAll((error, hosts)=> {
 		response.render('hosts/view-all', { hosts: hosts })
 	})
