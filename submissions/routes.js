@@ -9,7 +9,34 @@ const limax = require('limax')
 router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	submissionApi.getAll((error, submissions)=> {
 		if(error) response.render('error', {error: error})
-		response.render('submissions/view-all', {submissions: submissions})
+		else {
+
+			let totalSubmissions = submissions.length
+
+			let totalReviewsCount = 0
+			let reviewedSubmissionCount = 0
+			let completedSubmissionCount = 0
+
+			for(let i=0; i<submissions.length; i++) {
+				totalReviewsCount+= submissions[i].reviews.length				
+				if(submissions[i].reviews.length > 0)
+					reviewedSubmissionCount++
+				if(submissions[i].reviews.length >= 5)
+					completedSubmissionCount++
+			}
+
+			let percentReviewed = (reviewedSubmissionCount / totalSubmissions * 100).toFixed(0)
+			let percentComplete = (completedSubmissionCount / totalSubmissions * 100).toFixed(0)
+
+			response.render('submissions/view-all', {
+				submissions: submissions, 
+				percentReviewed: percentReviewed,
+				percentComplete: percentComplete,
+				totalReviewsCount: totalReviewsCount,
+				reviewedSubmissionCount: reviewedSubmissionCount,
+				completedSubmissionCount: completedSubmissionCount
+			})
+		}
 	})
 })
 
