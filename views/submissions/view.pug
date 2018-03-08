@@ -6,9 +6,88 @@ block content
 				a.text-muted(href="/submissions/") Submissions
 				|  /
 				| #{submission.actName}
+		a.btn.btn-secondary.ml-md-auto(href="/submissions/edit/" + submission._id) Edit Submission
 
 
 	.dash-boxes
-		.row
-			.col
-				h2.block-title Hello, world!
+		.row.justify-content-center
+			.col-lg-8
+				.box.box-b
+					.box-head.box-bb
+						.row
+							.col.text-center
+								if typeof submission.imageUrl != 'undefined' && submission.imageUrl != ''
+									img(alt="Submission Photo" src=submission.imageUrl.substr(0, submission.imageUrl.length-4) + 'b.jpeg')
+								h2.block-title #{submission.actName} 
+								h3.block-subtitle #{submission.showType} from #{submission.city}, #{submission.state}, #{submission.country}
+								h4.block-subtitle=submission.homeTheater
+					.box-block.box-bb
+						.row
+							.col
+								h3 Bio
+								p.font-italic=submission.publicDescription					
+
+								h3 How Do You Describe Your Act?
+								p=submission.informalDescription
+
+								h3 Accolades
+								p=submission.accolades
+					.box-block.box-bb
+						h3 Contacts
+						.mb-0 #{submission.primaryContactName}, #{submission.primaryContactRole}  
+							span.badge.badge-info #{submission.primaryContactAttending ? '' : 'Not Attending'}
+						pre.mb-0=submission.primaryContactEmail
+						pre=submission.primaryContactPhone
+
+						for contact in submission.additionalMembers
+							.mb-0 #{contact.name}, #{contact.role}  
+								span.badge.badge-info #{contact.attending ? '' : 'Not Attending'}
+							pre.mb-0=contact.email
+							pre=contact.phone
+
+					.box-block.box-bb
+						h3 Show Length
+						p From #{submission.minimumShowLength} to #{submission.maximumShowLength} minutes.
+						
+						if submission.specialNeeds
+							h3 Special Needs
+							p=submission.specialNeeds
+
+						if submission.noFood
+							p No food!
+						else
+							p Food??
+
+					.box-block.box-bb
+						h3 Payment Info
+						if (submission.paymentInfo != null)
+							- var payment = submission.paymentInfo
+							| Payment ID
+							pre=payment.transactions[0].related_resources[0].sale.id
+							| Email
+							pre=payment.payer.payer_info.email
+							| Amount
+							pre $#{payment.transactions[0].amount.total}
+							| Time of Payment
+							pre= new Date(payment.create_time).toLocaleString("en-US", {timeZone: 'America/Chicago'})
+						else
+							p No payment information found D:
+
+				//
+					minimumShowLength: Number,
+					maximumShowLength: Number,
+					specialNeeds: String,
+					noFood: Boolean,
+
+					imageUrl: String,
+					deleteImageUrl: String,
+
+					videoUrls: Array,
+					videoInfo: String,
+
+					socialMedia: Array,
+
+					available: Array,
+					conflicts: Array,
+
+					paymentInfo: {},
