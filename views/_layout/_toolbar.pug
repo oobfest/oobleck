@@ -4,7 +4,9 @@ header.dash-toolbar(style=(settings.env !== 'production' ? 'background-color: #0
 
 	.dropdown.dash-toolbar-dropdown
 		a.dropdown-toggle(href="#" data-toggle="dropdown")
-			span.d-none.d-md-inline-block #{user.username}
+			span.d-none.d-md-inline-block=user.username
+			span.d-md-none
+				span.fa.fa-user-circle=user.username
 		.dropdown-menu.dropdown-menu-right
 			a.dropdown-item(href="/users/account") Account
 			a.dropdown-item(href="/logout") Logout

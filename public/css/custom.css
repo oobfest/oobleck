@@ -36,12 +36,24 @@ a:hover { color: #016ff9; }
 }
 
 #oobleck-logo {
+	/*
 	height: auto;
 	width: 206px;
 	padding: 0 24px;
 	margin-top: 8px;
+	*/
+	margin: 0 auto;
+	height: 100%;
 }
-
+.dash-nav header, .dash-toolbar {
+	height: 85px;
+	min-height: 85px;
+	padding: 8px;
+	border-right: none;
+	border-left: none;
+	border-bottom: 1px solid #2d303a
+}
+.dash-fixed .dash-app main { margin-top: 85px; }
 .code { 
 	font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
 	color: #212529;

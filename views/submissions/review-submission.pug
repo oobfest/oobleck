@@ -33,6 +33,15 @@ block content
 								if submission.accolades
 									h3 Accolades
 									p=submission.accolades
+
+								h3 Members
+								.mb-0 
+									strong Primary:  
+									| #{submission.primaryContactName}, #{submission.primaryContactRole}
+
+								for contact in submission.additionalMembers
+									.mb-0 #{contact.name}, #{contact.role}  
+
 					.box-block.box-bb
 						.row
 							.col
@@ -74,14 +83,7 @@ block content
 						.row
 							.col
 								h3 Notes
-								p 
-									| What was the best part?
-									br
-									| What was the worst part? 
-									br
-									| Why should they be in the festival? 
-									br
-									| Why should they not be in the festival?
+								em What was the best part? What was the worst part?  Why should they be in the festival?  Why should they not be in the festival?
 								textarea#notes.form-control(name="notes" rows="3")=review.notes
 					.box-block
 						.row
