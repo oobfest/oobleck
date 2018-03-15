@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tyler Lane",
@@ -25,6 +25,7 @@
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
     "limax": "^1.6.0",
+    "lodash": "^4.17.5",
     "mongoose": "^5.0.0",
     "morgan": "^1.9.0",
     "nodemailer": "^4.4.1",

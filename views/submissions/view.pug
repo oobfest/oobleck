@@ -30,8 +30,9 @@ block content
 								h3 How Do You Describe Your Act?
 								p=submission.informalDescription
 
-								h3 Accolades
-								p=submission.accolades
+								if submission.accolades
+									h3 Accolades
+									p=submission.accolades
 					.box-block.box-bb
 						h3 Contacts
 						.mb-0 #{submission.primaryContactName}, #{submission.primaryContactRole}  
@@ -53,10 +54,11 @@ block content
 							h3 Special Needs
 							p=submission.specialNeeds
 
+						h3 Are they gonna bring food onstage?
 						if submission.noFood
-							p No food!
+							p Nope!
 						else
-							p Food??
+							p Maybe 😥
 
 					.box-block.box-bb
 						h3 Payment Info

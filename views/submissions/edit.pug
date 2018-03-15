@@ -215,7 +215,7 @@ block content
 							input#delete-image-url(type="hidden" name="delete-image-url" value=submission.deleteImageUrl)
 							#image-preview
 								.box-banner
-									- var imageUrl = (submission.imageUrl !== '' && typeof submission.imageUrl !== 'undefined') ? submission.imageUrl.substr(0, submission.imageUrl.length-4) + 'l.jpeg' : ''
+									- var imageUrl = (submission.imageUrl !== '' && typeof submission.imageUrl !== 'undefined' && submission.imageUrl !== null) ? submission.imageUrl.substr(0, submission.imageUrl.length-4) + 'l.jpeg' : ''
 									img#image-preview-element.box-banner-image(alt="Submission Photo" src=imageUrl)
 								.box-block.box-bb.text-right
 									a#delete-image-button.btn.btn-danger(href=submission.deleteImageUrl target="_blank" onclick="deleteImage()") Delete image

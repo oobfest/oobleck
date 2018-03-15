@@ -29,6 +29,71 @@ block form
 					label.col-form-label(for="text") Video URL (optional)
 					small.form-text.text-muted If you have video of you hosting we'd like to see it!
 					input#video-url.form-control(type="text" maxlength="280" v-model="videoUrl")
+			.box-block.box-bt
+				h3 Availability
+				p.help-text Which days of the festival are you able to host/MC?
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-tuesday.custom-control-input(
+							type="checkbox" 
+							value="tuesday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-tuesday") Tuesday, August 28th
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-wednesday.custom-control-input(
+							type="checkbox" 
+							value="wednesday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-wednesday") Wednesday, August 29th
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-thursday.custom-control-input(
+							type="checkbox" 
+							value="thursday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-thursday") Thursday, August 30th
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-friday.custom-control-input(
+							type="checkbox" 
+							value="friday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-friday") Friday, August 31st
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-saturday.custom-control-input(
+							type="checkbox" 
+							value="saturday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-saturday") Saturday, September 1st
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-sunday.custom-control-input(
+							type="checkbox" 
+							value="sunday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-sunday") Sunday, September 2nd
+				.form-group
+					.custom-control.custom-checkbox
+						input#available-monday.custom-control-input(
+							type="checkbox" 
+							value="monday" 
+							name="available[]"
+						)
+						label.custom-control-label(for="available-monday") Monday, September 3rd
+				h4 Mandatory Orientation Meeting
+				.form-group
+					.custom-control.custom-checkbox
+						input#can-attend-meeting.custom-control-input(type="checkbox" name="can-attend-meeting")
+						label.custom-control-label(for="can-attend-meeting") I am available Sunday afternoon, August 26th
+
 			.box-block.box-bt.text-right
 				button#submit-button.btn.btn-md.btn-primary(type="submit") Submit
 	script.
@@ -52,7 +117,7 @@ block form
 						phoneNumber: this.phoneNumber,
 						bio: this.bio,
 						experience: this.experience,
-						videoUr: this.videoUrl
+						videoUrl: this.videoUrl
 					}).then(response => {
 						console.log(response)
 					})

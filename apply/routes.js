@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { validationResult } = require('express-validator/check')
 const submissionValidation = require('../submissions/validation')
-const submissionApi = require('../submissions/api')
+const submissionModel = require('../submissions/model')
 const limax = require('limax')
 const log = require('winston')
 const sendEmail = require('../utilities/send-email')
@@ -22,24 +22,33 @@ router.get('/', (request, response) => {
 
 // GET /apply/hosting
 router.get('/hosting', (request, response)=> {
-	response.render('apply/host-application', { recaptcha: true, hotjar: true, trackPage: true })
+	response.render('apply/host-application', { 
+		recaptcha: true, 
+		hotjar: true, 
+		trackPage: true 
+	})
 })
 
 // POST /apply
 // From first page to second page
-router.post('/', isNotARobot, submissionValidation, (request, response) => {
+router.post('/', isNotARobot, submissionValidation, (request, response, next) => {
 
-	request.body['available'] = request.body['available']
-		? request.body['available']
-		: []
+	let submission = request.body
+	delete submission['g-recaptcha-response']
 
+	if(typeof submission.available === 'undefined')
+		submission.available == []
+
+	// Check for validation errors
 	let errors = validationResult(request)
 	let submissionIsErrorFree = errors.isEmpty()
-
 	if (submissionIsErrorFree) {
-		saveSubmission(request.body, function(submission) {
-			let applicationFee = calculateApplicationFee(submission)
-			response.render('apply/second-page', {submission: submission, applicationFee: applicationFee, trackPage: true})
+		saveSubmission(submission, function(error, savedSubmission) {
+			if(error) next(error)
+			else {
+				let applicationFee = calculateApplicationFee(savedSubmission)
+				response.render('apply/second-page', {submission: savedSubmission, applicationFee: applicationFee, trackPage: true})				
+			}
 		})
 	}
 	else {
@@ -68,44 +77,51 @@ router.post('/', isNotARobot, submissionValidation, (request, response) => {
 router.post('/pay/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let paymentInfo = request.body.paymentInfo
-	submissionApi.updatePayment(objectId, paymentInfo, (submission)=> {
+	submissionModel.updatePayment(objectId, paymentInfo, (submission)=> {
 		response.send({'cool-message': "YAY!"})
 	})
 })
 
-router.post('/finish', (request, response)=>{
+router.post('/finish', (request, response, next)=>{
 	let objectId = request.body['id']
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
-	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, (submission)=> {
-		// Double-check that they payed (if in production)
-		let isProduction = process.env.NODE_ENV == 'production'
-		if (submission.paymentInfo !== null || !isProduction) {
-			let subject = "Thank you for applying to Out of Bounds 2018!"
-			let message = 
-				`We received your application for ${submission.actName}<br>` +
-				`Acceptance emails will be sent out in the beginning of July<br>` + 
-				`To view & edit your application, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}<br>` +
-				`Anyone with this URL can edit your application, so keep it safe!!`
-			sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-				response.render('apply/thank-you', {submission: submission, trackPage: true})
-			})
-
-			let archiveMessage = 
-				`<b>Act name:</b> 		${submission.actName}<br>` +
-				`<b>Type:</b> 			${submission.showType}<br>` + 
-				`<b>Bio:</b>  			${submission.publicDescription}<br>` + 
-				`<b>Description:</b>  	${submission.informalDescription}<br>` +
-				`<b>Hometown:</b> 		${submission.homeTheater ? submission.homeTheater + ' in' : ''} ${submission.city}, ${submission.state}, ${submission.country}<br>` +
-				`<b>Contact:</b>  		${submission.primaryContactName}, ${submission.primaryContactEmail}<br>` +
-				`<b>Image URL:</b>		${submission.imageUrl ? submission.imageUrl : 'No image uploaded'}<br>` +
-				`<b>Availability:</b> 	${submission.available.join(' ')}<br>` + 
-				`<b>Video URLs:</b><br>	${submission.videoUrls.join('<br>')}`
-			sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
-
-		}
+	submissionModel.updateImage(objectId, imageUrl, deleteImageUrl, (error, submission)=> {
+		if(error) next(error)
 		else {
-			response.render('apply/second-page', {trackPage: true, submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
+			// Double-check that they payed (if in production)
+			let isProduction = process.env.NODE_ENV == 'production'
+
+			if(!isProduction) {
+				response.render('apply/thank-you', {submission: submission, trackPage: true})
+			}
+			else if (submission.paymentInfo !== null) {
+				let subject = "Thank you for applying to Out of Bounds 2018!"
+				let message = 
+					`We received your application for ${submission.actName}<br>` +
+					`Acceptance emails will be sent out in the beginning of July<br>` + 
+					`To view & edit your application, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}<br>` +
+					`Anyone with this URL can edit your application, so keep it safe!!`
+				sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
+					response.render('apply/thank-you', {submission: submission, trackPage: true})
+				})
+
+				let archiveMessage = 
+					`<b>Act name:</b> 		${submission.actName}<br>` +
+					`<b>Type:</b> 			${submission.showType}<br>` + 
+					`<b>Bio:</b>  			${submission.publicDescription}<br>` + 
+					`<b>Description:</b>  	${submission.informalDescription}<br>` +
+					`<b>Hometown:</b> 		${submission.homeTheater ? submission.homeTheater + ' in' : ''} ${submission.city}, ${submission.state}, ${submission.country}<br>` +
+					`<b>Contact:</b>  		${submission.primaryContactName}, ${submission.primaryContactEmail}<br>` +
+					`<b>Image URL:</b>		${submission.imageUrl ? submission.imageUrl : 'No image uploaded'}<br>` +
+					`<b>Availability:</b> 	${submission.available.join(' ')}<br>` + 
+					`<b>Video URLs:</b><br>	${submission.videoUrls.join('<br>')}`
+				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
+
+			}
+			else {
+				response.render('apply/second-page', {trackPage: true, submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
+			}			
 		}
 	})
 })
@@ -171,7 +187,7 @@ function saveSubmission(submissionRequest, callback) {
 		// Application Fee
 		paymentInfo: null
 	}
-	submissionApi.create(submission, callback)
+	submissionModel.create(submission, callback)
 }
 
 function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {

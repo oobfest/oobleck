@@ -2,12 +2,12 @@ const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
-const submissionApi = require('../submissions/api')
+const submissionModel = require('../submissions/model')
 const limax = require('limax')
 
 // GET /submissions
 router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
-	submissionApi.getAll((error, submissions)=> {
+	submissionModel.getAll((error, submissions)=> {
 		if(error) response.render('error', {error: error})
 		else {
 
@@ -42,7 +42,7 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 
 router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
 	let domain = request.params.domain
-	submissionApi.getByDomain(domain, (error, submission)=> {
+	submissionModel.getByDomain(domain, (error, submission)=> {
 		if(error) response.render('error', {error: error})
 		else response.render('submissions/view', {submission: submission})
 	})
@@ -51,14 +51,14 @@ router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (re
 // Todo: HTTP DELETE
 router.get('/delete/:objectId', isRole(['admin']), (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.delete(objectId, ()=> {
+	submissionModel.delete(objectId, ()=> {
 		response.redirect('/submissions')
 	})
 })
 
 router.post('/delete-image/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.updateImage(objectId, null, null, ()=> {
+	submissionModel.updateImage(objectId, null, null, ()=> {
 		response.send({message: "Borat Voice: 'Great success!'"})
 	})
 })
@@ -67,7 +67,7 @@ router.post('/add-image/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let imageUrl = request.body['image-url']
 	let deleteImageUrl = request.body['delete-image-url']
-	submissionApi.updateImage(objectId, imageUrl, deleteImageUrl, ()=> {
+	submissionModel.updateImage(objectId, imageUrl, deleteImageUrl, ()=> {
 		response.send({message: "Borat Voice: 'Very nice!'"})
 	})
 })
@@ -83,17 +83,17 @@ router.get('/review', isLoggedIn, (request, response)=> {
 	let userRoles = request.user.roles
 
 	if (userRoles.includes('admin')) {
-		submissionApi.getAll((error, submissions)=> {
+		submissionModel.getAll((error, submissions)=> {
 			callback(error, submissions)
 		})
 	}
 	else if (userRoles.includes('panelist')) {
-		submissionApi.getAllPaidExceptStandup((error, submissions)=> {
+		submissionModel.getAllPaidExceptStandup((error, submissions)=> {
 			callback(error, submissions)
 		})		
 	}
 	else if (userRoles.includes('standup-panelist')) {
-		submissionApi.getAllPaidStandup((error, submissions)=> {
+		submissionModel.getAllPaidStandup((error, submissions)=> {
 			callback(error, submissions)
 		})
 	}
@@ -106,7 +106,7 @@ router.get('/review', isLoggedIn, (request, response)=> {
 
 router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.get(objectId, (error, submission)=> {
+	submissionModel.get(objectId, (error, submission)=> {
 		if(error) response.render('error', {error: error})
 		else response.render('submissions/review-submission', {submission: submission})
 	})
@@ -120,14 +120,14 @@ router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'stand
 		score: request.body['score'],
 		notes: request.body['notes']
 	}
-	submissionApi.saveReview(objectId, review, (submission)=> {
+	submissionModel.saveReview(objectId, review, (submission)=> {
 		response.redirect('/submissions/review')
 	})
 })
 
 router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
 	let domain = request.params.domain
-	submissionApi.getByDomain(domain, (error, submission)=> {
+	submissionModel.getByDomain(domain, (error, submission)=> {
 		if(error) response.render('error', {error: error})
 		else response.render('submissions/reviews-by-submission', {submission: submission})
 	})
@@ -135,7 +135,7 @@ router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (reque
 
 router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
 	let username = request.params.username
-	submissionApi.getAll((error, submissions)=> {
+	submissionModel.getAll((error, submissions)=> {
 		if(error) response.render('error', {error: error})
 		else {
 			let releventSubmissions = []
@@ -152,7 +152,7 @@ router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule'
 // It's kept public so troup members can edit the form
 router.get('/edit/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
-	submissionApi.get(objectId, (error, submission)=> {
+	submissionModel.get(objectId, (error, submission)=> {
 		if(error) response.render('error', {error: error})
 		else {
 			let imgurUrlConverter = require('../utilities/imgur')
@@ -210,7 +210,7 @@ router.post('/edit', (request, response)=> {
 
 	}
 
-	submissionApi.update(submission, (newSubmission)=> {		
+	submissionModel.update(submission, (newSubmission)=> {		
 		let archiveMessage = 
 			`<b>Act name:</b> 		${newSubmission.actName}<br>` +
 			`<b>Type:</b> 			${newSubmission.showType}<br>` + 

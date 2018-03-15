@@ -1,6 +1,6 @@
 extends _layout
 block form
-	form(action="/apply" method="POST")
+	form(action="/apply" method="POST" name="apply")
 		.box-head.box-head-accent-oob
 		if errors 
 			include partials/errors
@@ -20,3 +20,64 @@ block form
 		$(function () {
 		  $('[data-toggle="popover"]').popover()
 		})
+
+	if settings.env !== 'production'
+		script.
+			// Secret autofill method for testing!
+			function autofill() {
+				reset()
+
+				//Act Details
+				document.apply['act-name'].value = "TEST SUBMISSION"
+				document.apply['show-type'].value = "Sketch"
+				document.apply['informal-description'].value = "Informal description of act"
+				document.apply['public-description'].value = "Public description of act"
+				document.apply['accolades'].value = "List of accolades"
+
+				// Location
+				document.apply['country'].value = "CA"
+				document.apply['state'].value = "Manitoba"
+				document.apply['city'].value = "Winnipeg"
+				document.apply['home-theater'].value = "Winnipeg ChuckleSportz"
+
+				// Contact
+				document.apply['primary-contact-name'].value = "Carl McCarl"
+				document.apply['primary-contact-email'].value = "carl@example.com"
+				document.apply['primary-contact-phone'].value = "777-555-1234"
+				document.apply['primary-contact-role'].value = "Director"
+				document.apply['primary-contact-attending'].value = "No"
+
+				// Performance Requirements
+				document.apply['minimum-show-length'].value = "12"
+				document.apply['maximum-show-length'].value = "42"
+				document.apply['special-needs'].value = "Vegan steaks"
+				document.apply['no-food'].checked = true
+
+				// Video
+				document.apply['video-url-0'].value = "http://www.google.com/channel-2"
+				document.apply['video-url-1'].value = "http://www.google.com/channel-3"
+				document.apply['video-url-2'].value = "http://www.google.com/channel-4"
+				document.apply['video-info'].value = "The password is \"swordfish\""
+
+				// Social Media
+				// ----
+
+				// Availability
+				document.apply['available-tuesday'].checked = true
+				document.apply['available-wednesday'].checked = true
+				document.apply['available-thursday'].checked = true
+				document.apply['available-friday'].checked = true
+				document.apply['available-saturday'].checked = false
+				document.apply['available-sunday'].checked = true
+				document.apply['available-monday'].checked = true
+				//document.apply['conflict-name'][0].value = ""
+
+				// Travel Agreement
+				document.apply['flight-agreement'].value = "Yes"
+
+				console.log("Autofill'd!")
+			}
+
+			function reset() {
+				document.apply.reset()
+			}

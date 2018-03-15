@@ -1,18 +1,17 @@
 const Submission = require('../submissions/schema')
 
-let submissionApi = {
+module.exports = {
 
 	create: function(submission, callback) {
 		let newSubmission = Submission(submission)
-		this.save(newSubmission, (savedSubmission)=> {
-			callback(savedSubmission)
+		this.save(newSubmission, (error, savedSubmission)=> {
+			callback(error, savedSubmission)
 		})
 	},
 
 	save: function(submission, callback) {
 		submission.save((error, submission)=> {
-			if (error) throw Error("Failed to save submission")
-			callback(submission)
+			callback(error, submission)
 		})
 	},
 
@@ -47,21 +46,21 @@ let submissionApi = {
 	},
 
 	saveReview: function(objectId, newReview, callback) {
-		this.get(objectId, (submission)=> {
+		this.get(objectId, (error, submission)=> {
 
 			// Update the review if it already exists
 			reviewIndex = submission.reviews.findIndex(review => review.userId == newReview.userId)
 			if (reviewIndex === -1) submission.reviews.push(newReview)
 			else submission.reviews[reviewIndex] = newReview
 
-			this.save(submission, (savedSubmission)=> {
-				callback(savedSubmission)
+			this.save(submission, (error, savedSubmission)=> {
+				callback(error, savedSubmission)
 			})
 		})
 	},
 
 	update: function(updatedSubmission, callback) {
-		this.get(updatedSubmission.id, (oldSubmission)=> {
+		this.get(updatedSubmission.id, (error, oldSubmission)=> {
 
 			oldSubmission.actName					= updatedSubmission.actName,
   			oldSubmission.domain					= updatedSubmission.domain,
@@ -98,19 +97,18 @@ let submissionApi = {
 	},
 
 	updateImage: function(objectId, imageUrl, deleteImageUrl, callback) {
-		this.get(objectId, (submission)=> {
-
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
 			submission.imageUrl = imageUrl
-			submission.deleteImageUrl = deleteImageUrl
-			
-			this.save(submission, (savedSubmission)=> {
-				callback(savedSubmission)
+			submission.deleteImageUrl = deleteImageUrl			
+			this.save(submission, (error, savedSubmission)=> {
+				callback(error, savedSubmission)
 			})
 		})
 	},
 
 	updatePayment: function(objectId, paymentInfo, callback) {
-		this.get(objectId, (submission)=> {
+		this.get(objectId, (error, submission)=> {
 
 			submission.paymentInfo = paymentInfo
 			submission.markModified('paymentInfo')
@@ -122,7 +120,7 @@ let submissionApi = {
 	},
 
 	delete: function(objectId, callback) {
-		this.get(objectId, (submission)=> {
+		this.get(objectId, (error, submission)=> {
 			submission.remove((error, submission)=> {
 				if (error) throw Error("AHH NO WAY")
 				callback(submission)
@@ -130,5 +128,3 @@ let submissionApi = {
 		})
 	}
 }
-
-module.exports = submissionApi
