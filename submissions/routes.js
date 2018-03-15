@@ -4,13 +4,13 @@ const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
 const submissionModel = require('../submissions/model')
 const limax = require('limax')
+const isProductionEnvironment = require('../utilities/is-production-environment')
 
 // GET /submissions
 router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	submissionModel.getAll((error, submissions)=> {
-		if(error) response.render('error', {error: error})
+		if(error) next(error)
 		else {
-
 			let totalSubmissions = submissions.length
 
 			let totalReviewsCount = 0
@@ -40,10 +40,10 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 	})
 })
 
-router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
+router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	let domain = request.params.domain
 	submissionModel.getByDomain(domain, (error, submission)=> {
-		if(error) response.render('error', {error: error})
+		if(error) next(error)
 		else response.render('submissions/view', {submission: submission})
 	})
 })
@@ -72,11 +72,11 @@ router.post('/add-image/:objectId', (request, response)=> {
 	})
 })
 
-router.get('/review', isLoggedIn, (request, response)=> {
+router.get('/review', isLoggedIn, (request, response, next)=> {
 
 	let callback = function(error, submissions) {
-		if(error) response.render('error', {error: error})
-		response.render('submissions/review-submissions', {submissions: submissions})
+		if(error) next(error)
+		else response.render('submissions/review-submissions', {submissions: submissions})
 	}
 
 	// Behavior depends on role
@@ -98,21 +98,19 @@ router.get('/review', isLoggedIn, (request, response)=> {
 		})
 	}
 	else {
-		renderErrorPage(response, "You do not have permission to do that :(")
+		next(new Error("You do not have permission to do that :("))
 	}
-
-
 })
 
-router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response)=> {
+router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId
 	submissionModel.get(objectId, (error, submission)=> {
-		if(error) response.render('error', {error: error})
+		if(error) next(error)
 		else response.render('submissions/review-submission', {submission: submission})
 	})
 })
 
-router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response)=> {
+router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId
 	let review = {
 		userId: request.user._id,
@@ -120,23 +118,24 @@ router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'stand
 		score: request.body['score'],
 		notes: request.body['notes']
 	}
-	submissionModel.saveReview(objectId, review, (submission)=> {
-		response.redirect('/submissions/review')
+	submissionModel.saveReview(objectId, review, (error, submission)=> {
+		if(error) next(error)
+		else response.redirect('/submissions/review')
 	})
 })
 
-router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
+router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	let domain = request.params.domain
 	submissionModel.getByDomain(domain, (error, submission)=> {
-		if(error) response.render('error', {error: error})
+		if(error) next(error)
 		else response.render('submissions/reviews-by-submission', {submission: submission})
 	})
 })
 
-router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule']), (request, response)=> {
+router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	let username = request.params.username
 	submissionModel.getAll((error, submissions)=> {
-		if(error) response.render('error', {error: error})
+		if(error) next(error)
 		else {
 			let releventSubmissions = []
 			for(let i=0; i<submissions.length; i++)
@@ -150,10 +149,10 @@ router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule'
 
 // Normally this path would be restricted by roles & signed-in users,
 // It's kept public so troup members can edit the form
-router.get('/edit/:objectId', (request, response)=> {
+router.get('/edit/:objectId', (request, response, next)=> {
 	let objectId = request.params.objectId
 	submissionModel.get(objectId, (error, submission)=> {
-		if(error) response.render('error', {error: error})
+		if(error) next(error)
 		else {
 			let imgurUrlConverter = require('../utilities/imgur')
 			response.render('submissions/edit', {submission: submission, user: request.user})
@@ -161,7 +160,7 @@ router.get('/edit/:objectId', (request, response)=> {
 	})
 })
 
-router.post('/edit', (request, response)=> {
+router.post('/edit', (request, response, next)=> {
 
 	let submission = { 
 		id: request.body['submission-id'],
@@ -210,19 +209,24 @@ router.post('/edit', (request, response)=> {
 
 	}
 
-	submissionModel.update(submission, (newSubmission)=> {		
-		let archiveMessage = 
-			`<b>Act name:</b> 		${newSubmission.actName}<br>` +
-			`<b>Type:</b> 			${newSubmission.showType}<br>` + 
-			`<b>Bio:</b>  			${newSubmission.publicDescription}<br>` + 
-			`<b>Description:</b>  	${newSubmission.informalDescription}<br>` +
-			`<b>Hometown:</b> 		${newSubmission.homeTheater ? newSubmission.homeTheater + ' in' : ''} ${newSubmission.city}, ${newSubmission.state}, ${newSubmission.country}<br>` +
-			`<b>Contact:</b>  		${newSubmission.primaryContactName}, ${newSubmission.primaryContactEmail}<br>` +
-			`<b>Image URL:</b>		${newSubmission.imageUrl ? newSubmission.imageUrl : 'No image uploaded'}<br>` +
-			`<b>Availability:</b> 	${newSubmission.available.join(' ')}<br>` + 
-			`<b>Video URLs:</b><br>	${newSubmission.videoUrls.join('<br>')}`
-		sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
-		response.redirect('/submissions/edit/' + submission.id)
+	submissionModel.update(submission, (error, newSubmission)=> {
+		if(error) next(error)
+		else {			
+			if(isProductionEnvironment) {
+				let archiveMessage = 
+					`<b>Act name:</b> 		${newSubmission.actName}<br>` +
+					`<b>Type:</b> 			${newSubmission.showType}<br>` + 
+					`<b>Bio:</b>  			${newSubmission.publicDescription}<br>` + 
+					`<b>Description:</b>  	${newSubmission.informalDescription}<br>` +
+					`<b>Hometown:</b> 		${newSubmission.homeTheater ? newSubmission.homeTheater + ' in' : ''} ${newSubmission.city}, ${newSubmission.state}, ${newSubmission.country}<br>` +
+					`<b>Contact:</b>  		${newSubmission.primaryContactName}, ${newSubmission.primaryContactEmail}<br>` +
+					`<b>Image URL:</b>		${newSubmission.imageUrl ? newSubmission.imageUrl : 'No image uploaded'}<br>` +
+					`<b>Availability:</b> 	${newSubmission.available.join(' ')}<br>` + 
+					`<b>Video URLs:</b><br>	${newSubmission.videoUrls.join('<br>')}`
+				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
+			}
+			response.redirect('/submissions/edit/' + submission.id)
+		}
 	})
 })
 
