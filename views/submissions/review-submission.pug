@@ -16,6 +16,8 @@ block content
 							.col.text-center
 								if typeof submission.imageUrl != 'undefined' && submission.imageUrl != ''
 									img(alt="Submission Photo" src=submission.imageUrl.substr(0, submission.imageUrl.length-4) + 'b.jpeg')
+								else
+									small [no picture]
 								h2.block-title #{submission.actName} 
 								h3.block-subtitle #{submission.showType} from #{submission.city}, #{submission.state}, #{submission.country}
 								h4.block-subtitle=submission.homeTheater
@@ -34,33 +36,40 @@ block content
 					.box-block.box-bb
 						.row
 							.col
-								h4 How They Describe Their Act
-								p.alert.alert-light=submission.informalDescription
-								h4 Video Links
+								h3 Video Links
 								for videoUrl in submission.videoUrls
 									unless videoUrl == ''
 										pre.alert.alert-light
 											a#video-url(href=videoUrl target="_blank")=videoUrl
 								if submission.videoInfo
-									h4 Video Information
+									h3 Video Information
 									p.alert.alert-light=submission.videoInfo
 					- var review = submission.reviews.find(review => review.userId == user._id) || { score: null, notes: null };
 					.box-block.box-bb
 						.row
 							.col
 								h3 Your Score
-								.custom-control.custom-radio
-									input#yes.custom-control-input(type="radio" name="score" value="2" checked=review.score==2)
-									label.custom-control-label(for="yes") 😍 Yes! 
-								.custom-control.custom-radio
-									input#meh.custom-control-input(type="radio" name="score" value="1" checked=review.score==1)
-									label.custom-control-label(for="meh") 😬 Meh
-								.custom-control.custom-radio
-									input#nah.custom-control-input(type="radio" name="score" value="0" checked=review.score==0)
-									label.custom-control-label(for="nah") 😕 Nah 
-								.custom-control.custom-radio
-									input#veto.custom-control-input(type="radio" name="score" value="-1" checked=review.score==-1)
-									label.custom-control-label(for="veto") 😡 Veto
+								.row
+									.col-sm-3
+										label.display-2(for="yes").mb-0 😍
+										.custom-control.custom-radio.mb-4
+											input#yes.custom-control-input(type="radio" name="score" value="2" checked=review.score==2)
+											label.custom-control-label.h4(for="yes") Yes! 
+									.col-sm-3
+										label.display-2(for="meh").mb-0 😬
+										.custom-control.custom-radio.mb-4
+											input#meh.custom-control-input(type="radio" name="score" value="1" checked=review.score==1)
+											label.custom-control-label.h4(for="meh") Meh
+									.col-sm-3
+										label.display-2(for="nah").mb-0 😕
+										.custom-control.custom-radio.mb-4
+											input#nah.custom-control-input(type="radio" name="score" value="0" checked=review.score==0)
+											label.custom-control-label.h4(for="nah") Nah 
+									.col-sm-3
+										label.display-2(for="veto").mb-0 😡
+										.custom-control.custom-radio.mb-4
+											input#veto.custom-control-input(type="radio" name="score" value="-1" checked=review.score==-1)
+											label.custom-control-label.h4(for="veto") Veto
 					.box-block.box-bb
 						.row
 							.col
@@ -74,6 +83,8 @@ block content
 									br
 									| Why should they not be in the festival?
 								textarea#notes.form-control(name="notes" rows="3")=review.notes
-
-				.text-right.mb-4
-					button.btn.btn-primary(type="submit") Save
+					.box-block
+						.row
+							.col
+								.text-right.m-2
+									button.btn.btn-primary(type="submit") Save
