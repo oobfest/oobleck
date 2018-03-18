@@ -5,16 +5,19 @@ block content
 			span.dash-titlebar-title Host Submissions
 
 	.dash-boxes.container-fluid
-		.box.box-b
-			table.box-table.table
-				thead
-					tr
-						th Name
-						th Delete
-				tbody
-					for host in hosts
+		if (hosts.length == 0)
+			p There are none!
+		else
+			.box.box-b
+				table.box-table.table
+					thead
 						tr
-							td
-								a(href="/hosts/"+host._id)=host.name
-							td
-								a(href="/hosts/delete/" + host._id) Delete
+							th Name
+							th Delete
+					tbody
+						for host in hosts
+							tr
+								td
+									a(href="/hosts/"+host._id)=host.name
+								td
+									a(href="/hosts/delete/" + host._id) Delete

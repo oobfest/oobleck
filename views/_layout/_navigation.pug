@@ -16,6 +16,5 @@ nav#dash-nav.dash-nav
 			a.dash-nav-item(href='/hosts') Host Submissions
 		if isAdmin
 			a.dash-nav-item(href="/users") Users
-		if isPanelist || isStandupPanelist
+		if isPanelist || isStandupPanelist || isScheduler
 			a.dash-nav-item(href="/submissions/review") Review Submissions
-		if isScheduler

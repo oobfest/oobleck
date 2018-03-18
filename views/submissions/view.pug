@@ -18,6 +18,8 @@ block content
 							.col.text-center
 								if typeof submission.imageUrl != 'undefined' && submission.imageUrl != ''
 									img(alt="Submission Photo" src=submission.imageUrl.substr(0, submission.imageUrl.length-4) + 'b.jpeg')
+								else
+									small [no picture]
 								h2.block-title #{submission.actName} 
 								h3.block-subtitle #{submission.showType} from #{submission.city}, #{submission.state}, #{submission.country}
 								h4.block-subtitle=submission.homeTheater

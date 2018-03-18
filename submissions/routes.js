@@ -82,7 +82,7 @@ router.get('/review', isLoggedIn, (request, response, next)=> {
 	// Behavior depends on role
 	let userRoles = request.user.roles
 
-	if (userRoles.includes('admin')) {
+	if (userRoles.includes('schedule')) {
 		submissionModel.getAll((error, submissions)=> {
 			callback(error, submissions)
 		})
@@ -102,7 +102,7 @@ router.get('/review', isLoggedIn, (request, response, next)=> {
 	}
 })
 
-router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response, next)=> {
+router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId
 	submissionModel.get(objectId, (error, submission)=> {
 		if(error) next(error)
