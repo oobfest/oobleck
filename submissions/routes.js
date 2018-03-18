@@ -110,7 +110,7 @@ router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'paneli
 	})
 })
 
-router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'panelist', 'standup-panelist']), (request, response, next)=> {
+router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId
 	let review = {
 		userId: request.user._id,
