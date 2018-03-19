@@ -83,7 +83,7 @@ router.get('/review', isLoggedIn, (request, response, next)=> {
 	let userRoles = request.user.roles
 
 	if (userRoles.includes('schedule')) {
-		submissionModel.getAll((error, submissions)=> {
+		submissionModel.getAllPaid((error, submissions)=> {
 			callback(error, submissions)
 		})
 	}

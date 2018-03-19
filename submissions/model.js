@@ -33,6 +33,12 @@ module.exports = {
 		})
 	},
 
+	getAllPaid: function(callback) {
+		Submission.find({paymentInfo: {$ne: null}}, (error, submissions)=> {
+			callback(error, submissions)
+		})
+	},
+
 	getAllPaidExceptStandup: function(callback) {
 		Submission.find({showType: {$ne: 'Stand-Up'}, paymentInfo: {$ne: null} }, (error, submissions)=> {
 			callback(error, submissions)
