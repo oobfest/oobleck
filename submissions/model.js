@@ -51,6 +51,12 @@ module.exports = {
 		})
 	},
 
+	getAllUnpaid: function(callback) {
+		Submission.find({paymentInfo: null}, (error, submissions)=> {
+			callback(error, submissions)
+		})
+	},
+
 	saveReview: function(objectId, newReview, callback) {
 		this.get(objectId, (error, submission)=> {
 

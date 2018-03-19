@@ -7,6 +7,11 @@ block content
 					.box-head.box-head-accent-oob
 					.box-block.box-b.box-bt-0
 						h2 Error! 😯
-						p o noes
-						pre=error.status
+						p Something went wrong. Let 
+							code admin@oobfest.com 
+							| know about it, please!
+						if error.status
+							h4 Error Status
+							pre=error.status
+						h4 Error Message
 						pre=error.message

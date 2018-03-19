@@ -8,7 +8,8 @@ const isProductionEnvironment = require('../utilities/is-production-environment'
 
 // GET /submissions
 router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
-	submissionModel.getAll((error, submissions)=> {
+
+	submissionModel.getAllPaid((error, submissions)=> {
 		if(error) next(error)
 		else {
 			let totalSubmissions = submissions.length
@@ -37,6 +38,13 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				completedSubmissionCount: completedSubmissionCount
 			})
 		}
+	})
+})
+
+router.get('/unpaid', isLoggedIn, isRole(['admin']), (request, response, next)=> {
+	submissionModel.getAllUnpaid((error, submissions)=> {
+		if(error) next(error)
+		else response.render('submissions/view-all-unpaid', {submissions: submissions})
 	})
 })
 

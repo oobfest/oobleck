@@ -1,0 +1,27 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title 
+				a.text-muted(href="/submissions/") Submissions
+				|  /
+				| Unpaid Submissions
+
+	.dash-boxes.container-fluid
+		.row
+			.col
+				h2 Submissions
+				.box.box-b
+					table.box-table.table
+						thead
+							tr
+								th Act
+								th Type
+						tbody
+							for submission in submissions
+								tr
+									td
+										a(href="/submissions/submission/"+submission.domain)=submission.actName
+									td=submission.showType
+									td
+										a(href="/submissions/edit/"+submission._id) Edit
