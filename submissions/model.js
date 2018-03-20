@@ -59,52 +59,57 @@ module.exports = {
 
 	saveReview: function(objectId, newReview, callback) {
 		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				// Update the review if it already exists
+				reviewIndex = submission.reviews.findIndex(review => review.userId == newReview.userId)
+				if (reviewIndex === -1) submission.reviews.push(newReview)
+				else submission.reviews[reviewIndex] = newReview
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
 
-			// Update the review if it already exists
-			reviewIndex = submission.reviews.findIndex(review => review.userId == newReview.userId)
-			if (reviewIndex === -1) submission.reviews.push(newReview)
-			else submission.reviews[reviewIndex] = newReview
-
-			this.save(submission, (error, savedSubmission)=> {
-				callback(error, savedSubmission)
-			})
+			}
 		})
 	},
 
 	update: function(updatedSubmission, callback) {
 		this.get(updatedSubmission.id, (error, oldSubmission)=> {
+			if(error) callback(error)
+			else {
+				//TOOD: Use underscore!
+				oldSubmission.actName					= updatedSubmission.actName,
+				oldSubmission.domain					= updatedSubmission.domain,
+				oldSubmission.showType					= updatedSubmission.showType,
+				oldSubmission.informalDescription		= updatedSubmission.informalDescription,
+				oldSubmission.publicDescription			= updatedSubmission.publicDescription,
+				oldSubmission.accolades					= updatedSubmission.accolades,
+				oldSubmission.country					= updatedSubmission.country,
+				oldSubmission.city						= updatedSubmission.city,
+				oldSubmission.state						= updatedSubmission.state,
+				oldSubmission.homeTheater				= updatedSubmission.homeTheater
+				oldSubmission.primaryContactName		= updatedSubmission.primaryContactName,
+				oldSubmission.primaryContactEmail		= updatedSubmission.primaryContactEmail,
+				oldSubmission.primaryContactPhone		= updatedSubmission.primaryContactPhone,
+				oldSubmission.primaryContactRole		= updatedSubmission.primaryContactRole,
+				oldSubmission.primaryContactAttending 	= updatedSubmission.primaryContactAttending,
+				oldSubmission.additionalMembers			= updatedSubmission.additionalMembers,
+				oldSubmission.minimumShowLength			= updatedSubmission.minimumShowLength,
+				oldSubmission.maximumShowLength			= updatedSubmission.maximumShowLength,
+				oldSubmission.specialNeeds				= updatedSubmission.specialNeeds,
+				oldSubmission.noFood					= updatedSubmission.noFood,
+				oldSubmission.imageUrl					= updatedSubmission.imageUrl,
+				oldSubmission.deleteImageUrl			= updatedSubmission.deleteImageUrl,
+				oldSubmission.videoUrls					= updatedSubmission.videoUrls,
+				oldSubmission.videoInfo					= updatedSubmission.videoInfo
+				oldSubmission.socialMedia				= updatedSubmission.socialMedia,
+				oldSubmission.available					= updatedSubmission.available,
+				oldSubmission.conflicts					= updatedSubmission.conflicts,
 
-			oldSubmission.actName					= updatedSubmission.actName,
-  			oldSubmission.domain					= updatedSubmission.domain,
-  			oldSubmission.showType					= updatedSubmission.showType,
-  			oldSubmission.informalDescription		= updatedSubmission.informalDescription,
-  			oldSubmission.publicDescription			= updatedSubmission.publicDescription,
-  			oldSubmission.accolades					= updatedSubmission.accolades,
-  			oldSubmission.country					= updatedSubmission.country,
-  			oldSubmission.city						= updatedSubmission.city,
-  			oldSubmission.state						= updatedSubmission.state,
-  			oldSubmission.homeTheater				= updatedSubmission.homeTheater
-  			oldSubmission.primaryContactName		= updatedSubmission.primaryContactName,
-  			oldSubmission.primaryContactEmail		= updatedSubmission.primaryContactEmail,
-  			oldSubmission.primaryContactPhone		= updatedSubmission.primaryContactPhone,
-  			oldSubmission.primaryContactRole		= updatedSubmission.primaryContactRole,
-  			oldSubmission.primaryContactAttending 	= updatedSubmission.primaryContactAttending,
-  			oldSubmission.additionalMembers			= updatedSubmission.additionalMembers,
-  			oldSubmission.minimumShowLength			= updatedSubmission.minimumShowLength,
-  			oldSubmission.maximumShowLength			= updatedSubmission.maximumShowLength,
-  			oldSubmission.specialNeeds				= updatedSubmission.specialNeeds,
-  			oldSubmission.noFood					= updatedSubmission.noFood,
-  			oldSubmission.imageUrl					= updatedSubmission.imageUrl,
-  			oldSubmission.deleteImageUrl			= updatedSubmission.deleteImageUrl,
-  			oldSubmission.videoUrls					= updatedSubmission.videoUrls,
-  			oldSubmission.videoInfo					= updatedSubmission.videoInfo
-  			oldSubmission.socialMedia				= updatedSubmission.socialMedia,
-  			oldSubmission.available					= updatedSubmission.available,
-  			oldSubmission.conflicts					= updatedSubmission.conflicts,
-			
-			this.save(oldSubmission, (savedSubmission)=> {
-				callback(savedSubmission)
-			})
+				this.save(oldSubmission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
 		})
 	},
 
