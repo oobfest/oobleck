@@ -72,8 +72,8 @@ let validationSchema = [
 		.isLength({max:1400}).withMessage("Special needs is too long"),
 	check('video-url-0')
 		.exists().withMessage("Video URL must exist")
-		.not().isEmpty().withMessage("Video URL cannot be empty")
-		.isURL().withMessage("Video URL must be a valid URL"),
+		.not().isEmpty().withMessage("Video URL cannot be empty"),
+		//.isURL().withMessage("Video URL must be a valid URL"),
 	check('video-info')
 		.isLength({max:1400}).withMessage("Video information is too long")
 ]

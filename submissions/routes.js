@@ -4,6 +4,7 @@ const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
 const submissionModel = require('../submissions/model')
 const limax = require('limax')
+const sendEmail = require('../utilities/send-email')
 const isProductionEnvironment = require('../utilities/is-production-environment')
 
 // GET /submissions
