@@ -8,9 +8,9 @@ const log = require('winston')
 const sendEmail = require('../utilities/send-email')
 const isNotARobot = require('../middleware/is-not-a-robot')
 
-// GET /apply
+// Get first page of form
 router.get('/', (request, response) => {
-	response.render('apply/first-page', { 
+	response.render('apply/submission-details', { 
 		recaptcha: true, 
 		hotjar: true,
 		trackPage: true,
@@ -20,18 +20,8 @@ router.get('/', (request, response) => {
 	})
 })
 
-// GET /apply/hosting
-router.get('/hosting', (request, response)=> {
-	response.render('apply/host-application', { 
-		recaptcha: true, 
-		hotjar: true, 
-		trackPage: true 
-	})
-})
-
-// POST /apply
-// From first page to second page
-router.post('/', isNotARobot, submissionValidation, (request, response, next) => {
+// Submit first page, go to second page (if no errors)
+router.post('/details', isNotARobot, submissionValidation, (request, response, next) => {
 
 	let submission = request.body
 	delete submission['g-recaptcha-response']
@@ -39,20 +29,18 @@ router.post('/', isNotARobot, submissionValidation, (request, response, next) =>
 	if(typeof submission.available === 'undefined')
 		submission.available == []
 
-	// Check for validation errors
-	let errors = validationResult(request)
-	let submissionIsErrorFree = errors.isEmpty()
+	let submissionErrors = validationResult(request)
+	let submissionIsErrorFree = submissionErrors.isEmpty()
 	if (submissionIsErrorFree) {
 		saveSubmission(submission, function(error, savedSubmission) {
 			if(error) next(error)
 			else {
-				let applicationFee = calculateApplicationFee(savedSubmission)
-				response.render('apply/second-page', {submission: savedSubmission, applicationFee: applicationFee, trackPage: true})				
+				response.render('apply/submission-photo-upload', {submission: savedSubmission, trackPage: true})
 			}
 		})
 	}
 	else {
-		response.render('apply/first-page', {
+		response.render('apply/submission-details', {
 			recaptcha: true,
 			errors: errors.array(),
 			socialMedia: flattenSocialMedia(
@@ -74,26 +62,55 @@ router.post('/', isNotARobot, submissionValidation, (request, response, next) =>
 	}
 })
 
+router.post('/photo-upload', (request, response, next)=> {
+	// Get submission
+	let objectId = request.body.id
+	console.log(objectId)
+	submissionModel.get(objectId, (error, submission)=> {
+		if(error) next(error)
+		else {
+			// Check image was uploaded
+			let imageUrl = request.body["image-url"]
+			console.log(imageUrl)
+			if((typeof imageUrl =='undefined') || imageUrl == '') {
+				response.render('apply/submission-photo-upload', {submission: submission, trackPage: true, errors: [{msg: "Photo upload is required"}]})
+			}
+			else {
+				let deleteImageUrl = request.body["delete-image-url"]
+				console.log(deleteImageUrl)
+				submissionModel.updateImage(objectId, imageUrl, deleteImageUrl, (error, savedSubmission)=> {
+					if(error) next(error)
+					else {
+						console.log('savedddd')
+						let applicationFee = calculateApplicationFee(savedSubmission)
+						response.render('apply/submission-payment', {submission: savedSubmission, applicationFee: applicationFee, trackPage: true})
+					}
+				})
+
+			}
+		}
+	})
+})
+
 router.post('/pay/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let paymentInfo = request.body.paymentInfo
-	submissionModel.updatePayment(objectId, paymentInfo, (submission)=> {
+	submissionModel.updatePayment(objectId, paymentInfo, (error, submission)=> {
 		response.send({'cool-message': "YAY!"})
 	})
 })
 
 router.post('/finish', (request, response, next)=>{
-	let objectId = request.body['id']
-	let imageUrl = request.body['image-url']
-	let deleteImageUrl = request.body['delete-image-url']
-	submissionModel.updateImage(objectId, imageUrl, deleteImageUrl, (error, submission)=> {
+	let objectId = request.body.id
+
+	submissionModel.get(objectId, (error, submission)=> {
 		if(error) next(error)
 		else {
 			// Double-check that they payed (if in production)
 			let isProduction = process.env.NODE_ENV == 'production'
 
 			if(!isProduction) {
-				response.render('apply/thank-you', {submission: submission, trackPage: true})
+				response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
 			}
 			else if (submission.paymentInfo !== null) {
 				let subject = "Thank you for applying to Out of Bounds 2018!"
@@ -103,7 +120,7 @@ router.post('/finish', (request, response, next)=>{
 					`To view & edit your application, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}<br>` +
 					`Anyone with this URL can edit your application, so keep it safe!!`
 				sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-					response.render('apply/thank-you', {submission: submission, trackPage: true})
+					response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
 				})
 
 				let archiveMessage = 
@@ -120,9 +137,18 @@ router.post('/finish', (request, response, next)=>{
 
 			}
 			else {
-				response.render('apply/second-page', {trackPage: true, submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
-			}			
+				response.render('apply/submission-payment', {trackPage: true, submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
+			}
 		}
+	})
+})
+
+// GET /apply/hosting
+router.get('/hosting', (request, response)=> {
+	response.render('apply/host-application', { 
+		recaptcha: true, 
+		hotjar: true, 
+		trackPage: true 
 	})
 })
 

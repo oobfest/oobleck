@@ -60,8 +60,11 @@ router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (re
 // Todo: HTTP DELETE
 router.get('/delete/:objectId', isRole(['admin']), (request, response)=> {
 	let objectId = request.params.objectId
-	submissionModel.delete(objectId, ()=> {
-		response.redirect('/submissions')
+	submissionModel.delete(objectId, (error)=> {
+		if(error) next(error)
+		else {
+			response.redirect('/submissions')			
+		}
 	})
 })
 

@@ -117,7 +117,7 @@ module.exports = {
 		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)
 			submission.imageUrl = imageUrl
-			submission.deleteImageUrl = deleteImageUrl			
+			submission.deleteImageUrl = deleteImageUrl
 			this.save(submission, (error, savedSubmission)=> {
 				callback(error, savedSubmission)
 			})
@@ -130,18 +130,20 @@ module.exports = {
 			submission.paymentInfo = paymentInfo
 			submission.markModified('paymentInfo')
 			
-			this.save(submission, (savedSubmission)=> {
-				callback(savedSubmission)
+			this.save(submission, (error, savedSubmission)=> {
+				callback(error, savedSubmission)
 			})
 		})
 	},
 
 	delete: function(objectId, callback) {
 		this.get(objectId, (error, submission)=> {
-			submission.remove((error, submission)=> {
-				if (error) throw Error("AHH NO WAY")
-				callback(submission)
-			})
+			if(error) callback(error)
+			else {			
+				submission.remove((error)=> {
+					callback(error)
+				})
+			}
 		})
 	}
 }

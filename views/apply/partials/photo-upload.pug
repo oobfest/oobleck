@@ -1,13 +1,13 @@
 .box-block.box-bt
 	h3 Image Upload
 	p Accepted acts will have their submitted photo used for the festival website and programs. Please submit a nice, large photo, preferrably vertical and without text. Photos that are too small will make us sad and ruin our Sunday. 
-	p If you do not have the perfect photo ready yet, don't worry! You'll be able to update or submit one later. 
+	p While a photo is required, if you do not have the perfect photo yet don't worry! You'll be able to update it later. 
 	input#image-url(type="hidden" name="image-url")
 	input#delete-image-url(type="hidden" name="delete-image-url")
 	#custom-file
 		.custom-file
 			input#file-input.custom-file-input(type="file" accept="image/*")
-			label.custom-file-label(for="file-input") Select Image
+			label.custom-file-label.reqiured-field(for="file-input") Select Image
 		p.form-text
 			em Image hosting powered by 
 				a(href="https://imgur.com/" target="_blank") Imgur
@@ -18,7 +18,9 @@
 .box-banner
 	img#image-preview.box-banner-image(alt="Image preview")
 .box-block.text-right.delete-image-box
-	a#delete-image.btn.btn-danger(href="#" target="_blank" onclick="resetView()") Delete image
+	a#delete-image.btn.btn-danger(href="#" target="_blank" onclick="resetView()") Delete and upload another
+.box-block.box-bt.text-right
+	button#submit.btn.btn-md.btn-primary(type="submit" disabled="disabled") Next
 
 script.
 	resetView()
@@ -29,6 +31,7 @@ script.
 		$("#custom-file").show()
 		$(".progress-bar").width(0)
 		$("#image-url, #delete-image-url").val("")
+		$("#submit").prop("disabled", true)
 	}
 
 	$("#file-input").on('change', () => {
@@ -90,6 +93,7 @@ script.
 					$("#delete-image-url").val(deleteImageUrl)
 					$("#delete-image").attr('href', deleteImageUrl)
 					$(".delete-image-box, #image-preview").show()
+					$("#submit").prop("disabled", false)
 				})
 				.fail(function(response){ 
 					console.log("Upload failed", response)

@@ -2,6 +2,7 @@
 	input#submission-id(name="submission-id" value=submission._id type="hidden")
 	input#application-fee(name="application-fee" value=applicationFee type="hidden")
 	h3 Application Fee
+	p You're almost done! 
 	p Your application fee is 
 		code $#{applicationFee}.00
 	p#payment-received(style="display:none") Payment Received! ✅
@@ -10,7 +11,7 @@
 	script.
 		paypal.Button.render({
 
-			env: 'production',
+			env: "#{settings.env=='development'? 'sandbox' : 'production'}",
 
 			style: {
 				layout: 'vertical',
@@ -25,7 +26,8 @@
 			},
 
 			client: {
-				production: 'AQZoN6QJP3Tk_5DgVdFEGY2kaw7rKIr7aOICDI-PpkWvoHLTZuXHTieZqN37NkQtVDUUNYUk08fFxdct'
+				production: 'AQZoN6QJP3Tk_5DgVdFEGY2kaw7rKIr7aOICDI-PpkWvoHLTZuXHTieZqN37NkQtVDUUNYUk08fFxdct',
+				sandbox: 'AfZ4e0RmGfJdbNSK3eH7yFes5D5pTcVUno0Yx4AQ0qEtfXBrlnXSMGJsIeCl2xo1mKZCh3xlWifcssWG'
 			},
 
 			commit: true, // Show a 'Pay Now' button
@@ -45,8 +47,8 @@
 
 			onAuthorize: function(data, actions) {
 				return actions.payment.execute().then(function(paymentInfo) {
-					// The payment is complete!
-					// You can now show a confirmation message to the customer
+
+					// Show submit button
 					$("#paypal-buttons").hide()
 					$("#submit-button")
 						.html("Submit Application")
