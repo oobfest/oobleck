@@ -10,8 +10,9 @@ module.exports = {
 	},
 
 	save: function(submission, callback) {
-		submission.save((error, submission)=> {
-			callback(error, submission)
+		submission.save((error, savedSubmission)=> {
+			console.log("SAVED", savedSubmission)
+			callback(error, savedSubmission)
 		})
 	},
 

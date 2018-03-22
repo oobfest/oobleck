@@ -57,7 +57,20 @@ router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (re
 	})
 })
 
-// Todo: HTTP DELETE
+router.get('/create', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+	response.render('submissions/create')
+})
+
+router.post('/create', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+
+	let submission = formatSubmissionObject(request)
+
+	submissionModel.create(submission, (error, savedSubmission)=> {
+		if(error) next(error)
+		else response.redirect('/submissions/submission/' + savedSubmission.domain)
+	})
+})
+
 router.get('/delete/:objectId', isRole(['admin']), (request, response)=> {
 	let objectId = request.params.objectId
 	submissionModel.delete(objectId, (error)=> {
@@ -174,7 +187,31 @@ router.get('/edit/:objectId', (request, response, next)=> {
 
 router.post('/edit', (request, response, next)=> {
 
-	let submission = { 
+	let submission = formatSubmissionObject(request)
+
+	submissionModel.update(submission, (error, newSubmission)=> {
+		if(error) next(error)
+		else {			
+			if(isProductionEnvironment) {
+				let archiveMessage = 
+					`<b>Act name:</b> 		${newSubmission.actName}<br>` +
+					`<b>Type:</b> 			${newSubmission.showType}<br>` + 
+					`<b>Bio:</b>  			${newSubmission.publicDescription}<br>` + 
+					`<b>Description:</b>  	${newSubmission.informalDescription}<br>` +
+					`<b>Hometown:</b> 		${newSubmission.homeTheater ? newSubmission.homeTheater + ' in' : ''} ${newSubmission.city}, ${newSubmission.state}, ${newSubmission.country}<br>` +
+					`<b>Contact:</b>  		${newSubmission.primaryContactName}, ${newSubmission.primaryContactEmail}<br>` +
+					`<b>Image URL:</b>		${newSubmission.imageUrl ? newSubmission.imageUrl : 'No image uploaded'}<br>` +
+					`<b>Availability:</b> 	${newSubmission.available.join(' ')}<br>` + 
+					`<b>Video URLs:</b><br>	${newSubmission.videoUrls.join('<br>')}`
+				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
+			}
+			response.redirect('/submissions/edit/' + submission.id)
+		}
+	})
+})
+
+function formatSubmissionObject(request) {
+	return { 
 		id: request.body['submission-id'],
 		actName: request.body['act-name'],
 		domain: limax(request.body['act-name']),
@@ -191,7 +228,8 @@ router.post('/edit', (request, response, next)=> {
 		primaryContactPhone: request.body['primary-contact-phone'],
 		primaryContactRole: request.body['primary-contact-role'],
 		primaryContactAttending: (request.body['primary-contact-attending'].toLowerCase() == 'yes'),
-		showLength: request.body['show-length'],
+		minimumShowLength: request.body['minimum-show-length'],
+		maximumShowLength: request.body['maximum-show-length'],
 		specialNeeds: request.body['special-needs'],
 		imageUrl: request.body['image-url'],
 		deleteImageUrl: request.body['delete-image-url'],
@@ -217,30 +255,9 @@ router.post('/edit', (request, response, next)=> {
 		socialMedia: flattenSocialMedia(
 			request.body['social-media-type'],
 			request.body['social-media-url']
-		),
-
+		)
 	}
-
-	submissionModel.update(submission, (error, newSubmission)=> {
-		if(error) next(error)
-		else {			
-			if(isProductionEnvironment) {
-				let archiveMessage = 
-					`<b>Act name:</b> 		${newSubmission.actName}<br>` +
-					`<b>Type:</b> 			${newSubmission.showType}<br>` + 
-					`<b>Bio:</b>  			${newSubmission.publicDescription}<br>` + 
-					`<b>Description:</b>  	${newSubmission.informalDescription}<br>` +
-					`<b>Hometown:</b> 		${newSubmission.homeTheater ? newSubmission.homeTheater + ' in' : ''} ${newSubmission.city}, ${newSubmission.state}, ${newSubmission.country}<br>` +
-					`<b>Contact:</b>  		${newSubmission.primaryContactName}, ${newSubmission.primaryContactEmail}<br>` +
-					`<b>Image URL:</b>		${newSubmission.imageUrl ? newSubmission.imageUrl : 'No image uploaded'}<br>` +
-					`<b>Availability:</b> 	${newSubmission.available.join(' ')}<br>` + 
-					`<b>Video URLs:</b><br>	${newSubmission.videoUrls.join('<br>')}`
-				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
-			}
-			response.redirect('/submissions/edit/' + submission.id)
-		}
-	})
-})
+}
 
 function flattenSocialMedia(socialMediaTypes, socialMediaUrls) {
 	if (socialMediaTypes) {

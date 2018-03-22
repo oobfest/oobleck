@@ -208,7 +208,7 @@ block content
 									| Time of Payment
 									pre= new Date(payment.create_time).toLocaleString("en-US", {timeZone: 'America/Chicago'})
 								else
-									p No payment information found D:
+									p No payment made
 					.col
 						.box.box-b.mb-4
 							input#image-url(type="hidden" name="image-url" value=submission.imageUrl)
@@ -315,7 +315,7 @@ block content
 	script#region-template(type="text/x-template")
 		.form-group
 			label.col-form-label(for="state") State / Province / Region
-			input#state.form-control(type="text" name="state" maxlength="280" value=submission.state)
+			input#state.form-control(type="text" name="state" required maxlength="280" value=submission.state)
 
 	script#additional-contact-template(type="text/x-template")
 		.personnel-item
@@ -426,7 +426,7 @@ block content
 			// Delete image urls from database
 			var objectId = $("#submission-id").val()
 			$.post('/submissions/delete-image/' + objectId, function(response) {
-				alert("Image removed from submission")
+				console.log("Image successfully removed")
 			}, "json")
 
 			$("#image-upload-message").html("")
