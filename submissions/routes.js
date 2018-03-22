@@ -56,8 +56,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 					if (typeof(reviews[reviewer]) == 'undefined')
 						reviews[reviewer] = []
 					reviews[reviewer].push({
-						act: submissions[i].actName
-						score: submissions[i].reviews[j].score,
+						act: submissions[i].actName,
+						score: submissions[i].reviews[j].score
 					})
 				}
 			}
