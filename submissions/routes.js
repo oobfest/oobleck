@@ -64,6 +64,7 @@ router.get('/create', isLoggedIn, isRole(['admin', 'schedule']), (request, respo
 router.post('/create', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 
 	let submission = formatSubmissionObject(request)
+	submission.paymentInfo = true
 
 	submissionModel.create(submission, (error, savedSubmission)=> {
 		if(error) next(error)

@@ -197,7 +197,9 @@ block content
 									input#video-info.form-control(type="text" name="video-info" maxlength="1400" value=submission.videoInfo)
 							.box-block.box-bb
 								h4 Payment Info
-								if (submission.paymentInfo != null)
+								if (submission.paymentInfo === true)
+									p Payment waived
+								else if (submission.paymentInfo != null)
 									- var payment = submission.paymentInfo
 									| Payment ID
 									pre=payment.transactions[0].related_resources[0].sale.id

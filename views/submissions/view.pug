@@ -64,7 +64,9 @@ block content
 
 					.box-block.box-bb
 						h3 Payment Info
-						if (submission.paymentInfo != null)
+						if (submission.paymentInfo === true)
+							p Payment waived
+						else if (submission.paymentInfo != null)
 							- var payment = submission.paymentInfo
 							| Payment ID
 							pre=payment.transactions[0].related_resources[0].sale.id
@@ -75,7 +77,7 @@ block content
 							| Time of Payment
 							pre= new Date(payment.create_time).toLocaleString("en-US", {timeZone: 'America/Chicago'})
 						else
-							p No payment information found D:
+							p Unpaid
 
 				//
 

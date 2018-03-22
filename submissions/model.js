@@ -11,7 +11,6 @@ module.exports = {
 
 	save: function(submission, callback) {
 		submission.save((error, savedSubmission)=> {
-			console.log("SAVED", savedSubmission)
 			callback(error, savedSubmission)
 		})
 	},
@@ -117,11 +116,13 @@ module.exports = {
 	updateImage: function(objectId, imageUrl, deleteImageUrl, callback) {
 		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)
-			submission.imageUrl = imageUrl
-			submission.deleteImageUrl = deleteImageUrl
-			this.save(submission, (error, savedSubmission)=> {
-				callback(error, savedSubmission)
-			})
+			else {
+				submission.imageUrl = imageUrl
+				submission.deleteImageUrl = deleteImageUrl
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})				
+			}
 		})
 	},
 
