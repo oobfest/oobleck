@@ -1,0 +1,29 @@
+#stats.tab-pane.fade
+	.mt-3
+	.row
+		.col
+			.progress.mb-3(style="height: 2em")
+				.progress-bar(style="width: " + (percentReviewed - percentComplete) + '%; height: 100px') 
+				.progress-bar.bg-success(style="width: " + percentComplete + '%') 
+
+			.row
+				.col-md
+					.card.text-center.mb-3
+						.card-body
+							p.card-title Submissions
+							h3.card-text=submissions.length
+				.col-md
+					.card.text-center.mb-3
+						.card-body
+							p.card-title Reviews
+							h3.card-text=totalReviewsCount
+				.col-md
+					.card.text-center.mb-3
+						.card-body
+							p.card-title Reviewed
+							h3.card-text=reviewedSubmissionCount
+				.col-md
+					.card.text-center.mb-3
+						.card-body
+							p.card-title Completed
+							h3.card-text=completedSubmissionCount

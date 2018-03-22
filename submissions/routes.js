@@ -19,24 +19,56 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 			let reviewedSubmissionCount = 0
 			let completedSubmissionCount = 0
 
+			let demographics = {improv:0, sketch:0, standup:0, variety:0, podcast:0, performer:0, other:0}
+			let hometowns = {}
+
 			for(let i=0; i<submissions.length; i++) {
+
+				// REVIEWS
 				totalReviewsCount+= submissions[i].reviews.length				
 				if(submissions[i].reviews.length > 0)
 					reviewedSubmissionCount++
 				if(submissions[i].reviews.length >= 5)
 					completedSubmissionCount++
+
+				// SHOW TYPES
+				switch(submissions[i].showType) {
+					case "Improv": 		demographics.improv++; 	break;
+					case "Sketch": 		demographics.sketch++; 	break;
+					case "Stand-Up": 	demographics.standup++; break;
+					case "Variety": 	demographics.variety++; break;
+					case "Podcast": 	demographics.podcast++;	break;
+					case "Individual": 	demographics.performer++; break;
+					case "Other": 		demographics.other++;	break;
+				}
+
+				// CITY DEMOGRAPHICS
+				let hometown = submissions[i].city + ", " + submissions[i].state
+				if(hometown in hometowns) hometowns[hometown]++
+				else hometowns[hometown] = 1
 			}
 
+			// REVIEWS
 			let percentReviewed = (reviewedSubmissionCount / totalSubmissions * 100).toFixed(0)
 			let percentComplete = (completedSubmissionCount / totalSubmissions * 100).toFixed(0)
 
+			// Filter out count <= 1
+			let filteredHometownNames = Object.keys(hometowns)
+				.filter(hometown=> (hometowns[hometown] > 1))
+				
+			let filteredHometownCounts = filteredHometownNames
+				.map(ht=> hometowns[ht])
+			
 			response.render('submissions/view-all', {
 				submissions: submissions, 
 				percentReviewed: percentReviewed,
 				percentComplete: percentComplete,
 				totalReviewsCount: totalReviewsCount,
 				reviewedSubmissionCount: reviewedSubmissionCount,
-				completedSubmissionCount: completedSubmissionCount
+				completedSubmissionCount: completedSubmissionCount,
+				demographics: demographics,
+				filteredHometownNames: filteredHometownNames,
+				filteredHometownCounts: filteredHometownCounts
 			})
 		}
 	})

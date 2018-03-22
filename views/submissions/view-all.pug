@@ -8,58 +8,15 @@ block content
 	.dash-boxes.container-fluid
 		.row
 			.col
-				h2 Hot Stats 🔥🔥🔥
+				ul.nav.nav-pills
+					li.nav-item
+						a.nav-link.active(data-toggle="tab" href="#submissions") Submissions
+					li.nav-item
+						a.nav-link(data-toggle="tab" href="#demographics") Demographics
+				.tab-content
+					include partials/submissions
+					include partials/demographics
 
-				.progress.mb-3(style="height: 2em")
-					.progress-bar(style="width: " + (percentReviewed - percentComplete) + '%; height: 100px') 
-					.progress-bar.bg-success(style="width: " + percentComplete + '%') 
-
-				.row
-					.col-md
-						.card.text-center.mb-3
-							.card-body
-								p.card-title Submissions
-								h3.card-text=submissions.length
-					.col-md
-						.card.text-center.mb-3
-							.card-body
-								p.card-title Reviews
-								h3.card-text=totalReviewsCount
-					.col-md
-						.card.text-center.mb-3
-							.card-body
-								p.card-title Reviewed
-								h3.card-text=reviewedSubmissionCount
-					.col-md
-						.card.text-center.mb-3
-							.card-body
-								p.card-title Completed
-								h3.card-text=completedSubmissionCount
-
-
-		.row
-			.col
-				h2 Submissions
-				.box.box-b
-					table.box-table.table
-						thead
-							tr
-								th Act
-								th Score
-								th Type
-						tbody
-							for submission in submissions
-								tr
-									td
-										a(href="/submissions/submission/"+submission.domain)=submission.actName
-									td
-										a(href="/submissions/reviews/"+submission.domain)
-											+renderReviews(submission.reviews)
-									td=submission.showType
-									td
-										a(href="/submissions/edit/"+submission._id) Edit
-									td
-										a(href="/submissions/reviews/"+submission.domain) Reviews
 
 mixin renderReviews(reviews)
 	for review in reviews

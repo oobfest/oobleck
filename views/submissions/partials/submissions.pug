@@ -1,0 +1,22 @@
+#submissions.tab-pane.fade.show.active
+	.mt-3
+	.box.box-b
+		table.box-table.table
+			thead
+				tr
+					th Act
+					th Score
+					th Type
+			tbody
+				for submission in submissions
+					tr
+						td
+							a(href="/submissions/submission/"+submission.domain)=submission.actName
+						td
+							a(href="/submissions/reviews/"+submission.domain)
+								+renderReviews(submission.reviews)
+						td=submission.showType
+						td
+							a(href="/submissions/edit/"+submission._id) Edit
+						td
+							a(href="/submissions/reviews/"+submission.domain) Reviews

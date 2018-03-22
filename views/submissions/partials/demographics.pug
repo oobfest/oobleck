@@ -1,0 +1,57 @@
+#demographics.tab-pane.fade
+	.mt-3
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js")
+	
+	.row
+		.col-md-4
+			.card
+				h4.card-header.text-center Show Types
+				.card-body
+					canvas#show-types(width="400" height="400")
+		.col-md-8
+			.card
+				h4.card-header.text-center Submissions by City
+				.card-body
+					canvas#hometown
+
+	script.
+		Chart.defaults.global.defaultFontSize = 16
+
+		new Chart(document.getElementById('show-types').getContext('2d'), {
+			type: 'pie',
+			data: {
+				labels: ["Improv", "Sketch", "Stand-Up", "Variety", "Podcast", "Performer", "Other"],
+				datasets: [{
+					backgroundColor: ['#5DA5DA','#FAA43A','#60BD68','#F17CB0','#B2912F','#B276B2','#DECF3F','#F15854','#4D4D4D'],
+					borderColor: 'white',
+					data: [
+						#{demographics.improv},
+						#{demographics.sketch},
+						#{demographics.standup},
+						#{demographics.variety},
+						#{demographics.podcast},
+						#{demographics.performer},
+						#{demographics.other}
+					],
+				}]
+			}
+		})
+
+		var hometownNames = !{JSON.stringify(Object.values(filteredHometownNames)).replace(/<\//g, '<\\/')}
+		var hometownCounts = !{JSON.stringify(Object.values(filteredHometownCounts)).replace(/<\//g, '<\\/')}
+		console.log(hometownCounts)
+		new Chart(document.getElementById('hometown').getContext('2d'), {
+			type: 'horizontalBar',
+			data: {
+				labels: hometownNames,
+				datasets: [{ 
+					label: "Submissions",
+					backgroundColor: ['#5DA5DA','#FAA43A','#60BD68','#F17CB0','#B2912F','#B276B2','#DECF3F','#F15854','#4D4D4D'],
+					data: hometownCounts
+				}]
+			},
+			options: {
+				legend: { display: false},
+				scales: { xAxes: [{ ticks: { beginAtZero: true }}]}
+			}
+		})
