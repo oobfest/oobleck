@@ -13,9 +13,12 @@ block content
 						a.nav-link.active(data-toggle="tab" href="#submissions") Submissions
 					li.nav-item
 						a.nav-link(data-toggle="tab" href="#demographics") Demographics
+					li.nav-item
+						a.nav-link(data-toggle="tab" href="#reviewers") Reviewers
 				.tab-content
 					include partials/submissions
 					include partials/demographics
+					include partials/reviewers
 
 
 mixin renderReviews(reviews)

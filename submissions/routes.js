@@ -21,6 +21,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 
 			let demographics = {improv:0, sketch:0, standup:0, variety:0, podcast:0, performer:0, other:0}
 			let hometowns = {}
+			let reviewers = []
+			let reviews = {}
 
 			for(let i=0; i<submissions.length; i++) {
 
@@ -46,7 +48,21 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				let hometown = submissions[i].city + ", " + submissions[i].state
 				if(hometown in hometowns) hometowns[hometown]++
 				else hometowns[hometown] = 1
+
+				// REVIEWERS
+				for(let j=0; j<submissions[i].reviews.length; j++) {
+					let reviewer = submissions[i].reviews[j].username
+					if (!(reviewer in reviewers)) reviewers.push(reviewer)
+					if (typeof(reviews[reviewer]) == 'undefined')
+						reviews[reviewer] = []
+					reviews[reviewer].push({
+						act: submissions[i].actName
+						score: submissions[i].reviews[j].score,
+					})
+				}
 			}
+
+			console.log(reviews)
 
 			// REVIEWS
 			let percentReviewed = (reviewedSubmissionCount / totalSubmissions * 100).toFixed(0)
@@ -68,7 +84,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				completedSubmissionCount: completedSubmissionCount,
 				demographics: demographics,
 				filteredHometownNames: filteredHometownNames,
-				filteredHometownCounts: filteredHometownCounts
+				filteredHometownCounts: filteredHometownCounts,
+				reviews: reviews
 			})
 		}
 	})

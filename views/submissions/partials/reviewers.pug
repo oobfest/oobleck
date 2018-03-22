@@ -1,0 +1,20 @@
+#reviewers.tab-pane.fade
+	.mt-3
+	.box.box-b
+		table.table.box-table
+			thead
+				tr
+					th Name
+					th Reviews
+					//th Workload
+					//th Review %
+					//th Avg. Score
+			tbody
+				for reviewer, index in reviews
+					tr
+						th
+							a(href="/submissions/reviews-by-user/" + index)=index
+						th=reviewer.length
+						//th=reviewer.workload
+						//th=reviwer.reviewPercent
+						//th=reviewer
