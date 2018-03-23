@@ -42,7 +42,7 @@
 	script.
 		paypal.Button.render({
 
-			env: "#{settings.env=='development'? 'sandbox' : 'production'}",
+			env: "#{ (settings.env!=='production') ?'sandbox' :'production'}",
 
 			style: {
 				layout: 'vertical',
