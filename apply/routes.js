@@ -14,6 +14,7 @@ router.get('/', (request, response) => {
 		recaptcha: true, 
 		hotjar: true,
 		trackPage: true,
+		link: true,
 		submission: {available: []}, 
 		socialMedia: [], 
 		personnel: []
@@ -90,6 +91,20 @@ router.post('/photo-upload', (request, response, next)=> {
 			}
 		}
 	})
+})
+
+router.post('/promo/:objectId', (request, response)=> {
+	let objectId = request.params.objectId
+	let promoCode = request.body.promoCode
+	if(promoCode.toLowerCase() === process.env.OOB_PROMO_CODE) {
+		submissionModel.updatePayment(objectId, true, (error, submission)=> {
+			if(error) response.send({'success': false})
+			else response.send({'success': true})
+		})
+	}
+	else {
+		response.send({'success': false})
+	}
 })
 
 router.post('/pay/:objectId', (request, response)=> {

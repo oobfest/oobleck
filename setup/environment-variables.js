@@ -33,7 +33,8 @@ module.exports = function() {
 		'TWILIO_SID',
 		'TWILIO_TOKEN',
 		'TWILIO_RECIPIENT',
-		'SUBMISSION_EMAIL'
+		'SUBMISSION_EMAIL',
+		'OOB_PROMO_CODE'
 	]
 
 	for(let i=0; i<variableNameList.length; i++) {

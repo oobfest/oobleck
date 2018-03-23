@@ -12,9 +12,9 @@
 			tbody
 				for reviewer, index in reviews
 					tr
-						th
+						td
 							a(href="/submissions/reviews-by-user/" + index)=index
-						th=reviewer.length
-						//th=reviewer.workload
-						//th=reviwer.reviewPercent
-						//th=reviewer
+						td=reviewer.length
+						//td=reviewer.workload
+						//td=reviwer.reviewPercent
+						//td=reviewer

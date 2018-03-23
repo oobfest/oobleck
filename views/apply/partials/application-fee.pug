@@ -2,11 +2,43 @@
 	input#submission-id(name="submission-id" value=submission._id type="hidden")
 	input#application-fee(name="application-fee" value=applicationFee type="hidden")
 	h3 Application Fee
-	p You're almost done! 
-	p Your application fee is 
+	p You're almost done! Your application fee is 
 		code $#{applicationFee}.00
-	p#payment-received(style="display:none") Payment Received! ✅
-	#paypal-buttons
+
+	#paypal
+		p If you've been given a promo code you can  
+			a(href="#" onclick="$('#promo').show(); $('#paypal').hide()") enter that here
+			| .
+		p#payment-received(style="display:none") Payment Received! ✅
+		#paypal-buttons
+
+	#promo(style="display:none")
+		label.col-form-label(for="promo-code") Promo Code (case insensitive)
+		.input-group
+			input#promo-code.form-control(type="text" name="promo-code" maxlength="280")
+			.input-group-append
+				button.btn.btn-primary(type="button" onclick="postPromoCode()") Apply
+		h4 I was lying,  
+			a(href="#" onclick="$('#promo').hide(); $('#paypal').show()") I don't have a promo code!
+	p#promo-received(style="display:none") Promo code validated! ✅
+
+	script.
+		function postPromoCode() {
+			var objectId = $("#submission-id").val()
+			var promoCode = $("#promo-code").val()
+
+			$.post("/apply/promo/" + objectId, {promoCode: promoCode}, function(response) {
+				if(response.success) {
+					showSubmitButton()
+					$("#promo-received").show()
+					$("#promo").hide()
+				}
+				else {
+					alert("Invalid promo code")
+				}
+			})
+		}
+
 	script(src="https://www.paypalobjects.com/api/checkout.js")
 	script.
 		paypal.Button.render({
@@ -47,13 +79,7 @@
 
 			onAuthorize: function(data, actions) {
 				return actions.payment.execute().then(function(paymentInfo) {
-
-					// Show submit button
-					$("#paypal-buttons").hide()
-					$("#submit-button")
-						.html("Submit Application")
-						.prop('disabled', false)
-
+					showSubmitButton()
 					var objectId = $("#submission-id").val()
 					$.post('/apply/pay/' + objectId, {paymentInfo: paymentInfo}, function(paymentResponse) {
 						$("#payment-received").show()
@@ -62,3 +88,11 @@
 			}
 
 		}, '#paypal-buttons')
+
+		function showSubmitButton() {
+			// Show submit button
+			$("#paypal-buttons").hide()
+			$("#submit-button")
+				.html("Submit Application")
+				.prop('disabled', false)
+		}
