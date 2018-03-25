@@ -7,14 +7,15 @@ module.exports = async function(app) {
 	const router = express.Router()
 
 	// Setup
-	app.use('/api/hosts',	require('../hosts/api.routes'))
-	app.use('/hosts',		require('../hosts/view.routes'))
+	app.use('/api/hosts',		require('../hosts/api.routes'))
+	app.use('/api/submissions',	require('../submissions/api.routes'))
 
 	app.use('/', 			require('../login/routes'))
 	app.use('/', 			require('../email/routes'))
 	app.use('/apply', 		require('../apply/routes'))
 	app.use('/submissions', require('../submissions/routes'))
 	app.use('/users', 		require('../users/routes'))
+	app.use('/hosts',		require('../hosts/view.routes'))
 	
 
 	// Home Page (Login screen)

@@ -5,30 +5,137 @@ block content
 			span.dash-titlebar-title Review Submissions
 
 	.dash-boxes.container-fluid
-		.box.box-b
-			table.box-table.table
-				thead
-					tr
-						th Name
-						th Reviews
-						th Your Score
-						th Notes
-				tbody
-					for submission in submissions
-						- var review = submission.reviews.find(review => review.userId == user._id) || {score: 'N/A', notes: ''};
-						- var reviewCount = (typeof submission.reviews === 'undefined') ? 0 : submission.reviews.length;
+		#vue-app
+			.row
+				.col-sm-3
+					.form-group.mb-0
+						input.form-control(type="text" placeholder="Search by name" v-model="searchQuery")
+			.box.box-b
+				table.box-table.table
+					thead
 						tr
+							th
+								a(@click.prevent="sortByName" href="#") Name
+									span.arrow.asc(v-show="sortState==SORT_STATE.ACT_NAME_ASC")
+									span.arrow.dsc(v-show="sortState==SORT_STATE.ACT_NAME_DSC")
+							th
+								a(@click.prevent="sortByReviews" href="#") Reviews
+									span.arrow.asc(v-show="sortState==SORT_STATE.REVIEWS_ASC")
+									span.arrow.dsc(v-show="sortState==SORT_STATE.REVIEWS_DSC")
+							th 
+								a(@click.prevent="sortByScore" href="#") Your Score
+									span.arrow.asc(v-show="sortState==SORT_STATE.SCORE_ASC")
+									span.arrow.dsc(v-show="sortState==SORT_STATE.SCORE_DSC")
+							th Notes
+					tbody
+						tr(v-for="submission in filteredSubmissions")
+							td 
+								a(:href="'/submissions/review/' + submission._id") {{submission.actName}}
 							td
-								a(href="/submissions/review/" + submission._id)=submission.actName
-							td
-								if reviewCount == 0
-									span.badge.badge-danger No Reviews
-								else if reviewCount >= 5
-									span.badge.badge-success Success! #{reviewCount}
-								else
-									span.badge.badge-primary=reviewCount
-							td
-								+renderReview(review.score)
-							td.text-truncate(style="max-width: 150px")=review.notes
+								span.badge.badge-danger(v-show="submission.reviews.length ==0") No Reviews
+								span.badge.badge-primary(v-show="submission.reviews.length > 0 && submission.reviews.length < 5") {{submission.reviews.length}} Reviews
+								span.badge.badge-success(v-show="submission.reviews.length >=5") Success! {{submission.reviews.length}}
+								
+							td {{submission.review ? submission.review.score : -2 | emojify}}
+							td {{submission.review ? submission.review.notes : ''}}
 
-include _render-review
+
+	script(src="/js/vue.js")
+	script(src="/js/axios.min.js")
+	script.
+
+		let vm = new Vue({
+			el: "#vue-app",
+			methods: {
+				sortByName() {
+					if (this.sortState==this.SORT_STATE.ACT_NAME_DSC) {
+						this.submissions.sort((a, b) => a.actName.toLowerCase() < b.actName.toLowerCase() ? 1 : -1)
+						this.sortState = this.SORT_STATE.ACT_NAME_ASC
+					}
+					else {
+						this.submissions.sort((a, b) => a.actName.toLowerCase() > b.actName.toLowerCase() ? 1 : -1)
+						this.sortState = this.SORT_STATE.ACT_NAME_DSC
+					}
+				},
+				sortByReviews() {
+					if (this.sortState==this.SORT_STATE.REVIEWS_DSC) {
+						this.submissions.sort((a, b) => a.reviews.length < b.reviews.length ? 1 : -1)
+						this.sortState = this.SORT_STATE.REVIEWS_ASC
+					}
+					else {
+						this.submissions.sort((a, b) => a.reviews.length > b.reviews.length ? 1 : -1)
+						this.sortState = this.SORT_STATE.REVIEWS_DSC
+					}
+				},
+				sortByScore() {
+					if(this.sortState==this.SORT_STATE.SCORE_DSC) {
+						this.submissions.sort((a,b)=>
+							(typeof a.review != 'undefined' ?a.review.score :3) >
+							(typeof b.review != 'undefined' ?b.review.score :3)
+						)
+						this.sortState = this.SORT_STATE.SCORE_ASC
+					}
+					else {
+						this.submissions.sort((a,b)=>
+							(typeof a.review != 'undefined' ?a.review.score :-2) <
+							(typeof b.review != 'undefined' ?b.review.score :-2)
+						)
+						this.sortState = this.SORT_STATE.SCORE_DSC
+					}
+				}
+			},
+			data() {
+				return {
+					userId: '#{user._id}',
+					sortState: null,
+					SORT_STATE : {
+						ACT_NAME_ASC: 	0,
+						ACT_NAME_DSC: 	1,
+						REVIEWS_ASC: 	2,
+						REVIEWS_DSC: 	3,
+						SCORE_ASC: 		4,
+						SCORE_DSC: 		5
+					},
+					submissions: [],
+					searchQuery: "",
+				}
+			},
+			computed: {
+				filteredSubmissions() {
+					// Filter by search query
+					let filter = new RegExp(this.searchQuery, 'i')
+					let filteredSubmissions = this.submissions.filter(s => s.actName.match(filter))
+
+					// Get user's review
+					filteredSubmissions.map(fs=> { fs.review = fs.reviews.find(r=> r.userId == this.userId)})
+
+					return filteredSubmissions
+				}
+			},
+			filters: {
+				emojify(value) {
+					switch(value) {
+						case -1: return '😡 Veto'
+						case  0: return '😕 Nah'
+						case  1: return '😬 Meh'
+						case  2: return '😍 Yes!'
+						default: return ''
+					}
+				}
+			},
+			mounted() {
+				var self = this
+				axios
+					.get("/api/submissions")
+					.then(function(response) {
+						self.submissions = response.data
+						self.sortByReviews()
+					})
+					.catch(function(error) {
+						self.submissions = []
+					})
+			}
+		})
+
+
+

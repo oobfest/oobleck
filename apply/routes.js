@@ -66,23 +66,19 @@ router.post('/details', isNotARobot, submissionValidation, (request, response, n
 router.post('/photo-upload', (request, response, next)=> {
 	// Get submission
 	let objectId = request.body.id
-	console.log(objectId)
 	submissionModel.get(objectId, (error, submission)=> {
 		if(error) next(error)
 		else {
 			// Check image was uploaded
 			let imageUrl = request.body["image-url"]
-			console.log(imageUrl)
 			if((typeof imageUrl =='undefined') || imageUrl == '') {
 				response.render('apply/submission-photo-upload', {submission: submission, trackPage: true, errors: [{msg: "Photo upload is required"}]})
 			}
 			else {
 				let deleteImageUrl = request.body["delete-image-url"]
-				console.log(deleteImageUrl)
 				submissionModel.updateImage(objectId, imageUrl, deleteImageUrl, (error, savedSubmission)=> {
 					if(error) next(error)
 					else {
-						console.log('savedddd')
 						let applicationFee = calculateApplicationFee(savedSubmission)
 						response.render('apply/submission-payment', {submission: savedSubmission, applicationFee: applicationFee, trackPage: true})
 					}

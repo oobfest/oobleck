@@ -178,7 +178,6 @@ block form
 					.done(function(response){
 						let imageUrl = response.data.link
 						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
-						console.log("Linky:", imageUrl, deleteImageUrl)
 						
 						$("#image-url").val(imageUrl)
 						$("#delete-image-url").val(deleteImageUrl)

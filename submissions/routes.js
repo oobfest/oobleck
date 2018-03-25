@@ -62,8 +62,6 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				}
 			}
 
-			console.log(reviews)
-
 			// REVIEWS
 			let percentReviewed = (reviewedSubmissionCount / totalSubmissions * 100).toFixed(0)
 			let percentComplete = (completedSubmissionCount / totalSubmissions * 100).toFixed(0)
@@ -197,6 +195,10 @@ router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panel
 		if(error) next(error)
 		else response.redirect('/submissions/review')
 	})
+})
+
+router.get('/review2', isLoggedIn, isRole(['admin', 'panelist']), (request, response, next)=> {
+	response.render('submissions/review-submissions2')
 })
 
 router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
