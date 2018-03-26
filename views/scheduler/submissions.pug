@@ -1,0 +1,91 @@
+extends ../_layout-scheduler
+block content
+	#vue-app
+		.column
+			table
+				thead
+					tr
+						th 
+						th Act Name
+						th Type
+						th City
+						th Home
+						th Scores
+				tbody
+					tr(v-for="submission in submissions")
+						td 
+							input(type="checkbox")
+						td 
+							a(:href="submission.videoUrls[0]" target="_blank") {{submission.actName | shorten}}
+						td {{submission.showType}}
+						td {{submission.city}}, {{submission.state}} {{submission.country}}
+						td {{submission.homeTheater | shorten}}
+						td
+							span(v-for="review in submission.reviews")
+								code(:class="getReviewClass(review.score)") {{review.score | emojify}}
+								| &nbsp;
+		.column
+			div(v-for="day in days")
+				h2 {{day}}
+				table
+					thead
+						tr
+							th(v-for="venue in venues") {{venue}}
+					tbody
+						tr
+							td 
+								p First Venue, First Show
+								p First V, Second Show!
+								button Clicky
+							td 
+
+	script.
+		new Vue({
+			el: "#vue-app",
+			data() {
+				return {
+					test: "Hello",
+					submissions: [],
+					days: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'],
+					venues: ['ColdTowne', 'Hideout Up', 'Hideout Down', 'Fallout', 'Spider House']
+				}
+			},
+			methods: {
+				getReviewClass(score) {
+					switch(score) {
+						case -1: return 'veto'
+						case  0: return 'nah'
+						case  1: return 'meh'
+						case  2: return 'yeah'
+						default:  return ''
+					}
+				}
+			},
+			filters: {
+				emojify(value) {
+					switch(value) {
+						case -1: return 'VTO'
+						case  0: return 'NAH'
+						case  1: return 'MEH'
+						case  2: return 'YAH'
+						default: return ''
+					}
+				},
+				shorten(value) {
+					return value.length > 20
+						? value.substring(0,20)+'...'
+						: value
+				}
+			},
+			mounted() {
+				let self = this
+				axios
+					.get("/api/submissions")
+					.then(function(response) {
+						self.submissions = response.data.filter(rd=> rd.paymentInfo)						
+					})
+					.catch(function(error) {
+						self.submissions = []
+					})
+			}
+		})

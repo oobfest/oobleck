@@ -39,8 +39,7 @@ block content
 							td {{submission.review ? submission.review.score : -2 | emojify}}
 							td {{submission.review ? submission.review.notes : ''}}
 
-
-	script(src="/js/vue.js")
+	script(src="/js/vue.min.js")
 	script(src="/js/axios.min.js")
 	script.
 
@@ -87,6 +86,7 @@ block content
 			data() {
 				return {
 					userId: '#{user._id}',
+					userRoles: '#{user.roles}',
 					sortState: null,
 					SORT_STATE : {
 						ACT_NAME_ASC: 	0,
@@ -124,9 +124,15 @@ block content
 				}
 			},
 			mounted() {
-				var self = this
+				let self = this
+				let url = '/api/submissions/'
+				if(self.userRoles.indexOf('schedule') !== -1) url+='getAllPaid'
+				else if(self.userRoles.indexOf('admin') !== -1) url+='getAllPaid'
+				else if(self.userRoles.indexOf('standup-panelist') !== -1) url+='getAllPaidStandup'
+				else if(self.userRoles.indexOf('panelist') !== -1) url+='getAllPaidExceptStandup'
+				console.log(self.userRoles, url)
 				axios
-					.get("/api/submissions")
+					.get(url)
 					.then(function(response) {
 						self.submissions = response.data
 						self.sortByReviews()

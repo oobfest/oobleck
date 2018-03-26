@@ -1,0 +1,22 @@
+* {
+	font-size: 14px;
+}
+
+td, th {
+  border: 1px solid #999;
+  padding: 0.25rem;
+}
+
+table {
+	margin-right: 0.5rem;
+}
+
+#vue-app {
+	display: flex;
+}
+
+code {font-weight: bold;}
+.veto { color: #ca0020; }
+.nah  { color: #f4a582; }
+.meh  { color: #92c5de; }
+.yeah { color: #0571b0; }

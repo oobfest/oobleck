@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+		link(rel="icon" type="image/png" href="/img/favicon.png")
+		link(rel="stylesheet" href="/css/bootstrap-reboot.min.css")
+		link(rel="stylesheet" href="/css/scheduler.css")
+		title Out of Bounds Comedy Festival
+
+		script(src="/js/axios.min.js")
+		if (settings.env == 'production')
+			script(src="/js/vue.min.js")
+		else
+			script(src="/js/vue.js")
+
+	body
+		block content
+
+		

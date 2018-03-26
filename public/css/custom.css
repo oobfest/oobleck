@@ -74,10 +74,37 @@ a:hover { color: #016ff9; }
 	border-top: 4px solid black;
 }
 
-.color-code .tuesday	{fill:rgb(239,243,255)} 
-.color-code .wednesday	{fill:rgb(198,219,239)} 
-.color-code .thursday	{fill:rgb(158,202,225)} 
-.color-code .friday		{fill:rgb(107,174,214)} 
-.color-code .saturday	{fill:rgb(66,146,198)} 
-.color-code .sunday		{fill:rgb(33,113,181)} 
-.color-code .monday		{fill:rgb(8,69,148)}
+.table.schedule { table-layout: fixed; }
+
+.box-head.tuesday, 		.time.tuesday	{background-color:rgb(239,243,255)} 
+.box-head.wednesday, 	.time.wednesday	{background-color:rgb(198,219,239)} 
+.box-head.thursday, 	.time.thursday	{background-color:rgb(158,202,225)} 
+.box-head.friday, 		.time.friday	{background-color:rgb(107,174,214); color: white;} 
+.box-head.saturday, 	.time.saturday	{background-color:rgb( 66,146,198); color: white;} 
+.box-head.sunday, 		.time.sunday	{background-color:rgb( 33,113,181); color: white;} 
+.box-head.monday, 		.time.monday	{background-color:rgb(  8, 69,148); color: white;}
+
+.score { 
+	display: inline-block; 
+	width: 10px; height: 10px;
+}
+.veto { background-color: #ca0020; }
+.nah  { background-color: #f4a582; }
+.meh  { background-color: #92c5de; }
+.yeah { background-color: #0571b0; }
+
+.badge-improv 	{ color: white; background-color: #984ea3; }
+.badge-sketch 	{ color: white; background-color: #377eb8; }
+.badge-standup 	{ color: white; background-color: #4daf4a; }
+.badge-variety 	{ color: black; background-color: #ffff33; }
+.badge-podcast 	{ color: white; background-color: #ff7f00; }
+.badge-other	{ color: white; background-color: #e41a1c; }
+
+.time { 
+	border-bottom: 1px solid black; 
+	padding: 0.25rem; 
+}
+
+.act-slot, .time-slot { display: block; }
+.act-slot:hover { background-color: yellow; }
+.time-slot { margin-bottom: 1em; }
