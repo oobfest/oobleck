@@ -1,23 +1,184 @@
 #submissions.tab-pane.fade.show.active
-	.mt-3
-	h3 #{submissions.length} Submissions
-	.box.box-b
-		table.box-table.table
-			thead
-				tr
-					th Act
-					th Score
-					th Type
-			tbody
-				for submission in submissions
+	#submissions-vue-app
+		h3.mt-3 #{submissions.length} Submissions
+
+		.row
+			.col-sm-3
+				.form-group.mb-0
+					input.form-control(type="text" placeholder="Search by name" v-model="searchQuery")
+			.col-sm-9(style="padding-top:4px")
+				| Filter: 
+				a.badge.badge-pill(@click.prevent="filter('improv')" ,:class="visibleTypes.improv ?'badge-primary' :'badge-transparent'" href="#") improv
+				| &nbsp;
+				a.badge.badge-pill(@click.prevent="filter('sketch')" ,:class="visibleTypes.sketch ?'badge-primary' :'badge-transparent'" href="#") sketch
+				| &nbsp;
+				a.badge.badge-pill(@click.prevent="filter('standup')" ,:class="visibleTypes.standup ?'badge-primary' :'badge-transparent'" href="#") standup
+				| &nbsp;
+				a.badge.badge-pill(@click.prevent="filter('variety')" ,:class="visibleTypes.variety ?'badge-primary' :'badge-transparent'" href="#") variety
+				| &nbsp;
+				a.badge.badge-pill(@click.prevent="filter('podcast')" ,:class="visibleTypes.podcast ?'badge-primary' :'badge-transparent'" href="#") podcast
+				| &nbsp;
+				a.badge.badge-pill(@click.prevent="filter('individual')" ,:class="visibleTypes.individual ?'badge-primary' :'badge-transparent'" href="#") individual
+				| &nbsp;
+				a.badge.badge-pill(@click.prevent="filter('other')" ,:class="visibleTypes.other ?'badge-primary' :'badge-transparent'" href="#") other
+		.box.box-b
+			table.table.box-table
+				thead
 					tr
+						th
+							a(@click.prevent="sortBy('actName')" href="#") Act
+								span.arrow.asc(v-show="sortState.actName")
+								span.arrow.dsc(v-show="sortState.actName === false")
+						th 
+							a(@click.prevent="sortByScore" href="#") Score
+								span.arrow.asc(v-show="sortState.score")
+								span.arrow.dsc(v-show="sortState.score === false")
+						th 
+							a(@click.prevent="sortBy('showType')" href="#") Type
+								span.arrow.asc(v-show="sortState.showType")
+								span.arrow.dsc(v-show="sortState.showType === false")
+						th 
+							a(@click.prevent="sortBy('city')" href="#") City
+								span.arrow.asc(v-show="sortState.city")
+								span.arrow.dsc(v-show="sortState.city === false")
+						th 
+							a(@click.prevent="sortBy('homeTheater')" href="#") Theater
+									span.arrow.asc(v-show="sortState.homeTheater")
+									span.arrow.dsc(v-show="sortState.homeTheater === false")
+				tbody
+					tr(v-for="submission in filteredSubmissions")
 						td
-							a(href="/submissions/submission/"+submission.domain)=submission.actName
+							a(:href="'/submissions/submission/' + submission.domain") {{submission.actName}}
 						td
-							a(href="/submissions/reviews/"+submission.domain)
-								+renderReviews(submission.reviews)
-						td=submission.showType
+							a(:href="'/submissions/reviews/' + submission.domain") {{submission.reviews | filterReviews}}
+						td {{submission.showType}}
+						td {{submission.city}}, {{submission.state}}
+						td {{ (submission.homeTheater || "") | shorten}}
 						td
-							a(href="/submissions/edit/"+submission._id) Edit
+							a(:href="'/submissions/edit/' + submission._id") Edit
 						td
-							a(href="/submissions/reviews/"+submission.domain) Reviews
+							a(:href="'/submissions/reviews/' + submission.domain") Reviews
+
+script(src="/js/vue.min.js")
+script(src="/js/axios.min.js")
+script.
+
+	let vm = new Vue({
+		el: "#submissions-vue-app",
+		data() {
+			return {
+				submissions: [],
+				searchQuery: "",
+				visibleTypes: {
+					improv: true,
+					sketch: true,
+					standup: true,
+					variety: true,
+					podcast: true,
+					individual: true,
+					other: true
+				},
+				sortState: {
+					actName: 		null,
+					showType: 		null,
+					homeTheater: 	null,
+					city: 			null,
+					score: 			null
+				}
+			}
+		},
+		methods: {
+			sortBy(property) {
+				if (this.sortState[property]) {
+					this.submissions.sort((a, b) => 
+						(typeof a[property] != 'undefined' ?a[property].toLowerCase() :null) <
+						(typeof b[property] != 'undefined' ?b[property].toLowerCase() :null)
+					)
+					let self = this
+					Object.keys(this.sortState).forEach(function(key) {return self.sortState[key]=null})
+					this.sortState[property] = false
+				}
+				else {
+					this.submissions.sort((a, b) => 
+						(typeof a[property] != 'undefined' ?a[property].toLowerCase() :null) >
+						(typeof b[property] != 'undefined' ?b[property].toLowerCase() :null)
+					)
+					let self = this
+					Object.keys(this.sortState).forEach(function(key) {return self.sortState[key]=null})
+					this.sortState[property] = true
+				}
+			},
+			sortByScore() {
+				if(this.sortState.score) {
+					this.submissions.sort((a,b)=> 
+						(typeof a.reviews != 'undefined' ?a.reviews.length :0) >
+						(typeof b.reviews != 'undefined' ?b.reviews.length :0)
+					)
+					let self = this
+					Object.keys(this.sortState).forEach(function(key) {return self.sortState[key]=null})
+					this.sortState.score = false
+				}
+				else {
+					this.submissions.sort((a,b)=>
+						(typeof a.reviews != 'undefined' ?a.reviews.length :0) <
+						(typeof b.reviews != 'undefined' ?b.reviews.length :0)
+					)
+					let self = this
+					Object.keys(this.sortState).forEach(function(key) {return self.sortState[key]=null})
+					this.sortState.score = true
+				}
+			},
+			filter(type) {
+				this.visibleTypes[type] = !(this.visibleTypes[type])
+			}
+		},
+		computed: {
+			filteredSubmissions() {
+				// Filter by search query
+				let filter = new RegExp(this.searchQuery, 'i')
+				let filtered = this.submissions.filter(s => s.actName.match(filter))
+
+				if(!this.visibleTypes.improv) 		filtered = filtered.filter(s=> s.showType != 'Improv')
+				if(!this.visibleTypes.sketch) 		filtered = filtered.filter(s=> s.showType != 'Sketch')
+				if(!this.visibleTypes.standup) 		filtered = filtered.filter(s=> s.showType != 'Stand-Up')
+				if(!this.visibleTypes.variety) 		filtered = filtered.filter(s=> s.showType != 'Variety')
+				if(!this.visibleTypes.podcast) 		filtered = filtered.filter(s=> s.showType != 'Podcast')
+				if(!this.visibleTypes.individual) 	filtered = filtered.filter(s=> s.showType != 'Individual')
+				if(!this.visibleTypes.other) 		filtered = filtered.filter(s=> s.showType != 'Other')
+
+				return filtered
+			}
+		},
+		filters: {
+			filterReviews(reviews) {
+				let pretty = ""
+				for (let i=0; i<reviews.length; i++) {
+					switch(reviews[i].score) {
+						case -1: pretty+='😡'; break;
+						case  0: pretty+='😕'; break;
+						case  1: pretty+='😬'; break;
+						case  2: pretty+='😍'; break;
+						default: break;
+					}	
+				}
+				return pretty
+			},
+			shorten(value) {
+				return value.length > 25
+					? value.substring(0,25)+'...'
+					: value
+			}
+		},
+		mounted() {
+			let self = this
+			axios
+				.get('/api/submissions/getAllPaid')
+				.then(function(response) {
+					self.submissions = response.data
+					self.sortBy('actName')
+				})
+				.catch(function(error) {
+					self.submissions = []
+				})
+		}
+	})
