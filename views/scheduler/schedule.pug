@@ -4,7 +4,6 @@ block content
 		.row
 			.col
 				a(@click.prevent="fullscreen" href="#") Toggle Navigation
-				h3.text-center OoB 2018
 				.box.box-b(v-for="day in Object.keys(schedule)")
 					.box-head.box-bb.p-2(:class="day")
 						h4.mb-0 {{day | capitalize}}
@@ -22,25 +21,39 @@ block content
 						tbody
 							tr
 								td(v-for='venue in Object.keys(schedule[day])')
-									.time-slot(v-for='time in Object.keys(schedule[day][venue])')
-										p.mb-0.time(:class="day") {{time}}
+									.slot.time-slot(v-for='show in Object.keys(schedule[day][venue])')
+										p.mb-0.time(:class="day") {{schedule[day][venue][show].time}}
 											small.float-right
-												a(@click.prevent="stub" href="#") remove time
-										.act-slot(v-for='act in schedule[day][venue][time].acts')
-											strong 
-												a(href="#") {{act.name}}
-											| &nbsp;
-											em.badge(:class="getClass(act.type)") {{act.type | capitalize}}
-											| &nbsp;
-											.score.veto
-											.score.nah
-											small
-												a(@click.prevent="stub" href="#").float-right remove act
-										button.btn.btn-xs.btn-outline-secondary.btn-block(@click.prefent="stub") + add act
+												a(@click.prevent="stub" href="#") remove show
+										.row.no-gutters.justify-content-between.host-slot
+											.col-xs-6(v-show="schedule[day][venue][show].host")
+												em Host: {{schedule[day][venue][show].host}}
+											.col-xs-6(v-show="schedule[day][venue][show].host")
+												small
+													a(@click.prevent="stub" href="#") remove host
+											.col-xs-6(v-show="!(schedule[day][venue][show].host)")
+												em No Host
+											.col-xs-6(v-show="!(schedule[day][venue][show].host)")
+												small
+													a(@click.prevent="stub" href="#") add host
+										.row.no-gutters.justify-content-between.act-slot(v-for='act in schedule[day][venue][show].acts')
+											.col-xs-4
+												strong 
+													a(@click.prevent="stub" href="#") {{act.name}}
+												| &nbsp;
+												em.badge(:class="getClass(act.type)") {{act.type | capitalize}}
+											.col-xs-4
+												span(v-for="review in act.reviews")
+													.score(:class="getBadge(review)")
+											.col-xs-4
+												small
+													a(@click.prevent="stub" href="#").float-right remove act
+										small.d-block.text-right
+											a(@click.prefent="stub" href="#") + add act
 
 							tr
 								td(v-for='venue in Object.keys(schedule[day])')
-									button.btn.btn-sm.btn-outline-primary.btn-block + add time
+									button.btn.btn-sm.btn-outline-primary.btn-block + add show
 									
 	
 	script(src="/js/axios.min.js")
@@ -55,32 +68,42 @@ block content
 					schedule: {
 						tuesday: {
 							coldtowne: {
-								'0700': {
+								1: {
+									time: "7:00",
+									host: "Dave Buckman",
 									acts: [
-										{name: 'Frank Mills', type:'improv'},
-										{name: 'Loverboy', type: 'sketch'}
+										{name: 'Frank Mills', type:'improv', reviews: [-1, 1, 0]},
+										{name: 'Loverboy', type: 'sketch', reviews: [-1, -1]}
 									]
 								},
-								'0830': {
+								2: {
+									time: "8:30",
+									host: "Dave Buckman",
 									acts: [
-										{name: 'Movie Riot', type: 'standup'},
-										{name: 'SheSheSheShe', type: 'podcast'}
+										{name: 'Movie Riot', type: 'standup', reviews: [ 1, 2]},
+										{name: 'SheSheSheShe', type: 'podcast', reviews: [1, 1, 0]}
 									]
 								}
 							},
 							hideoutUp: {
-								'0800': {
+								1: {
+									time: "8:00",
+									host: "Asaf Ronen",
 									acts: [
-										{name: 'PGraph', type: 'other'},
-										{name: 'Minority Report', type: 'variety'}
+										{name: 'PGraph', type: 'other', reviews: [2, 1, 0]},
+										{name: 'Minority Report', type: 'variety', reviews: [-1, -1, 0]}
 									]
 								},
-								'1000': {
+								2: {
+									time: "10:00",
+									host: "Asaf Ronen",
 									acts: []
 								}
 							},
 							fallout: {
-								'0900': {
+								1: {
+									time: "9:00",
+									host: null,
 									acts: []
 								}
 							}
@@ -120,6 +143,14 @@ block content
 						case 'other': 	return 'badge-other'
 						case 'variety': return 'badge-variety'
 
+					}
+				},
+				getBadge(review) {
+					switch(review) {
+						case -1: return 'veto'
+						case  0: return 'nah'
+						case  1: return 'meh'
+						case  2: return 'yes'
 					}
 				},
 				addVenue(day, venue) {

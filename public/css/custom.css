@@ -87,6 +87,7 @@ a:hover { color: #016ff9; }
 .score { 
 	display: inline-block; 
 	width: 10px; height: 10px;
+	margin-right: 2px;
 }
 .veto { background-color: #ca0020; }
 .nah  { background-color: #f4a582; }
@@ -105,6 +106,6 @@ a:hover { color: #016ff9; }
 	padding: 0.25rem; 
 }
 
-.act-slot, .time-slot { display: block; }
-.act-slot:hover { background-color: yellow; }
+.slot { display: block; }
+.act-slot:hover, .host-slot:hover { background-color: yellow; }
 .time-slot { margin-bottom: 1em; }

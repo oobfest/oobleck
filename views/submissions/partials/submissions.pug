@@ -48,12 +48,12 @@
 				tbody
 					tr(v-for="submission in filteredSubmissions")
 						td
-							a(:href="'/submissions/submission/' + submission.domain") {{submission.actName}}
+							a(:href="'/submissions/submission/' + submission.domain" ,:title="submission.actName") {{submission.actName | shorten(42) }}
 						td
 							a(:href="'/submissions/reviews/' + submission.domain") {{submission.reviews | filterReviews}}
 						td {{submission.showType}}
 						td {{submission.city}}, {{submission.state}}
-						td {{ (submission.homeTheater || "") | shorten}}
+						td(:title="submission.homeTheater") {{ (submission.homeTheater || "") | shorten(25) }}
 						td
 							a(:href="'/submissions/edit/' + submission._id") Edit
 						td
@@ -163,9 +163,9 @@ script.
 				}
 				return pretty
 			},
-			shorten(value) {
-				return value.length > 25
-					? value.substring(0,25)+'...'
+			shorten(value, characters) {
+				return value.length > characters
+					? value.substring(0,characters)+'...'
 					: value
 			}
 		},
