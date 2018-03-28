@@ -442,7 +442,7 @@ block content
 		}
 
 
-		$("#image-upload-input").on('change', () => {
+		$("#image-upload-input").on('change', function() {
 			var image = $("#image-upload-input").prop('files')[0]
 			if(image.size > (1024 * 1000 * 10)) {
 				alert("Image cannot be larger than 10MB")
@@ -488,8 +488,8 @@ block content
 				$.ajax(request)
 					.done(function(response){
 					$("#image-upload-message").html("Saving image...")
-						let imageUrl = response.data.link
-						let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
+						var imageUrl = response.data.link
+						var deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
 						$("#image-upload-message").html(
 							"Upload complete! <br> Link: <a href='http://imgur.com/" 
 							+ response.data.id 

@@ -22,7 +22,7 @@
 	.form-group.row
 		label.col-form-label.col-2 Attending
 		select.form-control.col-10(name="primary-contact-attending")
-			option Yes
+			option(selected=(typeof submission == 'undefined')) Yes
 			option(selected=submission['primary-contact-attending']) No
 	h4 Additional Members
 	p Please list everyone that will be attending the festival including performers, tech, director, producer, etc.
