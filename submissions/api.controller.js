@@ -28,5 +28,23 @@ module.exports = {
 			if(error) next(error)
 			else response.send(submissions)
 		})
+	},
+
+	addTheaterTag: function(request, response, next) {
+		let objectId = request.body.objectId
+		let tag = request.body.tag
+		model.addTheaterTag(objectId, tag, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
+	},
+
+	removeTheaterTag: function(request, response, next) {
+		let objectId = request.body.objectId
+		let tag = request.body.tag
+		model.removeTheaterTag(objectId, tag, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
 	}
 }

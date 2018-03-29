@@ -1,0 +1,73 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title 
+				a.text-muted(href="/submissions/") Submissions
+				|  /
+				| Edit Theaters
+
+	#vue-app.dash-boxes.container-fluid
+		.row
+			.col
+				.box.box-b
+					table.table.box-table
+						thead
+							tr
+								th Act
+								th User's Input
+								th Custom Tags
+								th
+						tbody
+							tr(v-for="submission, key in submissions")
+								td {{submission.actName}}
+								td {{submission.homeTheater}}
+								td
+									div(v-for="tag in submission.theaterTags")
+										span.badge.badge-primary(@click.prevent="removeTheaterTag(submission, tag)" style="cursor: pointer") {{tag}} &times;
+
+								td 
+									.input-group
+										input.form-control(v-model="tags[key]" type="text" style="font-family: monospace")
+										.input-group-append
+											button.btn.btn-outline-primary(@click.prevent="addTheaterTag(submission, tags[key])" type="button") Add
+
+	script(src="/js/vue.js")
+	script(src="/js/axios.min.js")
+	script.
+
+		let vm = new Vue({
+			el: "#vue-app",
+			data() {
+				return {
+					submissions: [],
+					tags: []
+				}
+			},
+			methods: {
+				addTheaterTag: function(submission, tag, key) {
+					if(submission.theaterTags.includes(tag)) return
+					axios
+						.post('/api/submissions/add-theater-tag', {objectId: submission._id, tag: tag})
+						.then((response)=> {submission.theaterTags.push(tag)})
+						.catch((error)=> {alert("Failed to add tag"); console.log(error)})
+				},
+				removeTheaterTag: function(submission, tag) {
+					axios
+						.post('/api/submissions/remove-theater-tag', {objectId: submission._id, tag: tag})
+						.then((response)=> {submission.theaterTags.splice(submission.theaterTags.indexOf(tag), 1)})
+						.catch((error)=> {alert("Failed to delete tag"); console.log(error)})
+				}
+			},
+			mounted() {
+				let self = this
+				axios
+					.get('/api/submissions/getAllPaid')
+					.then(function(response) {
+						self.submissions = response.data
+					})
+					.catch(function(error) {
+						self.submissions = []
+					})
+			}
+		})

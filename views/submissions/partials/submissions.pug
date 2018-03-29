@@ -1,26 +1,15 @@
 #submissions.tab-pane.fade.show.active
 	#submissions-vue-app
-		h3.mt-3 #{submissions.length} Submissions
+		h4.mt-3 #{submissions.length} Submissions,  
+			span.badge.badge-primary=reviewedSubmissionCount
+			|  Reviewed,  
+			span.badge.badge-success=completedSubmissionCount
+			|  Completed.  
 
-		.row
-			.col-sm-3
-				.form-group.mb-0
-					input.form-control(type="text" placeholder="Search by name" v-model="searchQuery")
-			.col-sm-9(style="padding-top:4px")
-				| Filter: 
-				a.badge.badge-pill(@click.prevent="filter('improv')" ,:class="visibleTypes.improv ?'badge-primary' :'badge-transparent'" href="#") improv
-				| &nbsp;
-				a.badge.badge-pill(@click.prevent="filter('sketch')" ,:class="visibleTypes.sketch ?'badge-primary' :'badge-transparent'" href="#") sketch
-				| &nbsp;
-				a.badge.badge-pill(@click.prevent="filter('standup')" ,:class="visibleTypes.standup ?'badge-primary' :'badge-transparent'" href="#") standup
-				| &nbsp;
-				a.badge.badge-pill(@click.prevent="filter('variety')" ,:class="visibleTypes.variety ?'badge-primary' :'badge-transparent'" href="#") variety
-				| &nbsp;
-				a.badge.badge-pill(@click.prevent="filter('podcast')" ,:class="visibleTypes.podcast ?'badge-primary' :'badge-transparent'" href="#") podcast
-				| &nbsp;
-				a.badge.badge-pill(@click.prevent="filter('individual')" ,:class="visibleTypes.individual ?'badge-primary' :'badge-transparent'" href="#") individual
-				| &nbsp;
-				a.badge.badge-pill(@click.prevent="filter('other')" ,:class="visibleTypes.other ?'badge-primary' :'badge-transparent'" href="#") other
+		.progress.mb-3(style="height: 2em")
+			.progress-bar(style="width: " + (percentReviewed - percentComplete) + '%; height: 100px') 
+			.progress-bar.bg-success(style="width: " + percentComplete + '%') 
+				
 		.box.box-b
 			table.table.box-table
 				thead
@@ -46,6 +35,26 @@
 									span.arrow.asc(v-show="sortState.homeTheater")
 									span.arrow.dsc(v-show="sortState.homeTheater === false")
 				tbody
+					tr
+						td 
+							input.form-control(type="text" placeholder="Filter by Name" v-model="searchByName")
+						td
+						td
+							select.form-control(v-model="filterByType")
+								option(selected value="") All
+								option Improv
+								option Sketch
+								option Stand-Up
+								option Variety
+								option Podcast
+								option Individual
+								option Other
+						td
+							input.form-control(type="text" placeholder="Filter by City" v-model="searchByCity")
+						td
+							input.form-control(type="text" placeholder="Filter by Theater" v-model="searchByTheater")
+						td
+						td
 					tr(v-for="submission in filteredSubmissions")
 						td
 							a(:href="'/submissions/submission/' + submission.domain" ,:title="submission.actName") {{submission.actName | shorten(42) }}
@@ -68,16 +77,10 @@ script.
 		data() {
 			return {
 				submissions: [],
-				searchQuery: "",
-				visibleTypes: {
-					improv: true,
-					sketch: true,
-					standup: true,
-					variety: true,
-					podcast: true,
-					individual: true,
-					other: true
-				},
+				searchByName: "",
+				searchByTheater: "",
+				searchByCity: "",
+				filterByType: "",
 				sortState: {
 					actName: 		null,
 					showType: 		null,
@@ -134,17 +137,27 @@ script.
 		},
 		computed: {
 			filteredSubmissions() {
-				// Filter by search query
-				let filter = new RegExp(this.searchQuery, 'i')
-				let filtered = this.submissions.filter(s => s.actName.match(filter))
 
-				if(!this.visibleTypes.improv) 		filtered = filtered.filter(s=> s.showType != 'Improv')
-				if(!this.visibleTypes.sketch) 		filtered = filtered.filter(s=> s.showType != 'Sketch')
-				if(!this.visibleTypes.standup) 		filtered = filtered.filter(s=> s.showType != 'Stand-Up')
-				if(!this.visibleTypes.variety) 		filtered = filtered.filter(s=> s.showType != 'Variety')
-				if(!this.visibleTypes.podcast) 		filtered = filtered.filter(s=> s.showType != 'Podcast')
-				if(!this.visibleTypes.individual) 	filtered = filtered.filter(s=> s.showType != 'Individual')
-				if(!this.visibleTypes.other) 		filtered = filtered.filter(s=> s.showType != 'Other')
+				// Filter by search queries
+				let actNameFilter = new RegExp(this.searchByName, 'i')
+				let cityFilter = new RegExp(this.searchByCity, 'i')
+				let theaterFilter = new RegExp(this.searchByTheater, 'i')
+
+				let filtered = this.submissions
+					.filter(s=> s.actName.match(actNameFilter))
+					.filter(s=> s.city.match(cityFilter))
+
+				// Deal with undefined for optional 'home theater' property
+				for(let i=0; i<filtered.length; i++) {
+					if (typeof filtered[i].homeTheater == 'undefined') {
+						filtered[i].homeTheater = ""
+						//console.log(filtered[i])
+					}
+				}
+
+				filtered = filtered.filter(s=>s.homeTheater.match(theaterFilter))
+
+				if (this.filterByType !== '') filtered = filtered.filter(s=> s.showType == this.filterByType)
 
 				return filtered
 			}

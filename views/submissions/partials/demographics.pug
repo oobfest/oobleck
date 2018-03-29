@@ -10,32 +10,26 @@
 					canvas#show-types(width="400" height="400")
 		.col-md-8
 			.card
+				h4.card-header.text-center Theaters
+				.card-body
+					.form-check
+						input#filter-theaters.form-check-input(type="checkbox")
+						label.form-check-label(for="filter-theaters" onclick="condenseTheaters()") Only show for 2+ entries
+					canvas#theaters(width="800" height="400")
+	.row.mt-3
+		.col-md-8
+			.card
 				h4.card-header.text-center Submissions by City
 				.card-body
 					p (Graph only shows cities with more than one submission)
 					canvas#hometowns
-	.row.mt-3
-		.col-md-8.offset-md-4
-			.box.box-b
-				.box-head.box-bb
-					h4.text-center Submission Home Theaters
-				table.table.box-table
-					thead
-						tr
-							th Theater
-							th Count
-					tbody
-						for theater in theaters
-							tr
-								td #{theater.name}
-								td #{theater.count}
-
 
 	script.
 		Chart.defaults.global.defaultFontSize = 16
+		var COLORS = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D','#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC','#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399','#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933','#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF']
 
 		// SHOW TYPES
-		new Chart(document.getElementById('show-types').getContext('2d'), {
+		var showTypesChart = new Chart(document.getElementById('show-types').getContext('2d'), {
 			type: 'pie',
 			data: {
 				labels: ["Improv", "Sketch", "Stand-Up", "Variety", "Podcast", "Performer", "Other"],
@@ -58,8 +52,7 @@
 		// HOME TOWNS
 		var hometownNames = !{JSON.stringify(Object.values(filteredHometownNames)).replace(/<\//g, '<\\/')}
 		var hometownCounts = !{JSON.stringify(Object.values(filteredHometownCounts)).replace(/<\//g, '<\\/')}
-		hometownNames
-		new Chart(document.getElementById('hometowns').getContext('2d'), {
+		var hometownChart = new Chart(document.getElementById('hometowns').getContext('2d'), {
 			type: 'horizontalBar',
 			data: {
 				labels: hometownNames,
@@ -74,3 +67,36 @@
 				scales: { xAxes: [{ ticks: { beginAtZero: true }}]}
 			}
 		})
+
+		// THEATERS
+		var theaterNames = !{JSON.stringify(Object.keys(theaters))}
+		var theaterCounts = !{JSON.stringify(Object.values(theaters))}
+		var theaterChart = new Chart(document.getElementById('theaters').getContext('2d'), {
+			type: 'pie',
+			data: {
+				labels: theaterNames,
+				datasets: [{
+					backgroundColor: COLORS,
+					borderColor: 'white',
+					data: theaterCounts
+				}]
+			},
+			options: { legend: { position: 'left'}}
+		})
+
+		var condensedChart = false
+		var theaterNamesCondensed = !{JSON.stringify(Object.keys(theatersFiltered))}
+		var theaterCountsCondensed = !{JSON.stringify(Object.values(theatersFiltered))}
+		function condenseTheaters() {
+			if(condensedChart) {
+				theaterChart.data.labels = theaterNames
+				theaterChart.data.datasets[0].data = theaterCounts
+			}
+			else {
+				theaterChart.data.labels = theaterNamesCondensed
+				theaterChart.data.datasets[0].data = theaterCountsCondensed
+			}
+
+			theaterChart.update()
+			condensedChart = !condensedChart
+		}

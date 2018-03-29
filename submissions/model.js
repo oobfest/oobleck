@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const Submission = require('../submissions/schema')
 
 module.exports = {
@@ -73,40 +74,38 @@ module.exports = {
 		})
 	},
 
-	update: function(updatedSubmission, callback) {
-		this.get(updatedSubmission.id, (error, oldSubmission)=> {
+	addTheaterTag: function(objectId, tag, callback) {
+		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)
 			else {
-				//TOOD: Use underscore!
-				oldSubmission.actName					= updatedSubmission.actName,
-				oldSubmission.domain					= updatedSubmission.domain,
-				oldSubmission.showType					= updatedSubmission.showType,
-				oldSubmission.informalDescription		= updatedSubmission.informalDescription,
-				oldSubmission.publicDescription			= updatedSubmission.publicDescription,
-				oldSubmission.accolades					= updatedSubmission.accolades,
-				oldSubmission.country					= updatedSubmission.country,
-				oldSubmission.city						= updatedSubmission.city,
-				oldSubmission.state						= updatedSubmission.state,
-				oldSubmission.homeTheater				= updatedSubmission.homeTheater
-				oldSubmission.primaryContactName		= updatedSubmission.primaryContactName,
-				oldSubmission.primaryContactEmail		= updatedSubmission.primaryContactEmail,
-				oldSubmission.primaryContactPhone		= updatedSubmission.primaryContactPhone,
-				oldSubmission.primaryContactRole		= updatedSubmission.primaryContactRole,
-				oldSubmission.primaryContactAttending 	= updatedSubmission.primaryContactAttending,
-				oldSubmission.additionalMembers			= updatedSubmission.additionalMembers,
-				oldSubmission.minimumShowLength			= updatedSubmission.minimumShowLength,
-				oldSubmission.maximumShowLength			= updatedSubmission.maximumShowLength,
-				oldSubmission.specialNeeds				= updatedSubmission.specialNeeds,
-				oldSubmission.noFood					= updatedSubmission.noFood,
-				oldSubmission.imageUrl					= updatedSubmission.imageUrl,
-				oldSubmission.deleteImageUrl			= updatedSubmission.deleteImageUrl,
-				oldSubmission.videoUrls					= updatedSubmission.videoUrls,
-				oldSubmission.videoInfo					= updatedSubmission.videoInfo
-				oldSubmission.socialMedia				= updatedSubmission.socialMedia,
-				oldSubmission.available					= updatedSubmission.available,
-				oldSubmission.conflicts					= updatedSubmission.conflicts,
+				if(!submission.theaterTags.includes(tag)) {
+					submission.theaterTags.push(tag)
+					this.save(submission, (error, savedSubmission)=> {
+						callback(error, savedSubmission)
+					})					
+				}
+				else callback()
+			}
+		})
+	},
 
-				this.save(oldSubmission, (error, savedSubmission)=> {
+	removeTheaterTag: function(objectId, tag, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.update({$pull: {theaterTags: tag}}, (error, response)=> {
+					callback(error, response)
+				})
+			}
+		})
+	},
+
+	update: function(update, callback) {
+		this.get(update.id, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				_.merge(submission, update)
+				this.save(submission, (error, savedSubmission)=> {
 					callback(error, savedSubmission)
 				})
 			}

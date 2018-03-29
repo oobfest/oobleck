@@ -15,6 +15,7 @@ let submissionSchema = mongoose.Schema({
 	city: String,
 	state: String,
 	homeTheater: String,
+	theaterTags: [String],
 
 	// Personnel
 	primaryContactName: String,

@@ -8,6 +8,10 @@ const sendEmail = require('../utilities/send-email')
 const isProductionEnvironment = require('../utilities/is-production-environment')
 const _ = require('lodash')
 
+router.get('/edit-theaters', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+	response.render('submissions/edit-theaters')
+})
+
 // GET /submissions
 router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 
@@ -22,7 +26,7 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 
 			let demographics = {improv:0, sketch:0, standup:0, variety:0, podcast:0, performer:0, other:0}
 			let hometowns = {}
-			let theaterNames = []
+			let theaters = []
 			let reviewers = []
 			let reviews = {}
 
@@ -52,7 +56,7 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				else hometowns[hometown] = 1
 
 				// THEATERS
-				theaterNames.push(submissions[i].homeTheater)
+				theaters = theaters.concat(submissions[i].theaterTags)
 
 				// REVIEWERS
 				for(let j=0; j<submissions[i].reviews.length; j++) {
@@ -79,17 +83,9 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				.map(ht=> hometowns[ht])
 
 			// THEATERS
-			let theaterCount = _.countBy(theaterNames)
-			theaterCount["Not Given"] = theaterCount[""]
-			delete theaterCount[""]
-			let theaters = []
-			Object.keys(theaterCount).map(t=> theaters.push({name: t, count: theaterCount[t]}))
-			theaters = theaters.sort((a,b)=> {
-				if(a.count > b.count) return -1
-				if(a.count == b.count) return 0
-				else return 1
-			})
-			
+			let theatery = _.countBy(theaters)
+			let theateryFiltered = _.pickBy(theatery, (value, key)=> {return (value>1)})
+
 			response.render('submissions/view-all', {
 				submissions: submissions, 
 				percentReviewed: percentReviewed,
@@ -100,7 +96,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				demographics: demographics,
 				filteredHometownNames: filteredHometownNames,
 				filteredHometownCounts: filteredHometownCounts,
-				theaters: theaters,
+				theaters: theatery,
+				theatersFiltered: theateryFiltered,
 				reviews: reviews
 			})
 		}
@@ -233,11 +230,21 @@ router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule'
 		if(error) next(error)
 		else {
 			let releventSubmissions = []
-			for(let i=0; i<submissions.length; i++)
-				for(let j=0; j<submissions[i].reviews.length; j++)
-					if (submissions[i].reviews[j].username === username)
+			let votes = {yes:0, meh:0, nah:0, veto:0}
+			for(let i=0; i<submissions.length; i++) {
+				for(let j=0; j<submissions[i].reviews.length; j++) {
+					if (submissions[i].reviews[j].username === username) {
 						releventSubmissions.push(submissions[i])
-			response.render('submissions/reviews-by-user', {submissions: releventSubmissions, username: username})
+						switch(submissions[i].reviews[j].score) {
+							case  2: votes.yes++;  break;
+							case  1: votes.meh++;  break;
+							case  0: votes.nah++;  break;
+							case -1: votes.veto++; break;
+						}
+					}
+				}
+			}
+			response.render('submissions/reviews-by-user', {submissions: releventSubmissions, username: username, votes: votes})
 		}
 	})
 })

@@ -14,9 +14,9 @@ nav#dash-nav.dash-nav
 		if isAdmin || isScheduler
 			a.dash-nav-item(href="/submissions") Act Submissions
 			a.dash-nav-item(href='/hosts') Host Submissions
-			a.dash-nav-item(href="/scheduler") Scheduler
 		if isAdmin
 			a.dash-nav-item(href="/submissions/unpaid") Unpaid Submissions
 			a.dash-nav-item(href="/users") Users
+			a.dash-nav-item(href="/scheduler") Scheduler
 		if isPanelist || isStandupPanelist || isScheduler
 			a.dash-nav-item(href="/submissions/review") Review Submissions

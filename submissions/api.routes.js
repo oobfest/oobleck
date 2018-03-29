@@ -9,5 +9,7 @@ router.route('/getAllPaid').get(isLoggedIn, isRole(['admin', 'schedule']), contr
 router.route('/getAllPaidExceptStandup').get(isLoggedIn, isRole('panelist'), controller.getAllPaidExceptStandup)
 router.route('/getAllPaidStandup').get(isLoggedIn, isRole('standup-panelist'), controller.getAllPaidStandup)
 
+router.post('/add-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.addTheaterTag)
+router.post('/remove-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.removeTheaterTag)
 
 module.exports = router
