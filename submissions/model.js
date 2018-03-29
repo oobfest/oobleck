@@ -105,6 +105,11 @@ module.exports = {
 			if(error) callback(error)
 			else {
 				_.merge(submission, update)
+				submission.markModified('videoUrls')
+				submission.markModified('availability')
+				submission.markModified('conflicts')
+				submission.markModified('additionalMembers')
+				submission.markModified('socialMedia')
 				this.save(submission, (error, savedSubmission)=> {
 					callback(error, savedSubmission)
 				})
