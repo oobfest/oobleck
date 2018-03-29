@@ -43,7 +43,7 @@ router.post('/details', isNotARobot, submissionValidation, (request, response, n
 	else {
 		response.render('apply/submission-details', {
 			recaptcha: true,
-			errors: errors.array(),
+			errors: submissionErrors.array(),
 			socialMedia: flattenSocialMedia(
 				request.body['social-media-type'], 
 				request.body['social-media-url']
@@ -58,6 +58,7 @@ router.post('/details', isNotARobot, submissionValidation, (request, response, n
 				request.body['conflict-act'],
 				request.body['conflict-person']
 			),
+			available: [],
 			submission: request.body
 		})	
 	}
