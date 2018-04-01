@@ -136,7 +136,7 @@ router.post('/finish', (request, response, next)=>{
 				//})
 
 				response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
-				
+
 				let archiveMessage = 
 					`<b>Act name:</b> 		${submission.actName}<br>` +
 					`<b>Type:</b> 			${submission.showType}<br>` + 
@@ -294,7 +294,7 @@ function calculateApplicationFee(submission) {
 
 	if (currentDate > earlyBirdDeadline) 	applicationFee += 10
 	if (currentDate > regularDeadline)		applicationFee += 10
-	if (currentDate > lateDeadline)			applicationFee += 10
+	if (currentDate > lateDeadline)			applicationFee += 0
 
 	return applicationFee
 }
