@@ -285,16 +285,16 @@ function calculateApplicationFee(submission) {
 	if (submission.primaryContactAttending)
 		attendeeCount++
 
-	let applicationFee = (attendeeCount <= 2) ? 15 : 35
+	let applicationFee = (attendeeCount <= 2) ? 25 : 45
 
 	let earlyBirdDeadline = new Date(1519884000000)
 	let regularDeadline = new Date(1522558800000)
 	let lateDeadline = new Date(1523768400000)
 	let currentDate = new Date(Date.now())
 
-	if (currentDate > earlyBirdDeadline) 	applicationFee += 10
-	if (currentDate > regularDeadline)		applicationFee += 10
-	if (currentDate > lateDeadline)			applicationFee += 0
+	//if (currentDate > earlyBirdDeadline) 	applicationFee += 10
+	//if (currentDate > regularDeadline)		applicationFee += 10
+	//if (currentDate > lateDeadline)			applicationFee += 0
 
 	return applicationFee
 }
