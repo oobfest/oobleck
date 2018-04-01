@@ -131,10 +131,12 @@ router.post('/finish', (request, response, next)=>{
 					`Acceptance emails will be sent out in the beginning of July<br>` + 
 					`To view & edit your application, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}<br>` +
 					`Anyone with this URL can edit your application, so keep it safe!!`
-				sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-					response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
-				})
+				//sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
+				//	response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
+				//})
 
+				response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
+				
 				let archiveMessage = 
 					`<b>Act name:</b> 		${submission.actName}<br>` +
 					`<b>Type:</b> 			${submission.showType}<br>` + 
@@ -145,7 +147,7 @@ router.post('/finish', (request, response, next)=>{
 					`<b>Image URL:</b>		${submission.imageUrl ? submission.imageUrl : 'No image uploaded'}<br>` +
 					`<b>Availability:</b> 	${submission.available.join(' ')}<br>` + 
 					`<b>Video URLs:</b><br>	${submission.videoUrls.join('<br>')}`
-				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
+				//sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
 
 			}
 			else {
