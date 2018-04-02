@@ -18,18 +18,19 @@ block content
 								th City
 								th State
 								th Theater
-								th 
+								th(style="visibility: hidden")
+									button.btn.btn-primary Update
 						tbody
 							tr(v-for="submission, key in submissions")
 								td {{ submission.actName | shorten(42) }}
 								td 
-									input.form-control(type="text" v-model="submission.city" @change="stub(key)")
+									input.form-control(type="text" v-model="submission.city" @input="trackChange(key)")
 								td
-									input.form-control(type="text" v-model="submission.state")
+									input.form-control(type="text" v-model="submission.state" @input="trackChange(key)")
 								td 
-									input.form-control(type="text" v-model="submission.homeTheater")
+									input.form-control(type="text" v-model="submission.homeTheater" @input="trackChange(key)")
 								td
-									button.btn.btn-primary(v-show="hasChanged[key]" type="button" @click.prevent="standardize(submission)") Update
+									button.btn.btn-primary(v-show="hasChanged[key]" type="button" @click.prevent="standardize(submission, key)") Update
 	script(src="/js/vue.js")
 	script(src="/js/axios.min.js")
 	script.
@@ -43,17 +44,19 @@ block content
 				}
 			},
 			methods: {
-				standardize(submission) {
+				standardize(submission, key) {
 					let objectId = submission.objectId
 					let city = submission.city
 					let state = submission.state
 					let theater = submission.homeTheater
 					axios
 						.post('/api/submissions/standardize', {objectId: submission._id, city: city, state: state, theater: theater})
-						.then((response)=> {})
+						.then((response)=> {
+							Vue.set(this.hasChanged, key, false)
+						})
 						.catch((error)=> {alert("Failed to update 😖"); console.log(error)})
 				},
-				stub(key) {
+				trackChange(key) {
 					Vue.set(this.hasChanged, key, true)
 				 }
 			},

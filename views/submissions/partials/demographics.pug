@@ -13,7 +13,7 @@
 				h4.card-header.text-center Theaters
 				.card-body
 					.form-check
-						input#filter-theaters.form-check-input(type="checkbox")
+						input#filter-theaters.form-check-input(type="checkbox" autocomplete="off")
 						label.form-check-label(for="filter-theaters" onclick="condenseTheaters()") Only show for 2+ entries
 					canvas#theaters(width="800" height="400")
 	.row.mt-3
@@ -21,7 +21,9 @@
 			.card
 				h4.card-header.text-center Submissions by City
 				.card-body
-					p (Graph only shows cities with more than one submission)
+					.form-check
+						input#filter-hometowns.form-check-input(type="checkbox" autocomplete="off")
+						label.form-check-label(for="filter-hometowns" onclick="condenseHometowns()") Only show for 2+ entries
 					canvas#hometowns
 
 	script.
@@ -50,8 +52,10 @@
 		})
 
 		// HOME TOWNS
-		var hometownNames = !{JSON.stringify(Object.values(filteredHometownNames)).replace(/<\//g, '<\\/')}
-		var hometownCounts = !{JSON.stringify(Object.values(filteredHometownCounts)).replace(/<\//g, '<\\/')}
+		var hometownNames = !{JSON.stringify(Object.values(hometownNames)).replace(/<\//g, '<\\/')}
+		var hometownCounts = !{JSON.stringify(Object.values(hometownCounts)).replace(/<\//g, '<\\/')}
+		var hometownNamesCondensed = !{JSON.stringify(Object.values(filteredHometownNames)).replace(/<\//g, '<\\/')}
+		var hometownCountsCondensed = !{JSON.stringify(Object.values(filteredHometownCounts)).replace(/<\//g, '<\\/')}
 		var hometownChart = new Chart(document.getElementById('hometowns').getContext('2d'), {
 			type: 'horizontalBar',
 			data: {
@@ -67,6 +71,21 @@
 				scales: { xAxes: [{ ticks: { beginAtZero: true }}]}
 			}
 		})
+		var condensedHometowns = false
+		function condenseHometowns() {
+			if(condensedHometowns) {
+				hometownChart.data.labels = hometownNames
+				hometownChart.data.datasets[0].data = hometownCounts
+			}
+			else {
+				hometownChart.data.labels = hometownNamesCondensed
+				hometownChart.data.datasets[0].data = hometownCountsCondensed
+			}
+
+			hometownChart.update()
+			condensedHometowns = !condensedHometowns
+		}
+
 
 		// THEATERS
 		var theaterNames = !{JSON.stringify(Object.keys(theaters))}
@@ -84,11 +103,11 @@
 			options: { legend: { position: 'left'}}
 		})
 
-		var condensedChart = false
+		var condensedTheaters = false
 		var theaterNamesCondensed = !{JSON.stringify(Object.keys(theatersFiltered))}
 		var theaterCountsCondensed = !{JSON.stringify(Object.values(theatersFiltered))}
 		function condenseTheaters() {
-			if(condensedChart) {
+			if(condensedTheaters) {
 				theaterChart.data.labels = theaterNames
 				theaterChart.data.datasets[0].data = theaterCounts
 			}
@@ -98,5 +117,5 @@
 			}
 
 			theaterChart.update()
-			condensedChart = !condensedChart
+			condensedTheaters = !condensedTheaters
 		}

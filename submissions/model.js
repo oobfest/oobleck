@@ -142,6 +142,20 @@ module.exports = {
 		})
 	},
 
+	standardize: function(objectId, city, state, theater, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.city = city
+				submission.state = state
+				submission.homeTheater = theater
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})				
+			}
+		})
+	},
+
 	delete: function(objectId, callback) {
 		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)

@@ -56,7 +56,7 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				else hometowns[hometown] = 1
 
 				// THEATERS
-				theaters = theaters.concat(submissions[i].theaterTags)
+				theaters = theaters.concat(submissions[i].homeTheater)
 
 				// REVIEWERS
 				for(let j=0; j<submissions[i].reviews.length; j++) {
@@ -82,6 +82,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 			let filteredHometownCounts = filteredHometownNames
 				.map(ht=> hometowns[ht])
 
+			let hometownCounts = Object.keys(hometowns).map(ht=> hometowns[ht])
+
 			// THEATERS
 			let theatery = _.countBy(theaters)
 			let theateryFiltered = _.pickBy(theatery, (value, key)=> {return (value>1)})
@@ -94,6 +96,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				reviewedSubmissionCount: reviewedSubmissionCount,
 				completedSubmissionCount: completedSubmissionCount,
 				demographics: demographics,
+				hometownNames: Object.keys(hometowns),
+				hometownCounts: hometownCounts,
 				filteredHometownNames: filteredHometownNames,
 				filteredHometownCounts: filteredHometownCounts,
 				theaters: theatery,
