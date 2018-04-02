@@ -131,11 +131,7 @@ router.post('/finish', (request, response, next)=>{
 					`Acceptance emails will be sent out in the beginning of July<br>` + 
 					`To view & edit your application, please use this URL: https://${request.hostname}/submissions/edit/${submission._id}<br>` +
 					`Anyone with this URL can edit your application, so keep it safe!!`
-				//sendEmail(submission.primaryContactEmail, subject, message, (email)=> {
-				//	response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
-				//})
-
-				response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
+				sendEmail(submission.primaryContactEmail, subject, message)
 
 				let archiveMessage = 
 					`<b>Act name:</b> 		${submission.actName}<br>` +
@@ -147,8 +143,9 @@ router.post('/finish', (request, response, next)=>{
 					`<b>Image URL:</b>		${submission.imageUrl ? submission.imageUrl : 'No image uploaded'}<br>` +
 					`<b>Availability:</b> 	${submission.available.join(' ')}<br>` + 
 					`<b>Video URLs:</b><br>	${submission.videoUrls.join('<br>')}`
-				//sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
+				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | New Application | ' + submission.actName, archiveMessage)
 
+				response.render('apply/submission-thank-you', {submission: submission, trackPage: true})
 			}
 			else {
 				response.render('apply/submission-payment', {trackPage: true, submission: submission, errors: [ {msg: "Something went wrong with the payment. Contact admin@oobfest.com if necessary!"}]})
@@ -285,7 +282,7 @@ function calculateApplicationFee(submission) {
 	if (submission.primaryContactAttending)
 		attendeeCount++
 
-	let applicationFee = (attendeeCount <= 2) ? 25 : 45
+	let applicationFee = (attendeeCount <= 2) ? 35 : 55
 
 	let earlyBirdDeadline = new Date(1519884000000)
 	let regularDeadline = new Date(1522558800000)

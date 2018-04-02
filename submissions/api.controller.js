@@ -46,5 +46,16 @@ module.exports = {
 			if(error) next(error)
 			else response.send(submission)
 		})
+	},
+
+	standardize: function(request, response, next) {
+		let objectId = request.body.objectId
+		let city = request.body.city
+		let state = request.body.state
+		let theater = request.body.theater
+		model.standardize(objectId, city, state, theater, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
 	}
 }

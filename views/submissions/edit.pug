@@ -57,14 +57,15 @@ block content
 							.box-block.box-bb
 								h4 Performance Details
 								.form-group
-									label.col-form-label.required-field(for="minimum-length") What is the shortest set you'd be willing to do for the festival? 
+									label.col-form-label.required-field(for="minimum-show-length") What is the shortest set you'd be willing to do for the festival? 
 									.input-group
+										p=submission.minimumShowLength
 										input#minimum-show-length.form-control(type="number" min="0" max="2400" name="minimum-show-length" value=submission.minimumShowLength || 5)
 										.input-group-append
 											span.input-group-text minutes
 
 								.form-group
-									label.col-form-label.required-field(for="maximum-length") What's the longest you would be able to perform for? 
+									label.col-form-label.required-field(for="maximum-show-length") What's the longest you would be able to perform for? 
 									.input-group
 										input#maximum-show-length.form-control(type="number" min="0" max="2400" name="maximum-show-length" value=submission.maximumShowLength || 60)
 										.input-group-append

@@ -8,8 +8,8 @@ const sendEmail = require('../utilities/send-email')
 const isProductionEnvironment = require('../utilities/is-production-environment')
 const _ = require('lodash')
 
-router.get('/edit-theaters', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
-	response.render('submissions/edit-theaters')
+router.get('/standardize', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+	response.render('submissions/standardize')
 })
 
 // GET /submissions

@@ -1,0 +1,78 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title 
+				a.text-muted(href="/submissions/") Submissions
+				|  /
+				| Standardize Submissions
+
+	#vue-app.dash-boxes.container-fluid
+		.row
+			.col
+				.box.box-b
+					table.table.box-table
+						thead
+							tr
+								th Act
+								th City
+								th State
+								th Theater
+								th 
+						tbody
+							tr(v-for="submission, key in submissions")
+								td {{ submission.actName | shorten(42) }}
+								td 
+									input.form-control(type="text" v-model="submission.city" @change="stub(key)")
+								td
+									input.form-control(type="text" v-model="submission.state")
+								td 
+									input.form-control(type="text" v-model="submission.homeTheater")
+								td
+									button.btn.btn-primary(v-show="hasChanged[key]" type="button" @click.prevent="standardize(submission)") Update
+	script(src="/js/vue.js")
+	script(src="/js/axios.min.js")
+	script.
+
+		let vm = new Vue({
+			el: "#vue-app",
+			data() {
+				return {
+					submissions: [],
+					hasChanged: []
+				}
+			},
+			methods: {
+				standardize(submission) {
+					let objectId = submission.objectId
+					let city = submission.city
+					let state = submission.state
+					let theater = submission.homeTheater
+					axios
+						.post('/api/submissions/standardize', {objectId: submission._id, city: city, state: state, theater: theater})
+						.then((response)=> {})
+						.catch((error)=> {alert("Failed to update 😖"); console.log(error)})
+				},
+				stub(key) {
+					Vue.set(this.hasChanged, key, true)
+				 }
+			},
+			filters: {
+				shorten(value, characters) {
+				return value.length > characters
+					? value.substring(0,characters)+'...'
+					: value
+				}
+			},
+			mounted() {
+				let self = this
+				axios
+					.get('/api/submissions/getAllPaid')
+					.then(function(response) {
+						self.submissions = response.data
+					})
+					.catch(function(error) {
+						self.submissions = []
+					})
+			}
+		})

@@ -12,4 +12,5 @@ router.route('/getAllPaidStandup').get(isLoggedIn, isRole('standup-panelist'), c
 router.post('/add-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.addTheaterTag)
 router.post('/remove-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.removeTheaterTag)
 
+router.post('/standardize', isLoggedIn, isRole(['admin', 'schedule']), controller.standardize)
 module.exports = router
