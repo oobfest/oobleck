@@ -11,23 +11,23 @@ block content
 	.dash-boxes.container-fluid
 		.row
 			.col-md
-				.card.text-center.mb-3
-					.card-body
+				.card.text-center.mb-3(class=(votes.yes <= 12) ?'border-success' :'border-danger')
+					.card-body.text-success(class=(votes.yes <= 12) ?'text-success' :'text-danger')
 						p.card-title Yes 😍
 						h3.card-text=votes.yes
 			.col-md
-				.card.text-center.mb-3
-					.card-body
+				.card.text-center.mb-3.border-success
+					.card-body.text-success
 						p.card-title Meh 😬
 						h3.card-text=votes.meh
 			.col-md
-				.card.text-center.mb-3
-					.card-body
+				.card.text-center.mb-3.border-success
+					.card-body.text-success
 						p.card-title Nah 😕
 						h3.card-text=votes.nah
 			.col-md
-				.card.text-center.mb-3
-					.card-body
+				.card.text-center.mb-3(class=(votes.veto <= 5) ?'border-success' :'border-danger')
+					.card-body(class=(votes.veto <= 5) ?'text-success' :'text-danger')
 						p.card-title Veto 😡
 						h3.card-text=votes.veto
 		.box.box-b
