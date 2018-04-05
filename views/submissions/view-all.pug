@@ -14,14 +14,15 @@ block content
 					li.nav-item
 						a.nav-link.active(data-toggle="tab" href="#submissions") Submissions
 					li.nav-item
-						a.nav-link(data-toggle="tab" href="#demographics") Demographics
+						a.nav-link(data-toggle="tab" href="#charts") Charts
 					li.nav-item
 						a.nav-link(data-toggle="tab" href="#reviewers") Reviewers
 				.tab-content
+					script(src="/js/vue.min.js")
+					script(src="/js/axios.min.js")
 					include partials/submissions
-					include partials/demographics
+					include partials/charts
 					include partials/reviewers
-
 
 mixin renderReviews(reviews)
 	for review in reviews

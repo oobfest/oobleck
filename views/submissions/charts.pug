@@ -1,0 +1,171 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title 
+				a.text-muted(href="/submissions/") Submissions
+				|  /
+				| Charts
+
+	#charts-vue-app.dash-boxes.container-fluid
+		.row
+			.col
+				ul.nav.nav-pills
+					li.nav-item
+						a#type-chart-link.nav-link.active(data-toggle="tab" href="#type-chart-pane") Show Type
+					li.nav-item
+						a#hometown-chart-link.nav-link(data-toggle="tab" href="#hometown-chart-pane") Hometown
+					li.nav-item
+						a#theater-chart-link.nav-link(data-toggle="tab" href="#theater-chart-pane") Theater
+				.tab-content
+					#type-chart-pane.tab-pane.fade.active.show
+						.m-3
+						#type-chart
+					#hometown-chart-pane.tab-pane.fade
+						.btn-group.btn-group-toggle.m-3
+							label.btn.btn-secondary(:class="{active: hometownFilter==1}" for="hometown-filter-1")
+								input#hometown-filter-1.form-check-input(type="radio" value="1" v-model="hometownFilter")
+								| Show All
+							label.btn.btn-secondary(:class="{active: hometownFilter==2}" for="hometown-filter-2")
+								input#hometown-filter-2.form-check-input(type="radio" value="2" v-model="hometownFilter")
+								| 2+ 
+							label.btn.btn-secondary(:class="{active: hometownFilter==3}" for="hometown-filter-3")
+								input#hometown-filter-3.form-check-input(type="radio" value="3" v-model="hometownFilter")
+								| 3+
+							label.btn.btn-secondary(:class="{active: hometownFilter==4}" for="hometown-filter-4")
+								input#hometown-filter-4.form-check-input(type="radio" value="4" v-model="hometownFilter")
+								| 4+
+						#hometown-chart
+					#theater-chart-pane.tab-pane.fade
+						.btn-group.btn-group-toggle.m-3
+							label.btn.btn-secondary(:class="{active: theaterFilter==1}" for="theater-filter-1")
+								input#theater-filter-1.form-check-input(type="radio" value="1" v-model="theaterFilter")
+								| Show All
+							label.btn.btn-secondary(:class="{active: theaterFilter==2}" for="theater-filter-2")
+								input#theater-filter-2.form-check-input(type="radio" value="2" v-model="theaterFilter")
+								| 2+ 
+							label.btn.btn-secondary(:class="{active: theaterFilter==3}" for="theater-filter-3")
+								input#theater-filter-3.form-check-input(type="radio" value="3" v-model="theaterFilter")
+								| 3+
+							label.btn.btn-secondary(:class="{active: theaterFilter==4}" for="theater-filter-4")
+								input#theater-filter-4.form-check-input(type="radio" value="4" v-model="theaterFilter")
+								| 4+
+						#theater-chart
+
+	script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+	script(src="/js/axios.min.js")
+	script(src="/js/vue.min.js")
+	script.
+
+		let vueApp = new Vue({
+			el: "#charts-vue-app",
+			data() {
+				return {
+					hometownFilter: 1,
+					theaterFilter: 1
+				}
+			},
+			watch: {
+				hometownFilter: function(value) {
+					drawChart(hometownChart.chart, createDataView(hometownChart.data, parseInt(value)))
+				},
+				theaterFilter: function(value) {
+					drawChart(theaterChart.chart, createDataView(theaterChart.data, parseInt(value)))
+				}
+			}
+		})
+
+		google.charts.load('current', {'packages':['corechart']})
+		google.charts.setOnLoadCallback(drawCharts)
+
+		let typeChart = {chart: null, data: null, filter: false}
+		let hometownChart = {chart: null, data: null, filter: false}
+		let theaterChart = {chart: null, data: null, filter: false}
+
+		function drawCharts() {
+			axios
+				.get('/api/submissions/getAllPaid')
+				.then(function(response) {
+					let submissions = response.data
+					let types = {}
+					let hometowns = {}
+					let theaters = {}
+
+					for(let i=0; i<submissions.length; i++) {
+						let submission = submissions[i]
+
+						// Types
+						let type = submission.showType
+
+						if (typeof types[type] ==='undefined') types[type] = 1
+						else types[type] += 1
+
+						// Hometowns
+						let hometown = submission.city + ", " + submission.state
+						if (typeof hometowns[hometown] === 'undefined') hometowns[hometown] = 1
+						else hometowns[hometown] += 1
+
+						// Theaters
+						let theater = submission.homeTheater
+						if (typeof theaters[theater] === 'undefined') theaters[theater] = 1
+						else theaters[theater] += 1
+					}
+					
+					// Ignore blank entries
+					delete theaters[''] 
+
+					typeChart.data = createDataTable(types)
+					hometownChart.data = createDataTable(hometowns)
+					theaterChart.data = createDataTable(theaters)
+
+					typeChart.chart = new google.visualization.PieChart(document.getElementById('type-chart'))
+					hometownChart.chart = new google.visualization.PieChart(document.getElementById('hometown-chart'))
+					theaterChart.chart = new google.visualization.PieChart(document.getElementById('theater-chart'))
+
+					drawChart(typeChart.chart, createDataView(typeChart.data, false))
+				})
+				.catch(function(error) {
+					console.log(error)
+				})
+		}
+
+		function createDataTable(data) {		
+			let dataTable = new google.visualization.DataTable()
+			dataTable.addColumn('string')
+			dataTable.addColumn('number')
+			let keys = Object.keys(data)
+			dataTable.addRows(keys.length)
+			keys.forEach(function(key, index) {
+				dataTable.setValue(index, 0, key)
+				dataTable.setValue(index, 1, data[key])
+			})
+			return dataTable
+		}
+
+		function createDataView(data, filter) {
+			let dataView = new google.visualization.DataView(data)
+			if (filter) dataView.setRows(dataView.getFilteredRows([{column: 1, minValue: filter}]))
+			return dataView
+		}
+
+		function drawChart(chart, view) {
+			chart.draw(view, {
+				width: 1200, 
+				height: 600, 
+				is3D: true,
+				titleTextStyle: {fontSize: 32},
+				backgroundColor: '#f6f6f6',
+				chartArea: {'width': '100%', 'height': '100%'},
+				'legend':'left',
+			})
+		}
+
+		$('#type-chart-link').on('shown.bs.tab', function() {
+			drawChart(typeChart.chart, createDataView(typeChart.data, 1))
+		})
+		$('#hometown-chart-link').on('shown.bs.tab', function() {
+			drawChart(hometownChart.chart, createDataView(hometownChart.data, parseInt(vueApp.hometownFilter)))
+		})
+		$('#theater-chart-link').on('shown.bs.tab', function() {
+			drawChart(theaterChart.chart, createDataView(theaterChart.data, parseInt(vueApp.theaterFilter)))
+		})
