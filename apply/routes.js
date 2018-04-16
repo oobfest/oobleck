@@ -10,15 +10,21 @@ const isNotARobot = require('../middleware/is-not-a-robot')
 
 // Get first page of form
 router.get('/', (request, response) => {
-	response.render('apply/submission-details', { 
-		recaptcha: true, 
-		hotjar: true,
-		trackPage: true,
-		link: true,
-		submission: {available: []}, 
-		socialMedia: [], 
-		personnel: []
-	})
+
+	if(Date.now() > 1523867498876) {		// Todo: make the concept of time more intuitive in the field of computer science
+		response.render('apply/closed')
+	}
+	else {
+		response.render('apply/submission-details', { 
+			recaptcha: true, 
+			hotjar: true,
+			trackPage: true,
+			link: true,
+			submission: {available: []}, 
+			socialMedia: [], 
+			personnel: []
+		})
+	}
 })
 
 // Submit first page, go to second page (if no errors)
