@@ -34,7 +34,8 @@ module.exports = function() {
 		'TWILIO_TOKEN',
 		'TWILIO_RECIPIENT',
 		'SUBMISSION_EMAIL',
-		'OOB_PROMO_CODE'
+		'OOB_PROMO_CODE',
+		'LATE_SUBMISSION_PASSWORD'
 	]
 
 	for(let i=0; i<variableNameList.length; i++) {
