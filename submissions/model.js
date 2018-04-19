@@ -74,6 +74,18 @@ module.exports = {
 		})
 	},
 
+	deleteReview: function(submissionId, userId, callback) {
+		this.get(submissionId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				reviewIndex = submission.reviews.findIndex(review => review.userId == userId)
+				submission.update({$pull: {reviews: {userId: userId}}}, (error, response)=> {
+					callback(error, response)
+				})
+			}
+		})
+	},
+
 	addTheaterTag: function(objectId, tag, callback) {
 		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)

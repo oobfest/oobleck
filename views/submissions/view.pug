@@ -36,6 +36,15 @@ block content
 									h3 Accolades
 									p=submission.accolades
 					.box-block.box-bb
+								if submission.videoUrls
+									h3 Video Links
+									for videoUrl in submission.videoUrls
+										pre
+											a(href=videoUrl)=videoUrl
+								if submission.videoInfo
+									h3 Video Info
+									p=submission.videoInfo
+					.box-block.box-bb
 						h3 Contacts
 						.mb-0 #{submission.primaryContactName}, #{submission.primaryContactRole}  
 							span.badge.badge-info #{submission.primaryContactAttending ? '' : 'Not Attending'}

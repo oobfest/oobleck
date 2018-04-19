@@ -5,9 +5,14 @@ const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
 
 router.route('/').get(isLoggedIn, controller.getAll)
+router.route('/get/:submissionId').get(isLoggedIn, isRole(['admin', 'schedule']), controller.get)
+
+// TODO: Routes should be kebabs, not camels whoopz
 router.route('/getAllPaid').get(isLoggedIn, isRole(['admin', 'schedule']), controller.getAllPaid)
 router.route('/getAllPaidExceptStandup').get(isLoggedIn, isRole('panelist'), controller.getAllPaidExceptStandup)
 router.route('/getAllPaidStandup').get(isLoggedIn, isRole('standup-panelist'), controller.getAllPaidStandup)
+
+router.route('/delete-review').post(isLoggedIn, isRole(['admin', 'schedule']), controller.deleteReview)
 
 router.post('/add-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.addTheaterTag)
 router.post('/remove-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.removeTheaterTag)

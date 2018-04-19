@@ -6,23 +6,77 @@ block content
 				a.text-muted(href="/submissions") Submissions
 				|  /
 				| Reviews for Submission 
-				code #{submission.actName}
+				code 
+					a(href="/submissions/submission/" + submission.domain) #{submission.actName}
 
 	.dash-boxes.container-fluid
-		.box.box-b
-			table.box-table.table
-				thead
-					tr
-						th Reviewer
-						th Score
-						th Notes
-				tbody
-					for review in submission.reviews
+		#vue-submission-reviews
+			.box.box-b
+				table.box-table.table
+					thead
 						tr
+							th Reviewer
+							th Score
+							th Notes
+							th Delete
+					tbody
+						tr(v-for="review, key in submission.reviews")
 							td
-								a(href="/submissions/reviews-by-user/"+review.username)=review.username
+								a(:href="'/submissions/reviews-by-user/'+review.username") {{review.username}}
+							td {{review.score | emojify}}
+							td {{review.notes}}
 							td
-								+renderReview(review.score)
-							td=review.notes
+								button.btn.btn-danger(@click="deleteReview(review.userId, key)" type="button") Clicky!
+
+	script(src="/js/vue.js")
+	script(src="/js/axios.min.js")
+	script.
+
+		let vm = new Vue({
+			el: "#vue-submission-reviews",
+			data() {
+				return {
+					submission: {reviews: []}
+				}
+			},
+			methods: {
+				deleteReview(userId, reviewIndex) {
+					let self = this
+					let url = '/api/submissions/delete-review/'
+					axios
+						.post(url, {submissionId: self.submission._id, userId: userId})
+						.then(function(response) {
+							self.submission.reviews.splice(reviewIndex,1)
+						})
+						.catch(function(error) {
+							console.log(error)
+						})
+				}
+			},
+			filters: {
+				emojify(value) {
+					switch(value) {
+						case -1: return '😡 Veto'
+						case  0: return '😕 Nah'
+						case  1: return '😬 Meh'
+						case  2: return '😍 Yes!'
+						default: return ''
+					}
+				}
+			},
+
+			mounted() {
+				let self = this
+				let url = '/api/submissions/get/#{submission._id}'
+				axios
+					.get(url)
+					.then(function(response) {
+						self.submission = response.data
+					})
+					.catch(function(error) {
+						self.submission = null
+					})
+			}
+		})
 
 include _render-review

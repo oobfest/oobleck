@@ -19,7 +19,7 @@
 								span.arrow.asc(v-show="sortState.actName")
 								span.arrow.dsc(v-show="sortState.actName === false")
 						th 
-							a(@click.prevent="sortByScore" href="#") Score
+							a(@click.prevent="sortByScore" href="#") Scores
 								span.arrow.asc(v-show="sortState.score")
 								span.arrow.dsc(v-show="sortState.score === false")
 						th 
@@ -171,6 +171,16 @@ script.
 					}	
 				}
 				return pretty
+			},
+			totalReviewScores(reviews) {
+				if (reviews.length > 0) {
+					let total = 0
+					for(let i=0; i<reviews.length; i++) {
+						total+=reviews[i].score
+					}
+					return total					
+				}
+				else return ''
 			},
 			shorten(value, characters) {
 				return value.length > characters

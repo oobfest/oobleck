@@ -2,6 +2,14 @@ const model = require('./model')
 
 module.exports = {
 
+	get: function(request, response, next) {
+		let submissionId = request.params.submissionId
+		model.get(submissionId, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
+	},
+
 	getAll: function(request, response, next) {
 		model.getAll((error, submissions)=> {
 			if(error) next(error)
@@ -56,6 +64,16 @@ module.exports = {
 		model.standardize(objectId, city, state, theater, (error, submission)=> {
 			if(error) next(error)
 			else response.send(submission)
+		})
+	},
+
+	deleteReview: function(request, response, next) {
+		let submissionId = request.body.submissionId
+		let userId = request.body.userId
+		console.log("Params: ", submissionId, userId)
+		model.deleteReview(submissionId, userId, (error)=> {
+			if(error) next(error)
+			else response.send("Success!")
 		})
 	}
 }
