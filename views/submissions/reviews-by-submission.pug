@@ -26,7 +26,7 @@ block content
 							td {{review.score | emojify}}
 							td {{review.notes}}
 							td
-								button.btn.btn-danger(@click="deleteReview(review.userId, key)" type="button") Clicky!
+								button.btn.btn-danger(@click="deleteReview(review.userId, key)" type="button") Delete Review
 
 	script(src="/js/vue.js")
 	script(src="/js/axios.min.js")
@@ -41,16 +41,18 @@ block content
 			},
 			methods: {
 				deleteReview(userId, reviewIndex) {
-					let self = this
-					let url = '/api/submissions/delete-review/'
-					axios
-						.post(url, {submissionId: self.submission._id, userId: userId})
-						.then(function(response) {
-							self.submission.reviews.splice(reviewIndex,1)
-						})
-						.catch(function(error) {
-							console.log(error)
-						})
+					if (confirm('Delete this review?')) {
+						let self = this
+						let url = '/api/submissions/delete-review/'
+						axios
+							.post(url, {submissionId: self.submission._id, userId: userId})
+							.then(function(response) {
+								self.submission.reviews.splice(reviewIndex,1)
+							})
+							.catch(function(error) {
+								console.log(error)
+							})						
+					}
 				}
 			},
 			filters: {
