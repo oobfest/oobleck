@@ -7,5 +7,9 @@ module.exports = {
 
 	schedule: function(request, response, next) {
 		response.render('scheduler/schedule')
+	},
+
+	scheduleOld: function(request, response, next) {
+		response.render('scheduler/schedule-old')
 	}
 }

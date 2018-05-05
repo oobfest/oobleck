@@ -1,0 +1,196 @@
+extends ../_layout
+block content
+	#vue-app.dash-boxes.container-fluid
+		.row
+			.col
+				a(@click.prevent="fullscreen" href="#") Toggle Navigation
+				.box.box-b(v-for="day in Object.keys(schedule)")
+					.box-head.box-bb.p-2(:class="day")
+						h4.mb-0 {{day | capitalize}}
+						small 
+							a(@click.prevent="addVenue(day, 'fallout')" href="#") Add Venue
+
+					table.table.box-table.schedule
+						thead
+							tr
+								th.text-center(v-for='venue in Object.keys(schedule[day])')
+									img(:src="venue | logoify" ,:alt="venue | capitalize" width="50px" height="auto")
+									p.mb-0
+										small
+											a(@click.prevent="stub" href="#") Remove Venue
+						tbody
+							tr
+								td(v-for='venue in Object.keys(schedule[day])')
+									.slot.time-slot(v-for='show in Object.keys(schedule[day][venue])')
+										p.mb-0.time(:class="day") {{schedule[day][venue][show].time}}
+											small.float-right
+												a(@click.prevent="stub" href="#") remove show
+										.row.no-gutters.justify-content-between.host-slot
+											.col-xs-6(v-show="schedule[day][venue][show].host")
+												em Host: {{schedule[day][venue][show].host}}
+											.col-xs-6(v-show="schedule[day][venue][show].host")
+												small
+													a(@click.prevent="stub" href="#") remove host
+											.col-xs-6(v-show="!(schedule[day][venue][show].host)")
+												em No Host
+											.col-xs-6(v-show="!(schedule[day][venue][show].host)")
+												small
+													a(@click.prevent="stub" href="#") add host
+										.row.no-gutters.justify-content-between.act-slot(v-for='act in schedule[day][venue][show].acts')
+											.col-xs-4
+												strong 
+													a(@click.prevent="stub" href="#") {{act.name}}
+												| &nbsp;
+												em.badge(:class="getClass(act.type)") {{act.type | capitalize}}
+											.col-xs-4
+												span(v-for="review in act.reviews")
+													.score(:class="getBadge(review)")
+											.col-xs-4
+												small
+													a(@click.prevent="stub" href="#").float-right remove act
+										small.d-block.text-right
+											a(@click.prefent="stub" href="#") + add act
+
+							tr
+								td(v-for='venue in Object.keys(schedule[day])')
+									button.btn.btn-sm.btn-outline-primary.btn-block + add show
+									
+	
+	script(src="/js/axios.min.js")
+	script(src="/js/vue.js")
+	script.
+		new Vue({
+			el: "#vue-app",
+			data() {
+				return {
+					isFullscreen: false,
+					submissions: [],
+					schedule: {
+						tuesday: {
+							coldtowne: {
+								1: {
+									time: "7:00",
+									host: "Dave Buckman",
+									acts: [
+										{name: 'Frank Mills', type:'improv', reviews: [-1, 1, 0]},
+										{name: 'Loverboy', type: 'sketch', reviews: [-1, -1]}
+									]
+								},
+								2: {
+									time: "8:30",
+									host: "Dave Buckman",
+									acts: [
+										{name: 'Movie Riot', type: 'standup', reviews: [ 1, 2]},
+										{name: 'SheSheSheShe', type: 'podcast', reviews: [1, 1, 0]}
+									]
+								}
+							},
+							hideoutUp: {
+								1: {
+									time: "8:00",
+									host: "Asaf Ronen",
+									acts: [
+										{name: 'PGraph', type: 'other', reviews: [2, 1, 0]},
+										{name: 'Minority Report', type: 'variety', reviews: [-1, -1, 0]}
+									]
+								},
+								2: {
+									time: "10:00",
+									host: "Asaf Ronen",
+									acts: []
+								}
+							},
+							fallout: {
+								1: {
+									time: "9:00",
+									host: null,
+									acts: []
+								}
+							}
+						},
+						wednesday: {
+							coldtowne: {},
+							hideout: {}
+						},
+						thursday: {},
+						friday: {},
+						saturday: {},
+						sunday: {},
+						monday: {}
+					}
+				}
+			},
+			methods: {
+				fullscreen() {
+					if(this.isFullscreen) {
+						document.getElementById("dash-nav").style.display = 'flex';
+						document.getElementsByTagName("main")[0].style["margin-left"] = '206px'
+						document.getElementsByClassName('dash-toolbar')[0].style.left = '206px'
+					}
+					else {
+						document.getElementById("dash-nav").style.display = 'none';
+						document.getElementsByTagName("main")[0].style["margin-left"] = 0
+						document.getElementsByClassName('dash-toolbar')[0].style.left = 0
+					}
+					this.isFullscreen = !this.isFullscreen
+				},
+				getClass(showType) {
+					switch(showType) {
+						case 'improv': 	return 'badge-improv'
+						case 'sketch': 	return 'badge-sketch'
+						case 'standup': return 'badge-standup'
+						case 'podcast': return 'badge-podcast'
+						case 'other': 	return 'badge-other'
+						case 'variety': return 'badge-variety'
+
+					}
+				},
+				getBadge(review) {
+					switch(review) {
+						case -1: return 'veto'
+						case  0: return 'nah'
+						case  1: return 'meh'
+						case  2: return 'yes'
+					}
+				},
+				addVenue(day, venue) {
+					if(typeof this.schedule[day][venue] == 'undefined')
+						this.$set(this.schedule[day], venue, {})
+					else
+						alert("Venue already added")
+				},
+				stub() {
+					alert("Clicky")
+				}
+			},
+			filters: {
+				capitalize(string) {
+					if (string=='coldtowne') return 'ColdTowne'
+					if (string=='spiderHouse') return 'Spider House'
+					else return string.charAt(0).toUpperCase() + string.slice(1)
+				},
+				logoify(theater) {
+					switch(theater) {
+						case 'coldtowne': return '/img/venues/coldtowne.png'
+						case 'hideout': 
+						case 'hideoutUp':
+						case 'hideoutDown': return '/img/venues/hideout.png'
+						case 'fallout': return '/img/venues/fallout.png'
+						case 'spiderHouse': return '/img/venues/spider-house.png'
+						default: return ''
+					}
+				}
+			},
+			mounted() {
+				let self = this
+				axios
+					.get("/api/submissions")
+					.then(function(response) {
+						self.submissions = response.data.filter(rd=> rd.paymentInfo)						
+					})
+					.catch(function(error) {
+						self.submissions = []
+					})
+				self.fullscreen()
+			}
+		})
