@@ -4,7 +4,82 @@ block content
 		.row
 			.col
 				a(@click.prevent="toggleFullscreen" href="#") Toggle Navigation
-				day(v-for="(days, key) in schedule" ,:name="days.name" ,:venues="days.venues" ,:key="key")
+				day(v-for="(day, key) in days" 
+					:name="day.name" 
+					:venues="day.venues" 
+					:key="key"
+					@add-venue-modal="addVenueDay = $event"
+					@add-show-modal="addShowModal = $event"
+					@add-act-modal="addActModal.day = $event.day, addActModal.venue=$event.venue, addActModal.time=$event.time")
+
+		#add-venue-modal.modal
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h5.modal-title Add Venue
+						button.close(type="button" data-dismiss="modal")
+							span &times;
+					.modal-body
+						form(@submit.prevent="addVenue")
+							.form-group
+								label.col-form-label(for="add-venue-day") Day
+								
+							.form-group
+								label.col-form-label(for="add-venue-name") Venue
+								select#add-venue-name.form-control(v-model="addVenueName") 
+									option(v-for="venue in venues") {{venue}}
+					.modal-footer
+						button.btn.btn-primary(type="button" @click="addVenue") Add
+						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
+
+		#add-show-modal.modal
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h5.modal-title Add Show
+						button.close(type="button" data-dismiss="modal")
+							span &times;
+					.modal-body
+						.form-group
+							label.col-form-label(for="add-show-modal-day") Day
+							input#add-show-modal-day.form-control(type="texct" readonly v-model="addShowModal.day")
+						.form-group
+							label.col-form-label(for="add-show-modal-venue") Venue
+							input#add-show-modal-venue.form-control(type="texct" readonly v-model="addShowModal.venue")
+						.form-group
+							label.col-form-label(for="add-show-time") Time
+							input#add-show-time.form-control(type="number" min="100" max="1259" v-model="addShowModal.time")
+					.modal-footer
+						button.btn.btn-primary(type="button" @click="addShow") Add
+						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
+
+		#add-act-modal.modal
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h5.modal-title Add Act
+						button.close(type="button" data-dismiss="modal")
+							span &times;
+					.modal-body
+						form(@submit.prevent)
+							.form-group
+								label.col-form-label(for="add-act-modal-day") Day
+								input#add-act-modal-day.form-control(type="text" readonly v-model="addActModal.day")
+							.form-group
+								label.col-form-label(for="add-act-modal-venue") Venue
+								input#add-act-modal-venue.form-control(type="text" readonly v-model="addActModal.venue")
+							.form-group
+								label.col-form-label(for="add-act-modal-time") Time
+								input#add-act-modal-time.form-control(type="text" readonly v-model="addActModal.time")
+							.form-group
+								label.col-form-label(for="add-act-modal-name") Name
+								input#add-act-modal-name.form-control(v-model="addActModal.name")
+							.form-group
+								label.col-form-label(for="add-act-modal-type") Type
+								input#add-act-modal-type.form-control(v-model="addActModal.type")
+					.modal-footer
+						button.btn.btn-primary(type="button" @click="addAct") Add
+						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
 
 	script(src="/js/axios.min.js")
 	script(src="/js/vue.js")
@@ -15,28 +90,36 @@ block content
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	script#day-template(type="text/x-template")
 		.box.box-b
-			.box-head.box-bb.p-2.wednesday
+			.box-head.box-bb.p-2.highlight
 				h4.mb-0 {{name}}
 				small 
-					a(@click.prevent="stub" href="#") Add Venue
+					a(data-toggle="modal" data-target="#add-venue-modal" href="#" @click="setAddVenueDay(name)") + add venue
 
 			table.table.box-table.schedule
 				thead
 					tr
-						venue(v-for="(venue, key) in venues" ,:name="venue.name" ,:key="key")
+						venue(v-for="(venue, key) in venues" ,:name="venue" ,:day="name" ,:key="key")
 				tbody
 					tr
-						td.shows(v-for="venue in venues")
-							show(v-for="(show, key) in venue.shows" 
-								:time="show.time" 
-								:host="show.host" 
-								:acts="show.acts" 
-								:key="key")
+						td(v-for="venue in venues")
+							shows(:venue="venue" ,:day="name")
+					tr
+						td(v-for='venue in venues').text-center
+							small
+								a(@click.prevent="addShow(name, venue)" href="#" data-toggle="modal" data-target="#add-show-modal") + add show
 
 	script.
 		Vue.component('day', {
 			template: '#day-template',
-			props: ['name', 'venues']
+			props: ['name', 'venues'],
+			methods: {
+				setAddVenueDay(name) {
+					this.$emit('add-venue-modal', name)
+				},
+				addShow(day, venue) {
+					this.$emit('add-show-modal', {day, venue})
+				}
+			}
 		})
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,60 +130,67 @@ block content
 			img(:alt="name" width="50px" height="auto")
 			p.mb-0
 				small
-					a(@click.prevent="stub" href="#") Remove Venue
+					a(@click.prevent="removeVenue(day, name)" href="#") - remove venue
 
 	script.
 		Vue.component('venue', {
 			template: '#venue-template',
-			props: ['name', 'image']
+			props: ['name', 'day', 'image'],
+			methods: {
+				removeVenue(day, venue) {
+					if (confirm("Remove " + venue + "?")) {
+						store.commit('removeVenue', {day, venue})
+					}
+				}
+			}
 		})
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	// SHOW //////////////////////////////////////////////////////////////////////////////////////
+	// SHOWS //////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////
-	script#show-template(type="text/template")
-		.slot.time-slot
-			p.mb-0.time.wednesday {{time}}
-				small.float-right
-					a(@click.prevent="stub" href="#") remove show
-			.row.no-gutters.justify-content-between.host-slot(v-if="host")
-				.col-xs-6
-					em Host: {{host}}
-				.col-xs-6
-					small
-						a(@click.prevent="stub" href="#") remove host
-			.row.no-gutters.justify-content-between.host-slot(v-else)
-				.col-xs-6
-					em No Host
-				.col-xs-6
-					small
-						a(@click.prevent="stub" href="#") add host
-			act(v-for="(act, key) in acts" ,:key="key" ,:name="act.name" ,:type="act.type")
-			small.d-block.text-right
-				a(@click.prevent="addAct" href="#") + add act
+	script#shows-template(type="text/template")
+		.shows
+			.show(v-for="show in shows")
+				.slot.time-slot
+					p.mb-0.time.highlight 
+						span.code {{show.time}}
+						small.float-right
+							a(@click.prevent="removeShow(show.time)" href="#") - remove show
+					.row.no-gutters.justify-content-between.host-slot(v-if="show.host")
+						.col-xs-6
+							em Host: {{show.host}}
+						.col-xs-6
+							small
+								a(@click.prevent="stub" href="#") remove host
+					//.row.no-gutters.justify-content-between.host-slot(v-else)
+						.col-xs-6
+							em No Host
+						.col-xs-6
+							small
+								a(@click.prevent="stub" href="#") + add host
+					act(v-for="(act, key) in show.acts" ,:key="key" ,:name="act.name" ,:type="act.type" ,:time="show.time")
+					small.d-block.text-right
+						a(@click.prevent="addActModal(show.time)" href="#" data-toggle="modal" data-target="#add-act-modal") + add act
 
 
 	script.
-		Vue.component('show', {
-			template: '#show-template',
-			props: {
-				time: {
-					type: String,
-					required: true
-				},
-				host: {
-					type: String,
-					default: null
-				},
-				acts: {
-					type: Array,
-					default() {return []}
+		Vue.component('shows', {
+			template: '#shows-template',
+			props: ['day', 'venue'],
+			computed: {
+				shows() {
+					return store.getters.getShows(this.day, this.venue)
 				}
 			},
 			methods: {
-				addAct() {
-					this.$emit('addAct')
+				addActModal(time) {
+					this.$parent.$emit('add-act-modal', {day:this.day, venue:this.venue, time})
+				},
+				removeShow(time) {
+					if (confirm("Remove " + time + " show?")) {
+						store.commit('removeShow', {day:this.day, venue:this.venue, time})
+					}
 				}
 			}
 		})
@@ -117,61 +207,133 @@ block content
 				em.badge {{type}}
 			.col-xs-6
 				small
-					a(@click.prevent="stub" href="#").float-right remove act
+					a(@click.prevent="removeAct" href="#").float-right - remove act
 
 	script.
 		Vue.component('act', {
 			template: '#act-template',
-			props: ['name', 'type']
+			props: ['time', 'name', 'type'],
+			methods: {
+				removeAct() {
+					if (confirm("Remove " + this.name + "?")) {
+						store.commit('removeAct', {
+							day: this.$parent.day,
+							venue: this.$parent.venue,
+							time: this.time,
+							name: this.name
+						})
+					}
+				}
+			}
 		})
-
 
 
 	script.
 
 		const store = new Vuex.Store({
 			state: {
-				schedule: [
-					{name: 'Tuesday', venues: [
-						{name: 'Hideout', shows: [
-							{time: '7pm', host: 'Dave Buckman', acts: [
-								{name: 'Frank Mills', type:'Improv'},
-								{name: 'Physics Curse', type: 'Sketch'}
-							]},
-							{time: '10pm', host: 'Asaf Ronen', acts: [
-								{name: 'Channel 2', type:'Improv'},
-								{name: 'Katie Stone', type:'Stand-Up'}]}
-						]},
-					 	{name: 'ColdTowne', shows: []},
-						{name: 'Fallout', shows: [
-							{time: '7:30pm', acts: []},
-							{time: '11pm', host: 'Asaf Ronen', acts: []}
-						]}
+				days: [
+					{name: 'Tuesday', venues: ['Hideout Upstairs', 'Hideout Downstairs']},
+					{name: 'Wednesday', venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne']},
+					{name: 'Thursday', venues: ['Hideout Upstairs']},
+					{name: 'Friday', venues: ['Hideout Upstairs']},
+					{name: 'Saturday', venues: ['Hideout Upstairs']},
+					{name: 'Sunday', venues: ['Hideout Upstairs']},
+					{name: 'Monday', venues: ['Hideout Downstairs']},
+				],
+				shows: [
+					{day: 'Tuesday', venue: 'Hideout Upstairs', time: 700, acts: [
+						{name: 'Frank Mills', type: 'Improv'},
 					]},
-					{name: 'Wednesday', venues: [
-						{name: 'Hideout', shows: [
-							{time: '10:30pm'}]
-						}
-					]}
-				]
+				],
+			},
+			getters: {
+				getDays: (state)=> {
+					return state.days
+				},
+				getShows: (state)=> (day, venue)=> {
+					return state.shows.filter(show=> (show.day === day && show.venue === venue))
+				}
 			},
 			mutations: {
-				addAct(state, day, venue, show) {
-
+				addVenue: (state, payload)=> {
+					let i = state.days.findIndex(day=> day.name === payload.day)
+					state.days[i].venues.push(payload.venue)
+				},
+				removeVenue: (state, payload)=> {
+					let i = state.days.findIndex(day=> day.name === payload.day)
+					let j = state.days[i].venues.findIndex(venue=> venue === payload.venue)
+					state.days[i].venues.splice(j, 1)
+				},
+				addShow: (state, payload)=> {
+					state.shows.push({day: payload.day, venue: payload.venue, time: payload.time, acts: []})
+					state.shows.sort((a,b)=> a.time - b.time)
+				},
+				removeShow: (state, payload)=> {
+					let i = state.shows.findIndex(show=> (
+						show.day===payload.day && 
+						show.venue===payload.venue && 
+						show.time===payload.time))
+					state.shows.splice(i, 1)
+					state.shows.sort((a,b)=> a.time - b.time)
+				},
+				addAct: (state, payload)=> {
+					let i = state.shows.findIndex(show=> (
+						show.day===payload.day && 
+						show.venue===payload.venue && 
+						show.time===payload.time))
+					state.shows[i].acts.push({name: payload.name, type: payload.type})
+				},
+				removeAct: (state, payload)=> {
+					let i = state.shows.findIndex(show=> (
+						show.day===payload.day &&
+						show.venue===payload.venue &&
+						show.time===payload.time))
+					let j = state.shows[i].acts.findIndex(act=> act.name === payload.name)
+					state.shows[i].acts.splice(j, 1)
 				}
 			}
 		})
 
-
-		new Vue({ 
+		let app = new Vue({ 
 			el: "#vue-app",
 			data() { 
 				return {
 					isFullscreen: false,
-					schedule: store.state.schedule
+					venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne'],
+					addVenueDay: "",
+					addVenueName: "",
+					addShowModal: {day:"", venue:"", time:""},
+					addActModal: {day:"", venue:"", time:"", name:"", type:""},
+
+				}
+			},
+			store: store,
+			computed: {
+				days() {
+					return this.$store.getters.getDays
+				},
+				shows() {
+					return this.$store.getters.getShows('Tuesday', 'Hideout Upstairs')
 				}
 			},
 			methods: {
+				addVenue() {
+					if(this.addVenueName !== '') {
+						$("#add-venue-modal").modal('hide')
+						store.commit('addVenue', {day: this.addVenueDay, venue: this.addVenueName})
+						this.addVenueName = ""
+						this.addVenueDay = ""					
+					}
+				},
+				addShow() {
+					$("#add-show-modal").modal('hide')
+					store.commit('addShow', this.addShowModal)
+				},
+				addAct() {
+					$('#add-act-modal').modal('hide')
+					store.commit('addAct', this.addActModal)
+				},
 				toggleFullscreen() {
 					if(this.isFullscreen) {
 						document.getElementById("dash-nav").style.display = 'flex';

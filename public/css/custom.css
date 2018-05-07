@@ -83,6 +83,7 @@ a:hover { color: #016ff9; }
 .box-head.saturday, 	.time.saturday	{background-color:rgb( 66,146,198); color: white;} 
 .box-head.sunday, 		.time.sunday	{background-color:rgb( 33,113,181); color: white;} 
 .box-head.monday, 		.time.monday	{background-color:rgb(  8, 69,148); color: white;}
+.box-head.highlight,	.time.highlight {background-color:rgb(198,219,239)} 
 
 .score { 
 	display: inline-block; 
