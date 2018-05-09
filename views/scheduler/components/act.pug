@@ -1,0 +1,46 @@
+script#act-template(type="text/template")
+	.row.no-gutters.justify-content-between.act-slot
+		.col-xs-6
+			strong(data-toggle="popover" data-trigger="hover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?") 
+				a(@click.prevent="actDetailsModal" href="#" data-target="#act-details-modal" data-toggle="modal") {{submission.actName}}
+			| &nbsp;
+			em.badge(:class="getClass(submission.showType)") {{submission.showType}}
+		.col-xs-6
+			small(v-show="$root.show")
+				a(@click.prevent="removeAct" href="#").float-right - remove act
+
+script.
+	Vue.component('act', {
+		template: '#act-template',
+		props: ['time', 'domain', 'type'],
+		methods: {
+			removeAct() {
+				if (confirm("Remove " + this.submission.actName + "?")) {
+					store.commit('removeAct', {
+						day: this.$parent.day,
+						venue: this.$parent.venue,
+						time: this.time,
+						domain: this.domain
+					})
+				}
+			},
+			getClass(showType) {
+				switch(showType) {
+					case 'Improv': 	return 'badge-improv'
+					case 'Sketch': 	return 'badge-sketch'
+					case 'Stand-Up': return 'badge-standup'
+					case 'Podcast': return 'badge-podcast'
+					case 'Other': 	return 'badge-other'
+					case 'Variety': return 'badge-variety'
+				}
+			},
+			actDetailsModal() {
+				this.$parent.$parent.$emit('act-details-modal', this.submission)
+			}
+		},
+		computed: {
+			submission() {
+				return this.$root.submissions.find(s=> s.domain == this.domain)
+			}
+		}
+	})

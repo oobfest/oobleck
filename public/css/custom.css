@@ -83,7 +83,9 @@ a:hover { color: #016ff9; }
 .box-head.saturday, 	.time.saturday	{background-color:rgb( 66,146,198); color: white;} 
 .box-head.sunday, 		.time.sunday	{background-color:rgb( 33,113,181); color: white;} 
 .box-head.monday, 		.time.monday	{background-color:rgb(  8, 69,148); color: white;}
-.box-head.highlight,	.time.highlight {background-color:rgb(198,219,239)} 
+.box-head.highlight,	.time.highlight {background-color:rgb(158,202,225)} 
+.box-head.highlight2,	.time.highlight2{background-color:#353844; color: white}
+.highlight2 a { color: white; }
 
 .score { 
 	display: inline-block; 
@@ -110,3 +112,5 @@ a:hover { color: #016ff9; }
 .slot { display: block; }
 .act-slot:hover, .host-slot:hover { background-color: yellow; }
 .time-slot { margin-bottom: 1em; }
+
+.modal-lg { max-width: 1200; }

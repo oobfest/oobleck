@@ -1,0 +1,33 @@
+script#day-template(type="text/x-template")
+	.box.box-b
+		.box-head.box-bb.p-2.highlight2
+			h4.mb-0 {{name}}
+			small(v-show="$root.show")
+				a(data-toggle="modal" data-target="#add-venue-modal" href="#" @click="setAddVenueDay(name)") + add venue
+
+		table.table.box-table.schedule
+			thead
+				tr
+					venue(v-for="(venue, key) in venues" ,:name="venue" ,:day="name" ,:key="key")
+			tbody
+				tr
+					td(v-for="venue in venues")
+						shows(:venue="venue" ,:day="name")
+				tr(v-show="$root.show")
+					td(v-for='venue in venues').text-center
+						small
+							a(@click.prevent="addShow(name, venue)" href="#" data-toggle="modal" data-target="#add-show-modal") + add show
+
+script.
+	Vue.component('day', {
+		template: '#day-template',
+		props: ['name', 'venues'],
+		methods: {
+			setAddVenueDay(name) {
+				this.$emit('add-venue-modal', name)
+			},
+			addShow(day, venue) {
+				this.$emit('add-show-modal', {day, venue})
+			}
+		}
+	})

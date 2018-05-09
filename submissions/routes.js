@@ -92,8 +92,29 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 			let theatery = _.countBy(theaters)
 			let theateryFiltered = _.pickBy(theatery, (value, key)=> {return (value>1)})
 
+			let performers = []
+			for(let i=0; i<submissions.length; i++) {
+				performers.push({
+					performerName: submissions[i].primaryContactName, 
+					actName: submissions[i].actName,
+					role: submissions[i].primaryContactRole,
+					actType: submissions[i].showType,
+					location: submissions[i].city + ", " + submissions[i].state
+				})
+				for(let j=0; j<submissions[i].additionalMembers.length; j++) {
+					performers.push({
+						performerName: submissions[i].additionalMembers[j].name,
+						actName: submissions[i].actName,
+						role: submissions[i].additionalMembers[j].role,
+						actType: submissions[i].showType,
+						location: submissions[i].city + ", " + submissions[i].state
+					})
+				}
+			}
+
 			response.render('submissions/view-all', {
 				submissions: submissions, 
+				performers: performers,
 				percentReviewed: percentReviewed,
 				percentComplete: percentComplete,
 				totalReviewsCount: totalReviewsCount,

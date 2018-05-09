@@ -2,6 +2,7 @@
 	#charts-vue-app.dash-boxes.container-fluid
 		.row
 			.col
+				hr
 				ul.nav.nav-pills
 					li.nav-item
 						a#type-chart-link.nav-link(data-toggle="tab" href="#type-chart-pane") Show Type
@@ -9,6 +10,8 @@
 						a#hometown-chart-link.nav-link(data-toggle="tab" href="#hometown-chart-pane") Hometown
 					li.nav-item
 						a#theater-chart-link.nav-link(data-toggle="tab" href="#theater-chart-pane") Theater
+					li.nav-item
+						a#performers-link.nav-link(data-toggle="tab" href="#performers-pane") Performers
 				.tab-content
 					#type-chart-pane.tab-pane.fade
 						.m-3
@@ -43,6 +46,28 @@
 								input#theater-filter-4.form-check-input(type="radio" value="4" v-model="theaterFilter")
 								| 4+
 						#theater-chart
+					#performers-pane.tab-pane.fade
+						hr
+						//button.btn.btn-primary(type="button" @click="downloadPerformerSpreadsheet") Download Spreadsheet
+						.box.box-b
+							table.table.box-table
+								thead
+									tr
+										th Name
+										th Role
+										th Act
+										th Type
+										th Location
+
+								tbody
+									for performer in performers
+										tr
+											td=performer.performerName
+											td=performer.role
+											td=performer.actName
+											td=performer.actType
+											td=performer.location
+						
 
 	script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
 	script.
@@ -61,6 +86,11 @@
 				},
 				theaterFilter: function(value) {
 					drawChart(theaterChart.chart, createDataView(theaterChart.data, parseInt(value)))
+				}
+			},
+			methods: {
+				downloadPerformerSpreadsheet() {
+					alert("Todo")
 				}
 			}
 		})

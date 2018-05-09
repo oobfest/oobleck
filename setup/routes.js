@@ -9,6 +9,7 @@ module.exports = async function(app) {
 	// Setup
 	app.use('/api/hosts',		require('../hosts/api.routes'))
 	app.use('/api/submissions',	require('../submissions/api.routes'))
+	app.use('/api/shows',		require('../shows/api.routes'))
 
 	app.use('/', 			require('../login/routes'))
 	app.use('/', 			require('../email/routes'))

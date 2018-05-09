@@ -1,0 +1,19 @@
+script#venue-template(type="text/template")
+	th.text-center
+		img(:alt="name" width="50px" height="auto")
+		p.mb-0
+			small(v-show="$root.show")
+				a(@click.prevent="removeVenue(day, name)" href="#") - remove venue
+
+script.
+	Vue.component('venue', {
+		template: '#venue-template',
+		props: ['name', 'day', 'image'],
+		methods: {
+			removeVenue(day, venue) {
+				if (confirm("Remove " + venue + "?")) {
+					store.commit('removeVenue', {day, venue})
+				}
+			}
+		}
+	})

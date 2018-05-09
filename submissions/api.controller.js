@@ -70,7 +70,6 @@ module.exports = {
 	deleteReview: function(request, response, next) {
 		let submissionId = request.body.submissionId
 		let userId = request.body.userId
-		console.log("Params: ", submissionId, userId)
 		model.deleteReview(submissionId, userId, (error)=> {
 			if(error) next(error)
 			else response.send("Success!")
