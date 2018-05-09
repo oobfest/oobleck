@@ -191,13 +191,18 @@ router.post('/add-image/:objectId', (request, response)=> {
 
 router.get('/review', isLoggedIn, (request, response, next)=> {
 
-	let callback = function(error, submissions) {
+	let callback = function(error, submissions, votes) {
 		if(error) next(error)
-		else response.render('submissions/review-submissions', {submissions: submissions})
+		else {
+			let username = request.user.username
+			let votes = getVotes(submissions, username)
+			response.render('submissions/review-submissions', {submissions: submissions, votes: votes})
+		}
 	}
 
 	// Behavior depends on role
 	let userRoles = request.user.roles
+
 
 	if (userRoles.includes('schedule')) {
 		submissionModel.getAllPaid((error, submissions)=> {
@@ -218,6 +223,25 @@ router.get('/review', isLoggedIn, (request, response, next)=> {
 		next(new Error("You do not have permission to do that :("))
 	}
 })
+
+function getVotes(submissions, username) {
+	let releventSubmissions = []
+	let votes = {yes:0, meh:0, nah:0, veto:0}
+	for(let i=0; i<submissions.length; i++) {
+		for(let j=0; j<submissions[i].reviews.length; j++) {
+			if (submissions[i].reviews[j].username === username) {
+				releventSubmissions.push(submissions[i])
+				switch(submissions[i].reviews[j].score) {
+					case  2: votes.yes++;  break;
+					case  1: votes.meh++;  break;
+					case  0: votes.nah++;  break;
+					case -1: votes.veto++; break;
+				}
+			}
+		}
+	}
+	return votes
+}
 
 router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId

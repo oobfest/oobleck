@@ -5,7 +5,7 @@ script#shows-template(type="text/template")
 				p.mb-0.time.highlight 
 					span.code {{show.time | time}}
 					small.float-right(v-show="$root.show")
-						a(@click.prevent="removeShow(show.time)" href="#") - remove show
+						a(@click.prevent="removeShow(show._id)" href="#") - remove show
 				.row.no-gutters.justify-content-between.host-slot(v-if="show.host")
 					.col-xs-6
 						em Host: {{show.host}}
@@ -37,10 +37,12 @@ script.
 			addActModal(time) {
 				this.$parent.$emit('add-act-modal', {day:this.day, venue:this.venue, time})
 			},
-			removeShow(time) {
-				time = time.toString()
-				if (confirm("Remove " + time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm" + " show?")) {
-					store.commit('removeShow', {day:this.day, venue:this.venue, time})
+			removeShow(id) {
+				if (confirm("Remove show?")) {
+					axios
+						.delete("/api/shows/" + id)
+						.then(store.commit('removeShow', id))
+						.catch(function(error) {alert("Failed to delete show")})
 				}
 			}
 		},

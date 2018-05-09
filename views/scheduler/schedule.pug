@@ -141,28 +141,29 @@ block content
 
 		const store = new Vuex.Store({
 			state: {
-				days: [
-					{name: 'Tuesday', venues: ['Hideout Upstairs', 'Hideout Downstairs']},
-					{name: 'Wednesday', venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne']},
-					{name: 'Thursday', venues: ['Hideout Upstairs']},
-					{name: 'Friday', venues: ['Hideout Upstairs']},
-					{name: 'Saturday', venues: ['Hideout Upstairs']},
-					{name: 'Sunday', venues: ['Hideout Upstairs']},
-					{name: 'Monday', venues: ['Hideout Downstairs']},
-				],
+				days: [],
 				shows: [],
 			},
 			getters: {
 				getDays: (state)=> {
 					return state.days
 				},
+				getAllShows: (state)=> {
+					return state.shows
+				},
 				getShows: (state)=> (day, venue)=> {
 					return state.shows.filter(show=> (show.day === day && show.venue === venue))
 				}
 			},
 			mutations: {
-				initialize: (state, payload)=> {
+				initializeShows: (state, payload)=> {
 					state.shows = payload
+					state.shows.sort((a,b)=> a.time - b.time)
+				},
+				initializeVenues: (state, payload)=> {
+					state.days = payload
+					for(let i=0; i<state.days; i++)
+						state.days[i].venues.sort()
 				},
 				addVenue: (state, payload)=> {
 					let i = state.days.findIndex(day=> day.name === payload.day)
@@ -173,18 +174,21 @@ block content
 					let i = state.days.findIndex(day=> day.name === payload.day)
 					let j = state.days[i].venues.findIndex(venue=> venue === payload.venue)
 					state.days[i].venues.splice(j, 1)
+
 				},
 				addShow: (state, payload)=> {
-					state.shows.push({day: payload.day, venue: payload.venue, time: payload.time, acts: []})
+					state.shows.push({
+						__v: payload.__v,
+						_id: payload._id,
+						day: payload.day, 
+						venue: payload.venue, 
+						time: payload.time, 
+						acts: []})
 					state.shows.sort((a,b)=> a.time - b.time)
 				},
 				removeShow: (state, payload)=> {
-					let i = state.shows.findIndex(show=> (
-						show.day===payload.day && 
-						show.venue===payload.venue && 
-						show.time===payload.time))
-					state.shows.splice(i, 1)
-					state.shows.sort((a,b)=> a.time - b.time)
+					let showIndex = state.shows.findIndex(show=> (show._id === payload))
+					state.shows.splice(showIndex, 1)
 				},
 				addAct: (state, payload)=> {
 					let i = state.shows.findIndex(show=> (
@@ -225,7 +229,7 @@ block content
 					return this.$store.getters.getDays
 				},
 				shows() {
-					return this.$store.getters.getShows('Tuesday', 'Hideout Upstairs')
+					return this.$store.getters.getAllShows
 				}
 			},
 			methods: {
@@ -241,7 +245,7 @@ block content
 					$("#add-show-modal").modal('hide')
 					axios
 						.post("/api/shows", this.addShowModal)
-						.then(store.commit('addShow', this.addShowModal))
+						.then(function(response) {store.commit('addShow', response.data)})
 						.catch(function(error) {alert("Error getting shows :(")})
 				},
 				addAct() {
@@ -282,6 +286,8 @@ block content
 			created() {
 				let self = this
 				self.toggleFullscreen()
+
+				// Get Submissions
 				axios
 					.get("/api/submissions")
 					.then(function(response) {
@@ -291,10 +297,22 @@ block content
 						self.submissions = []
 					})
 
+				let fake = [
+					{name: 'Tuesday', venues: ['Hideout Upstairs', 'Hideout Downstairs']},
+					{name: 'Wednesday', venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne']},
+					{name: 'Thursday', venues: ['Hideout Upstairs']},
+					{name: 'Friday', venues: ['Hideout Upstairs']},
+					{name: 'Saturday', venues: ['Hideout Upstairs']},
+					{name: 'Sunday', venues: ['Hideout Upstairs']},
+					{name: 'Monday', venues: ['Hideout Downstairs']}
+				]
+				store.commit('initializeVenues', fake)
+
+				// Get Shows
 				axios
 					.get("/api/shows")
 					.then(function(response) {
-						store.commit('initialize', response.data.sort((a,b)=> a.order - b.order))
+						store.commit('initializeShows', response.data)
 					})
 					.catch(function(error) {
 						alert("Error getting shows :(")

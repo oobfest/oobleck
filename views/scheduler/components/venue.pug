@@ -1,7 +1,9 @@
 script#venue-template(type="text/template")
 	th.text-center
-		img(:alt="name" width="50px" height="auto")
-		p.mb-0
+		img(:src="name | logoify" ,:alt="name" width="50px" height="auto")
+		p.m-0(style="line-height:1")
+			small {{name}}
+			br
 			small(v-show="$root.show")
 				a(@click.prevent="removeVenue(day, name)" href="#") - remove venue
 
@@ -15,5 +17,19 @@ script.
 					store.commit('removeVenue', {day, venue})
 				}
 			}
+		},
+		filters: {
+			logoify(theater) {
+				switch(theater) {
+					case 'ColdTowne': return '/img/venues/coldtowne.png'
+					case 'Hideout': 
+					case 'Hideout Downstairs':
+					case 'Hideout Upstairs': return '/img/venues/hideout.png'
+					case 'Fallout': return '/img/venues/fallout.png'
+					case 'Spider House': return '/img/venues/spider-house.png'
+					default: return ''
+				}
+			},
+
 		}
 	})
