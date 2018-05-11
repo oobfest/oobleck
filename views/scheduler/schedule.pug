@@ -281,7 +281,11 @@ block content
 				},
 				imgur(url) {
 					return url? url.substr(0, url.length-4) + 'b.jpeg' : ''
-				}
+				},
+				time(time) {
+					time = time.toString()
+					return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+				},
 			},
 			created() {
 				let self = this

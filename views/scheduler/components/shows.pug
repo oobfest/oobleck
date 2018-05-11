@@ -2,7 +2,7 @@ script#shows-template(type="text/template")
 	.shows
 		.show(v-for="show in shows")
 			.slot.time-slot
-				p.mb-0.time.highlight 
+				p.mb-0.time.box 
 					span.code {{show.time | time}}
 					small.float-right(v-show="$root.show")
 						a(@click.prevent="removeShow(show._id)" href="#") - remove show

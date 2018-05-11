@@ -4,10 +4,11 @@ script#act-template(type="text/template")
 			strong(data-toggle="popover" data-trigger="hover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?") 
 				a(@click.prevent="actDetailsModal" href="#" data-target="#act-details-modal" data-toggle="modal") {{submission.actName}}
 			| &nbsp;
-			em.badge(:class="getClass(submission.showType)") {{submission.showType}}
+			em.badge(v-show="$root.show", :class="getClass(submission.showType)") {{submission.showType}}
 		.col-xs-6
 			small(v-show="$root.show")
 				a(@click.prevent="removeAct" href="#").float-right - remove act
+			em.badge(v-show="!$root.show", :class="getClass(submission.showType)") {{submission.showType}}
 
 script.
 	Vue.component('act', {

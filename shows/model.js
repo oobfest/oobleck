@@ -47,6 +47,17 @@ module.exports = {
 				callback(error, show)
 			})
 		})
-	}
+	},
 
+	addAct: function(id, act, callback) {
+		this.get(id, (error, show)=> {
+			if(error) callback(error)
+			else {
+				show.acts.push(act)
+				this.save(show, (error, savedShow)=> {
+					callback(error, savedShow)
+				})
+			}
+		}
+	}
 }

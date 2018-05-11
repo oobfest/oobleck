@@ -1,6 +1,6 @@
 script#day-template(type="text/x-template")
 	.box.box-b
-		.box-head.box-bb.p-2.highlight2
+		.box-head.box-bb.p-2
 			h4.mb-0 {{name}}
 			small(v-show="$root.show")
 				a(data-toggle="modal" data-target="#add-venue-modal" href="#" @click="setAddVenueDay(name)") + add venue
@@ -16,7 +16,7 @@ script#day-template(type="text/x-template")
 				tr(v-show="$root.show")
 					td(v-for='venue in venues').text-center
 						small
-							a(@click.prevent="addShow(name, venue)" href="#" data-toggle="modal" data-target="#add-show-modal") + add show
+							a.btn.btn-outline-primary.btn-block(@click.prevent="addShow(name, venue)" href="#" data-toggle="modal" data-target="#add-show-modal") + add show
 
 script.
 	Vue.component('day', {

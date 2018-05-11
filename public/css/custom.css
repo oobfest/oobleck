@@ -83,9 +83,6 @@ a:hover { color: #016ff9; }
 .box-head.saturday, 	.time.saturday	{background-color:rgb( 66,146,198); color: white;} 
 .box-head.sunday, 		.time.sunday	{background-color:rgb( 33,113,181); color: white;} 
 .box-head.monday, 		.time.monday	{background-color:rgb(  8, 69,148); color: white;}
-.box-head.highlight,	.time.highlight {background-color:rgb(158,202,225)} 
-.box-head.highlight2,	.time.highlight2{background-color:#353844; color: white}
-.highlight2 a { color: white; }
 
 .score { 
 	display: inline-block; 
@@ -105,7 +102,7 @@ a:hover { color: #016ff9; }
 .badge-other	{ color: white; background-color: #e41a1c; }
 
 .time { 
-	border-bottom: 1px solid black; 
+	border-bottom: 2px solid #35bd49; 
 	padding: 0.25rem; 
 }
 
