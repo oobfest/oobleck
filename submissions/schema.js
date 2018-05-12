@@ -55,7 +55,10 @@ let submissionSchema = mongoose.Schema({
 		username: String,
 		score: Number, 
 		notes: String
-	}]
+	}],
+
+	// State
+	state: String
 
 	// Mongoose loses the ability to auto-detect and save changes of Mixed type.
 	// To tell Mongoose that the value of a Mixed type has changed call `.markModified(path)`

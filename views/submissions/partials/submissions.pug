@@ -1,14 +1,39 @@
 #submissions.tab-pane.fade.show.active
 	#submissions-vue-app
-		h4.mt-3 #{submissions.length} Submissions,  
-			span.badge.badge-primary=reviewedSubmissionCount
+		-let total = reviewCount.reduce((a,b)=> a+b);
+		h4.mt-3 
+			strong.code #{submissions.length}
+			|  Submissions,
+			strong.code #{reviewedSubmissionCount}
 			|  Reviewed,  
-			span.badge.badge-success=completedSubmissionCount
+			strong.code #{completedSubmissionCount}
 			|  Completed.  
 
-		.progress.mb-3(style="height: 2em")
-			.progress-bar(style="width: " + (percentReviewed - percentComplete) + '%; height: 100px') 
-			.progress-bar.bg-success(style="width: " + percentComplete + '%') 
+		p.mt-3
+			for review, i in reviewCount
+			
+				if (i==1)
+					span #{i} review
+				else if(i==6)
+					span #{i}+ reviews
+				else 
+					span #{i} reviews
+				span.badge.m-2(class='progress-bar-bg-' + i) #{Math.round(((review/total)*100))}%
+				span | 
+				
+
+
+		.progress(style="height: 2em")
+			for review,i in reviewCount
+				-;let percent = ((review/total)*100);
+				.progress-bar(
+					style="width: " + percent + '%'
+					class='progress-bar-bg-' + i
+					data-toggle="tooltip" 
+					data-placement="top" 
+					title=Math.round(percent) + '%'
+				)= i === 6 ? i + '+' : i
+
 				
 		.box.box-b
 			table.table.box-table

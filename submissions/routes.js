@@ -33,6 +33,7 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 			let theaters = []
 			let reviewers = []
 			let reviews = {}
+			let reviewCount = [0,0,0,0,0,0,0]
 
 			for(let i=0; i<submissions.length; i++) {
 
@@ -42,6 +43,21 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 					reviewedSubmissionCount++
 				if(submissions[i].reviews.length >= 5)
 					completedSubmissionCount++
+
+				// REVIEWS (but detailed)
+				let numberOfReviews = submissions[i].reviews.length
+				if(numberOfReviews <= 5) reviewCount[numberOfReviews]++
+				else reviewCount[6]++
+
+				switch(submissions[i].reviews.length) {
+					case 0: reviewCount[0]++; break;
+					case 1: reviewCount[1]++; break;
+					case 2: reviewCount[2]++; break;
+					case 3: reviewCount[3]++; break;
+					case 4: reviewCount[4]++; break;
+					case 5: reviewCount[5]++; break;
+					default: 
+				}
 
 				// SHOW TYPES
 				switch(submissions[i].showType) {
@@ -127,7 +143,8 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 				filteredHometownCounts: filteredHometownCounts,
 				theaters: theatery,
 				theatersFiltered: theateryFiltered,
-				reviews: reviews
+				reviews: reviews,
+				reviewCount: reviewCount
 			})
 		}
 	})

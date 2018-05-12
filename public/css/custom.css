@@ -53,6 +53,14 @@ a:hover { color: #016ff9; }
 	color: #212529;
 }
 
+.progress-bar-bg-0 { background-color: #edf8fb; color: black;}
+.progress-bar-bg-1 { background-color: #ccece6; color: black;}
+.progress-bar-bg-2 { background-color: #99d8c9; color: black;}
+.progress-bar-bg-3 { background-color: #66c2a4; color: white;}
+.progress-bar-bg-4 { background-color: #41ae76; color: white;}
+.progress-bar-bg-5 { background-color: #238b45; color: white;}
+.progress-bar-bg-6 { background-color: #005824; color: white;}
+
 .arrow {
   display: inline-block;
   vertical-align: middle;

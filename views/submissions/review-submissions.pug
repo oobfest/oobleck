@@ -147,11 +147,14 @@ block content
 			mounted() {
 				let self = this
 				let url = '/api/submissions/'
-				if(self.userRoles.indexOf('schedule') !== -1) url+='getAllPaid'
+
+				// Check if standup-panelist before schedule
+				// So standup schedule doesn't see non-standup submissions to review
+				if(self.userRoles.indexOf('standup-panelist') !== -1) url+='getAllPaidStandup'
+				else if(self.userRoles.indexOf('schedule') !== -1) url+='getAllPaid'
 				else if(self.userRoles.indexOf('admin') !== -1) url+='getAllPaid'
-				else if(self.userRoles.indexOf('standup-panelist') !== -1) url+='getAllPaidStandup'
 				else if(self.userRoles.indexOf('panelist') !== -1) url+='getAllPaidExceptStandup'
-				console.log(self.userRoles, url)
+
 				axios
 					.get(url)
 					.then(function(response) {
