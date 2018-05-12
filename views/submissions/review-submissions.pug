@@ -8,8 +8,9 @@ block content
 		#vue-app
 			.row
 				.col-md
-					.card.text-center.mb-3(class=(votes.yes <= 12) ?'border-success' :'border-danger')
-						.card-body.text-success(class=(votes.yes <= 12) ?'text-success' :'text-danger')
+					-let maximumYeses = user.roles.includes('standup-panelist') ? 12 : 20
+					.card.text-center.mb-3(class=(votes.yes <= maximumYeses) ?'border-success' :'border-danger')
+						.card-body.text-success(class=(votes.yes <= maximumYeses) ?'text-success' :'text-danger')
 							p.card-title Yes 😍
 							h3.card-text=votes.yes
 				.col-md
