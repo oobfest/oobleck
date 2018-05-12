@@ -18,4 +18,8 @@ router.post('/add-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), contr
 router.post('/remove-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.removeTheaterTag)
 
 router.post('/standardize', isLoggedIn, isRole(['admin', 'schedule']), controller.standardize)
+
+router.post('/stamp-accept', isLoggedIn, isRole(['admin', 'schedule']), controller.stampAccept)
+router.post('/stamp-reject', isLoggedIn, isRole(['admin', 'schedule']), controller.stampAccept)
+
 module.exports = router

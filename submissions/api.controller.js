@@ -67,6 +67,22 @@ module.exports = {
 		})
 	},
 
+	stampAccept: function(request, response, next) {
+		let objectId = request.body.objectId
+		model.stampAccept(objectId, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
+	},
+
+	stampReject: function(request, response, next) {
+		let objectId = request.body.objectId
+		model.stampReject(objectId, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
+	},
+
 	deleteReview: function(request, response, next) {
 		let submissionId = request.body.submissionId
 		let userId = request.body.userId

@@ -1,0 +1,81 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title 
+				a.text-muted(href="/submissions/") Submissions
+				|  /
+				| Stamp
+
+	#vue-app.dash-boxes.container-fluid
+		.row
+			.col
+				.box.box-b
+					.box-head
+						h3 Pending
+					.box-table(style="border-top: 1px solid #c8c8c8")
+						table.table
+							thead
+								tr
+									th Act
+							tbody
+								tr(v-for="submission, key in unreviewedSubmissions")
+									td {{ submission.actName | shorten(42) }}
+									td 
+										button.btn.btn-secondary(type="button" @click.prevent="reject") Reject
+									td 
+										button.btn.btn-secondary(type="button" @click.prevent="accept") Accept
+
+				.box.box-b
+					table.table.box-table
+						thead
+							tr
+								th Act
+						tbody
+							tr(v-for="submission, key in reviewedSubmissions")
+								td {{ submission.actName | shorten(42) }}
+								td 
+									button.btn.btn-secondary(type="button" @click.prevent="reject") Reject
+								td 
+									button.btn.btn-secondary(type="button" @click.prevent="accept") Accept
+
+
+	script(src="/js/vue.js")
+	script(src="/js/axios.min.js")
+	script.
+
+		let vm = new Vue({
+			el: "#vue-app",
+			data() {
+				return {
+					unreviewedSubmissions: [],
+					reviewedSubmissions: []
+				}
+			},
+			methods: {
+				reject() {
+					alert("REJECT'D")
+				},
+				accept() {
+					alert("ACCEPT'D")
+				}
+			},
+			filters: {
+				shorten(value, characters) {
+				return value.length > characters
+					? value.substring(0,characters)+'...'
+					: value
+				}
+			},
+			mounted() {
+				let self = this
+				axios
+					.get('/api/submissions/getAllPaid')
+					.then(function(response) {
+						self.unreviewedSubmissions = response.data
+					})
+					.catch(function(error) {
+						self.unreviewedSubmissions = []
+					})
+			}
+		})

@@ -12,6 +12,10 @@ router.get('/standardize', isLoggedIn, isRole(['admin', 'schedule']), (request, 
 	response.render('submissions/standardize')
 })
 
+router.get('/stamp', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+	response.render('submissions/stamp')
+})
+
 router.get('/charts', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	response.render('submissions/charts')
 })
