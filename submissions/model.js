@@ -177,5 +177,29 @@ module.exports = {
 				})
 			}
 		})
+	},
+
+	stamp: function(objectId, stamp, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.stamp = stamp
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
+		})
+	},
+
+	stampAccept: function(objectId, callback) {
+		this.stamp(objectId, 'in', callback)
+	},
+
+	stampPurgatory: function(objectId, callback) {
+		this.stamp(objectId, undefined, callback)
+	},
+
+	stampReject: function(objectId, callback) {
+		this.stamp(objectId, 'out', callback)
 	}
 }

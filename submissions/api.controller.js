@@ -75,6 +75,14 @@ module.exports = {
 		})
 	},
 
+	stampPurgatory: function(request, response, next) {
+		let objectId = request.body.objectId
+		model.stampPurgatory(objectId, (error, submission)=> {
+			if(error) next(error)
+			else response.send(submission)
+		})
+	},
+
 	stampReject: function(request, response, next) {
 		let objectId = request.body.objectId
 		model.stampReject(objectId, (error, submission)=> {
