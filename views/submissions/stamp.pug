@@ -95,9 +95,9 @@ block content
 														span(v-for="review in submission.reviews") {{review.score | emojifyReview}}
 													h4 Notes
 													.form-group
-														textarea.form-control.code
+														textarea.form-control.code(v-model="submission.scheduleNotes")
 													.form-group
-														button.btn.btn-primary Save Notes
+														button.btn.btn-primary(type="button" @click="saveNotes(submission._id, submission.scheduleNotes)") Save Notes
 													table.table.table-striped.table-bordered
 														thead.thead-light
 															tr
@@ -253,9 +253,17 @@ block content
 						})
 				},
 
-				actDetailsModal(submission) {
-					this.submission = submission
-					$("#act-details-modal").modal('show')
+				saveNotes(objectId, note) {
+					let self = this
+					axios
+						.post('/api/submissions/add-note', {objectId: objectId, note: note})
+						.then(function(response) {
+							alert("Saved note")
+						})
+						.catch(function(error) {
+							alert("Error :(")
+							console.log(error)
+						})
 				}
 			},
 			filters: {

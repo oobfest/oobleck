@@ -91,6 +91,15 @@ module.exports = {
 		})
 	},
 
+	addNote: function(request, response, next) {
+		let objectId = request.body.objectId
+		let note = request.body.note
+		model.addNote(objectId, note, (error, savedSubmission)=> {
+			if(error) next(error)
+			else response.send(savedSubmission)
+		})
+	},
+
 	deleteReview: function(request, response, next) {
 		let submissionId = request.body.submissionId
 		let userId = request.body.userId

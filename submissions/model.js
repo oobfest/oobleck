@@ -201,5 +201,17 @@ module.exports = {
 
 	stampReject: function(objectId, callback) {
 		this.stamp(objectId, 'out', callback)
+	},
+
+	addNote: function(objectId, note, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.scheduleNotes = note
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
+		})
 	}
 }

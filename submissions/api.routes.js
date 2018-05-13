@@ -23,4 +23,6 @@ router.post('/stamp-accept', isLoggedIn, isRole(['admin', 'schedule']), controll
 router.post('/stamp-purgatory', isLoggedIn, isRole(['admin', 'schedule']), controller.stampPurgatory)
 router.post('/stamp-reject', isLoggedIn, isRole(['admin', 'schedule']), controller.stampReject)
 
+router.post('/add-note', isLoggedIn, isRole(['admin', 'schedule']), controller.addNote)
+
 module.exports = router
