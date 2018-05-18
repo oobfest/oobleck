@@ -24,6 +24,13 @@ module.exports = {
 		})
 	},
 
+	getAllAccepted: function(request, response, next) {
+		model.getAllAccepted((error, submissions)=> {
+			if(error) next(error)
+			else response.send(submissions)
+		})
+	},
+
 	getAllPaidExceptStandup: function(request,response, next) {
 		model.getAllPaidExceptStandup((error, submissions)=> {
 			if(error) next(error)

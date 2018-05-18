@@ -40,6 +40,12 @@ module.exports = {
 		})
 	},
 
+	getAllAccepted: function(callback) {
+		Submission.find({stamp: 'in'}, (error, submissions)=> {
+			callback(error, submissions)
+		})
+	},
+
 	getAllPaidExceptStandup: function(callback) {
 		Submission.find({showType: {$ne: 'Stand-Up'}, paymentInfo: {$ne: null} }, (error, submissions)=> {
 			callback(error, submissions)

@@ -78,8 +78,12 @@ block content
 								input#add-act-modal-time.form-control(type="text" readonly v-model="addActModal.time")
 							.form-group
 								label.col-form-label(for="add-act-modal-act") Act
-								select#add-act-modal-act.form-control(v-model="addActModal.domain")
-									option(v-for="submission in submissions" ,:value="submission.domain") {{submission.actName}}
+								input#add-act-modal-act(type="hidden" value="addActModal.domain")
+								pre(v-if="addActModal.domain") {{addActModal.domain}} 
+									a.btn.btn-danger(href="#" @click.prevent="selectAct('')") &times;
+								input.form-control(v-else v-model="actNameDropdownFilter")
+								.list-group(v-if="addActModal.domain === ''")
+									a.list-group-item(v-for="submission in submissionsDropdown" href="#" @click.prevent="selectAct(submission.domain)") {{submission.actName}}
 					.modal-footer
 						button.btn.btn-primary(type="button" @click="addAct") Add
 						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
@@ -220,7 +224,8 @@ block content
 					addVenueName: "",
 					addShowModal: {day:"", venue:"", time:"", acts: []},
 					addActModal: {day:"", venue:"", time:"", domain:""},
-					actDetailsModal: {}
+					actDetailsModal: {},
+					actNameDropdownFilter: ''
 				}
 			},
 			store: store,
@@ -230,6 +235,13 @@ block content
 				},
 				shows() {
 					return this.$store.getters.getAllShows
+				},
+				submissionsDropdown() {
+					if(this.actNameDropdownFilter !== '') {
+						let actNameRegex = new RegExp(this.actNameDropdownFilter, 'i')
+						return this.submissions.filter(s=> s.actName.match(actNameRegex))
+					}
+					else return []
 				}
 			},
 			methods: {
@@ -250,7 +262,9 @@ block content
 				},
 				addAct() {
 					$('#add-act-modal').modal('hide')
+					this.actNameDropdownFilter = ''
 					store.commit('addAct', this.addActModal)
+					this.addActModal.domain = ''
 				},
 				toggleFullscreen() {
 					if(this.isFullscreen) {
@@ -267,6 +281,9 @@ block content
 				},
 				toggleMinimal() {
 					this.show = !this.show
+				},
+				selectAct(act) {
+					this.addActModal.domain = act
 				}
 			},
 			filters: {
@@ -293,11 +310,13 @@ block content
 
 				// Get Submissions
 				axios
-					.get("/api/submissions")
+					.get("/api/submissions/get-all-accepted")
 					.then(function(response) {
-						self.submissions = response.data.filter(rd=> rd.paymentInfo)
+						self.submissions = response.data
 					})
 					.catch(function(error) {
+						alert("Error :(")
+						console.log(error)
 						self.submissions = []
 					})
 
