@@ -91,6 +91,21 @@ block content
 											tr.collapse(:id="'collapse-' + submission.domain")
 												td(colspan="6")
 													h2 {{submission.actName}}
+													ul.pagination
+														li.page-item(:class="[submission.available.includes('tuesday') 		? 'available' : 'unavailable']") 
+															span.page-link.availability Tuesday
+														li.page-item(:class="[submission.available.includes('wednesday') 	? 'available' : 'unavailable']") 
+															span.page-link.availability Wednesday
+														li.page-item(:class="[submission.available.includes('thursday') 	? 'available' : 'unavailable']") 
+															span.page-link.availability Thursday
+														li.page-item(:class="[submission.available.includes('friday') 		? 'available' : 'unavailable']") 
+															span.page-link.availability Friday
+														li.page-item(:class="[submission.available.includes('saturday') 	? 'available' : 'unavailable']") 
+															span.page-link.availability Saturday
+														li.page-item(:class="[submission.available.includes('sunday') 		? 'available' : 'unavailable']") 
+															span.page-link.availability Sunday
+														li.page-item(:class="[submission.available.includes('monday') 		? 'available' : 'unavailable']") 
+															span.page-link.availability Monday
 													h4 Score: 
 														span(v-for="review in submission.reviews") {{review.score | emojifyReview}}
 													h4 Notes

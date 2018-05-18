@@ -125,3 +125,7 @@ a:hover { color: #016ff9; }
 	vertical-align: middle;
 	padding: 0 0.5em;
 }
+
+.page-link:not([disabled]):not(.disabled).availability { cursor: inherit; color: white; }
+.page-item.available   .page-link { background-color: #35bd49; }
+.page-item.unavailable .page-link { white; background-color: #fc2344; }
