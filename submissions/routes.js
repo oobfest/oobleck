@@ -71,6 +71,7 @@ router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, n
 					case "Variety": 	demographics.variety++; break;
 					case "Podcast": 	demographics.podcast++;	break;
 					case "Individual": 	demographics.performer++; break;
+					case "Music": 		demographics.music++; break;
 					case "Other": 		demographics.other++;	break;
 				}
 
