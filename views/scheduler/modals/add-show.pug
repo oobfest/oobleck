@@ -1,0 +1,20 @@
+#add-show-modal.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5.modal-title Add Show
+        button.close(type="button" data-dismiss="modal")
+          span &times;
+      .modal-body
+        .form-group
+          label.col-form-label(for="add-show-modal-day") Day
+          input#add-show-modal-day.form-control(type="text" readonly v-model="addShowModal.day")
+        .form-group
+          label.col-form-label(for="add-show-modal-venue") Venue
+          input#add-show-modal-venue.form-control(type="text" readonly v-model="addShowModal.venue")
+        .form-group
+          label.col-form-label(for="add-show-time") Time
+          input#add-show-time.form-control(type="number" min="100" max="1259" v-model="addShowModal.time")
+      .modal-footer
+        button.btn.btn-primary(type="button" @click="addShow") Add
+        button.btn.btn-secondary(type="button" data-dismiss="modal") Close

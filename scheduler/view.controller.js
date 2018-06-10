@@ -11,5 +11,9 @@ module.exports = {
 
 	scheduleOld: function(request, response, next) {
 		response.render('scheduler/schedule-old')
-	}
+	},
+
+  calendar: function(request, response, next) {
+    response.render('calendar/calendar')
+  }
 }

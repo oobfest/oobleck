@@ -1,0 +1,17 @@
+script#venue-template(type="text/template")
+  .venue-container
+    h3 {{venue}}
+    p(v-show="$root.editMode") &nbsp;
+      a.add-show(href="#" @click="addShow(day, venue)") add show
+    shows(:day="day" :venue="venue")
+
+script.
+  Vue.component('venue', {
+    template: "#venue-template",
+    props: ['day', 'venue'],
+    methods: {
+      addShow(day, venue) {
+        console.log("Add", day, venue)
+      }
+    }
+  })

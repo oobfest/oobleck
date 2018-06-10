@@ -7,130 +7,30 @@ block content
 					a(@click.prevent="toggleFullscreen" href="#") Toggle Navigation
 				p
 					a(@click.prevent="toggleMinimal" href="#") Toggle Minimal
+
+				//.row
+					.col-3
+						.input-group
+							input.form-control(type="text" v-model="addDayName")
+							input.form-control(type="number" min="0" v-model="addDayOrder")
+							.input-group-append
+								button.btn.btn-primary(type="button" @click="addDay") Add Day
+
 				day(v-for="(day, key) in days" 
 					:name="day.name" 
 					:venues="day.venues" 
+					:order="day.order"
+					:_id="day._id"
 					:key="key"
 					@add-venue-modal="addVenueDay = $event"
 					@add-show-modal="addShowModal = $event"
 					@add-act-modal="addActModal.day = $event.day, addActModal.venue=$event.venue, addActModal.time=$event.time"
 					@act-details-modal="actDetailsModal = $event")
 
-		#add-venue-modal.modal
-			.modal-dialog
-				.modal-content
-					.modal-header
-						h5.modal-title Add Venue
-						button.close(type="button" data-dismiss="modal")
-							span &times;
-					.modal-body
-						form(@submit.prevent="addVenue")
-							.form-group
-								label.col-form-label(for="add-venue-day") Day
-								input#add-venue-day.form-control(type="text" readonly v-model="addVenueDay")
-							.form-group
-								label.col-form-label(for="add-venue-name") Venue
-								select#add-venue-name.form-control(v-model="addVenueName")
-									option(disabled value="") Select Venue
-									option(v-for="venue in venues") {{venue}}
-					.modal-footer
-						button.btn.btn-primary(type="button" @click="addVenue") Add
-						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
-
-		#add-show-modal.modal
-			.modal-dialog
-				.modal-content
-					.modal-header
-						h5.modal-title Add Show
-						button.close(type="button" data-dismiss="modal")
-							span &times;
-					.modal-body
-						.form-group
-							label.col-form-label(for="add-show-modal-day") Day
-							input#add-show-modal-day.form-control(type="text" readonly v-model="addShowModal.day")
-						.form-group
-							label.col-form-label(for="add-show-modal-venue") Venue
-							input#add-show-modal-venue.form-control(type="text" readonly v-model="addShowModal.venue")
-						.form-group
-							label.col-form-label(for="add-show-time") Time
-							input#add-show-time.form-control(type="number" min="100" max="1259" v-model="addShowModal.time")
-					.modal-footer
-						button.btn.btn-primary(type="button" @click="addShow") Add
-						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
-
-		#add-act-modal.modal
-			.modal-dialog
-				.modal-content
-					.modal-header
-						h5.modal-title Add Act
-						button.close(type="button" data-dismiss="modal")
-							span &times;
-					.modal-body
-						form(@submit.prevent)
-							.form-group
-								label.col-form-label(for="add-act-modal-day") Day
-								input#add-act-modal-day.form-control(type="text" readonly v-model="addActModal.day")
-							.form-group
-								label.col-form-label(for="add-act-modal-venue") Venue
-								input#add-act-modal-venue.form-control(type="text" readonly v-model="addActModal.venue")
-							.form-group
-								label.col-form-label(for="add-act-modal-time") Time
-								input#add-act-modal-time.form-control(type="text" readonly v-model="addActModal.time")
-							.form-group
-								label.col-form-label(for="add-act-modal-act") Act
-								input#add-act-modal-act(type="hidden" value="addActModal.domain")
-								pre(v-if="addActModal.domain") {{addActModal.domain}} 
-									a.btn.btn-danger(href="#" @click.prevent="selectAct('')") &times;
-								input.form-control(v-else v-model="actNameDropdownFilter")
-								.list-group(v-if="addActModal.domain === ''")
-									a.list-group-item(v-for="submission in submissionsDropdown" href="#" @click.prevent="selectAct(submission.domain)") {{submission.actName}}
-					.modal-footer
-						button.btn.btn-primary(type="button" @click="addAct") Add
-						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
-
-		#act-details-modal.modal
-			.modal-dialog.modal-lg
-				.modal-content
-					.modal-header
-						button.close(type="button" data-dismiss="modal") &times;
-					.modal-body
-						.text-center
-							img(alt="Submission Photo" ,:src="actDetailsModal.imageUrl | imgur")
-							h2.block-title {{actDetailsModal.actName}}
-							h3.block-subtitle {{actDetailsModal.showType}} from {{actDetailsModal.city}}, {{actDetailsModal.state}}, {{actDetailsModal.country}}
-							h4.block-subtitle {{actDetailsModal.homeTheater}}
-						h4(style="margin-bottom:-8px") Score: 
-							span(v-for="review in actDetailsModal.reviews") {{review.score | emojify}}
-					table.table.table-striped.table-bordered
-						thead.thead-light
-							tr
-								th Reviewer
-								th 
-								th Description
-						tbody
-							tr(v-for="review in actDetailsModal.reviews")
-								td
-									small.code {{review.username}}
-								td {{review.score | emojify}}
-								td
-									p {{review.notes}}
-					.modal-body
-						//.text-center
-							img.img-fluid(:src="actDetailsModal.imageUrl | imgur")
-						h4 Bio
-						p 
-							em {{actDetailsModal.publicDescription}}
-						h4 Description
-						p {{actDetailsModal.informalDescription}}
-						h4 Members
-						ul
-							li {{actDetailsModal.primaryContactName}}
-							li(v-for="member in actDetailsModal.additionalMembers") {{member.name}}
-						h4 Video Links
-						pre(v-for="videoUrl in actDetailsModal.videoUrls" v-if="videoUrl != ''") 
-							a(:href="videoUrl" target="_blank") {{videoUrl}}
-					.modal-footer
-						button.btn.btn-secondary(type="button" data-dismiss="modal") Close
+		include modals/add-venue
+		include modals/add-show
+		include modals/add-act
+		include modals/act-details
 
 	script(src="/js/axios.min.js")
 	script(src="/js/vue.js")
@@ -141,205 +41,5 @@ block content
 	include components/shows
 	include components/act
 
-	script.
-
-		const store = new Vuex.Store({
-			state: {
-				days: [],
-				shows: [],
-			},
-			getters: {
-				getDays: (state)=> {
-					return state.days
-				},
-				getAllShows: (state)=> {
-					return state.shows
-				},
-				getShows: (state)=> (day, venue)=> {
-					return state.shows.filter(show=> (show.day === day && show.venue === venue))
-				}
-			},
-			mutations: {
-				initializeShows: (state, payload)=> {
-					state.shows = payload
-					state.shows.sort((a,b)=> a.time - b.time)
-				},
-				initializeVenues: (state, payload)=> {
-					state.days = payload
-					for(let i=0; i<state.days; i++)
-						state.days[i].venues.sort()
-				},
-				addVenue: (state, payload)=> {
-					let i = state.days.findIndex(day=> day.name === payload.day)
-					state.days[i].venues.push(payload.venue)
-					state.days[i].venues.sort()
-				},
-				removeVenue: (state, payload)=> {
-					let i = state.days.findIndex(day=> day.name === payload.day)
-					let j = state.days[i].venues.findIndex(venue=> venue === payload.venue)
-					state.days[i].venues.splice(j, 1)
-
-				},
-				addShow: (state, payload)=> {
-					state.shows.push({
-						__v: payload.__v,
-						_id: payload._id,
-						day: payload.day, 
-						venue: payload.venue, 
-						time: payload.time, 
-						acts: []})
-					state.shows.sort((a,b)=> a.time - b.time)
-				},
-				removeShow: (state, payload)=> {
-					let showIndex = state.shows.findIndex(show=> (show._id === payload))
-					state.shows.splice(showIndex, 1)
-				},
-				addAct: (state, payload)=> {
-					let i = state.shows.findIndex(show=> (
-						show.day===payload.day && 
-						show.venue===payload.venue && 
-						show.time===payload.time))
-					state.shows[i].acts.push({domain: payload.domain, type: payload.type})
-				},
-				removeAct: (state, payload)=> {
-					let i = state.shows.findIndex(show=> (
-						show.day===payload.day &&
-						show.venue===payload.venue &&
-						show.time===payload.time))
-					let j = state.shows[i].acts.findIndex(act=> act.name === payload.name)
-					state.shows[i].acts.splice(j, 1)
-				}
-			}
-		})
-
-		let app = new Vue({ 
-			el: "#vue-app",
-			data() { 
-				return {
-					isFullscreen: false,
-					submissions: false,
-					show: true,
-					venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne', 'Fallout', 'Spider House', 'Velveeta'],
-					addVenueDay: "",
-					addVenueName: "",
-					addShowModal: {day:"", venue:"", time:"", acts: []},
-					addActModal: {day:"", venue:"", time:"", domain:""},
-					actDetailsModal: {},
-					actNameDropdownFilter: ''
-				}
-			},
-			store: store,
-			computed: {
-				days() {
-					return this.$store.getters.getDays
-				},
-				shows() {
-					return this.$store.getters.getAllShows
-				},
-				submissionsDropdown() {
-					if(this.actNameDropdownFilter !== '') {
-						let actNameRegex = new RegExp(this.actNameDropdownFilter, 'i')
-						return this.submissions.filter(s=> s.actName.match(actNameRegex))
-					}
-					else return []
-				}
-			},
-			methods: {
-				addVenue() {
-					if(this.addVenueName !== '') {
-						$("#add-venue-modal").modal('hide')
-						store.commit('addVenue', {day: this.addVenueDay, venue: this.addVenueName})
-						this.addVenueName = ""
-						this.addVenueDay = ""					
-					}
-				},
-				addShow() {
-					$("#add-show-modal").modal('hide')
-					axios
-						.post("/api/shows", this.addShowModal)
-						.then(function(response) {store.commit('addShow', response.data)})
-						.catch(function(error) {alert("Error getting shows :(")})
-				},
-				addAct() {
-					$('#add-act-modal').modal('hide')
-					this.actNameDropdownFilter = ''
-					store.commit('addAct', this.addActModal)
-					this.addActModal.domain = ''
-				},
-				toggleFullscreen() {
-					if(this.isFullscreen) {
-						document.getElementById("dash-nav").style.display = 'flex';
-						document.getElementsByTagName("main")[0].style["margin-left"] = '206px'
-						document.getElementsByClassName('dash-toolbar')[0].style.left = '206px'
-					}
-					else {
-						document.getElementById("dash-nav").style.display = 'none';
-						document.getElementsByTagName("main")[0].style["margin-left"] = 0
-						document.getElementsByClassName('dash-toolbar')[0].style.left = 0
-					}
-					this.isFullscreen = !this.isFullscreen
-				},
-				toggleMinimal() {
-					this.show = !this.show
-				},
-				selectAct(act) {
-					this.addActModal.domain = act
-				}
-			},
-			filters: {
-				emojify(review) {
-					switch(review) {
-						case -1: return '😡'
-						case  0: return '😕'
-						case  1: return '😬'
-						case  2: return '😍'
-						default: break;
-					}
-				},
-				imgur(url) {
-					return url? url.substr(0, url.length-4) + 'b.jpeg' : ''
-				},
-				time(time) {
-					time = time.toString()
-					return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
-				},
-			},
-			created() {
-				let self = this
-				self.toggleFullscreen()
-
-				// Get Submissions
-				axios
-					.get("/api/submissions/get-all-accepted")
-					.then(function(response) {
-						self.submissions = response.data
-					})
-					.catch(function(error) {
-						alert("Error :(")
-						console.log(error)
-						self.submissions = []
-					})
-
-				let fake = [
-					{name: 'Tuesday', venues: ['Hideout Upstairs', 'Hideout Downstairs']},
-					{name: 'Wednesday', venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne']},
-					{name: 'Thursday', venues: ['Hideout Upstairs']},
-					{name: 'Friday', venues: ['Hideout Upstairs']},
-					{name: 'Saturday', venues: ['Hideout Upstairs']},
-					{name: 'Sunday', venues: ['Hideout Upstairs']},
-					{name: 'Monday', venues: ['Hideout Downstairs']}
-				]
-				store.commit('initializeVenues', fake)
-
-				// Get Shows
-				axios
-					.get("/api/shows")
-					.then(function(response) {
-						store.commit('initializeShows', response.data)
-					})
-					.catch(function(error) {
-						alert("Error getting shows :(")
-					})
-
-			}
-		})
+	include store
+	include app	

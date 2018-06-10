@@ -1,0 +1,169 @@
+script.
+  let app = new Vue({ 
+    el: "#vue-app",
+    store: store,
+
+    // DATA
+    data() { 
+      return {
+        isFullscreen: false,
+        submissions: false,
+        show: true,
+        venues: ['Hideout Upstairs', 'Hideout Downstairs', 'ColdTowne', 'Fallout', 'Spider House', 'Velveeta'],
+        addVenueDay: "",
+        addVenueName: "",
+        addShowModal: {day:"", venue:"", time:"", acts: []},
+        addActModal: {day:"", venue:"", time:"", domain:""},
+        actDetailsModal: {},
+        actNameDropdownFilter: '',
+        addDayName: '',
+        addDayOrder: 0
+      }
+    },
+
+    // COMPUTED PROPERTIES
+    computed: {
+      days() {
+        return this.$store.getters.getDays
+      },
+      shows() {
+        return this.$store.getters.getAllShows
+      },
+      submissionsDropdown() {
+        if(this.actNameDropdownFilter !== '') {
+          let actNameRegex = new RegExp(this.actNameDropdownFilter, 'i')
+          return this.submissions.filter(s=> s.actName.match(actNameRegex))
+        }
+        else return []
+      }
+    },
+
+    // METHODS
+    methods: {
+      addDay() {
+        alert("Add day " + this.addDayName + " " + this.addDayOrder)
+          if(this.addDayName !== '') {
+            axios
+              .post("/api/days", {order: this.addDayOrder, name: this.addDayName, venues: []})
+              .then(function(response) {
+                alert("Success")
+                console.log(response)
+              })
+              .catch(function(error) {
+                alert("Error :(")
+                console.log(error)
+              })
+          }
+      },
+      addVenue() {
+        if(this.addVenueName !== '') {
+          $("#add-venue-modal").modal('hide')
+          let day = store.getters.getDays.find((d)=> { return d.name === this.addVenueDay })
+          day.venues.push(this.addVenueName)
+          axios
+            .put("/api/days/" + day._id, day)
+            .then(function(response) {
+              // Response isn't right :\
+            })
+            .catch(function(error) {
+              alert("Error :(")
+              console.log(error)
+            })
+          //store.commit('addVenue', {day: this.addVenueDay, venue: this.addVenueName})
+          this.addVenueName = ""
+          this.addVenueDay = "" 
+        }
+      },
+      addShow() {
+        $("#add-show-modal").modal('hide')
+        axios
+          .post("/api/shows", this.addShowModal)
+          .then(function(response) {store.commit('addShow', response.data)})
+          .catch(function(error) {alert("Error getting shows :(")})
+      },
+      addAct() {
+        $('#add-act-modal').modal('hide')
+        this.actNameDropdownFilter = ''
+        store.commit('addAct', this.addActModal)
+        this.addActModal.domain = ''
+      },
+      toggleFullscreen() {
+        if(this.isFullscreen) {
+          document.getElementById("dash-nav").style.display = 'flex';
+          document.getElementsByTagName("main")[0].style["margin-left"] = '206px'
+          document.getElementsByClassName('dash-toolbar')[0].style.left = '206px'
+        }
+        else {
+          document.getElementById("dash-nav").style.display = 'none';
+          document.getElementsByTagName("main")[0].style["margin-left"] = 0
+          document.getElementsByClassName('dash-toolbar')[0].style.left = 0
+        }
+        this.isFullscreen = !this.isFullscreen
+      },
+      toggleMinimal() {
+        this.show = !this.show
+      },
+      selectAct(act) {
+        this.addActModal.domain = act
+      }
+    },
+
+    // FILTERS
+    filters: {
+      emojify(review) {
+        switch(review) {
+          case -1: return '😡'
+          case  0: return '😕'
+          case  1: return '😬'
+          case  2: return '😍'
+          default: break;
+        }
+      },
+      imgur(url) {
+        return url? url.substr(0, url.length-4) + 'b.jpeg' : ''
+      },
+      time(time) {
+        time = time.toString()
+        return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+      },
+    },
+
+    // ON CREATED EVENT
+    created() {
+      let self = this
+      self.toggleFullscreen()
+
+      // Get Submissions
+      axios
+        .get("/api/submissions/get-all-accepted")
+        .then(function(response) {
+          self.submissions = response.data
+        })
+        .catch(function(error) {
+          alert("Error :(")
+          console.log(error)
+          self.submissions = []
+        })
+
+      // Get Days & Venues
+      axios
+        .get("/api/days")
+        .then(function(response) {
+          store.commit('initializeVenues', response.data)
+        })
+        .catch(function(error) {
+          alert("Error! :(")
+          console.log(error)
+        })
+
+      // Get Shows
+      axios
+        .get("/api/shows")
+        .then(function(response) {
+          store.commit('initializeShows', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting shows :(")
+        })
+    }
+  })

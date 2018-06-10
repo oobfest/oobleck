@@ -8,6 +8,17 @@ const sendEmail = require('../utilities/send-email')
 const isProductionEnvironment = require('../utilities/is-production-environment')
 const _ = require('lodash')
 
+router.get('/accept/:id', (request, response, next)=> {
+	response.render('accept/accept', {id:request.params.id})
+})
+
+router.get('/status', isLoggedIn, (request, response, next)=> {
+	submissionModel.getAllPaid((error, submissions)=> {
+		if(error) next(error)
+		else response.render('accept/status', {submissions})
+	})
+})
+
 router.get('/standardize', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
 	response.render('submissions/standardize')
 })

@@ -1,0 +1,37 @@
+script#shows-template(type="text/template")
+  div
+    div(v-for="show in shows")
+      .box.show2
+        a.delete(v-show="$root.editMode" href="#" @click="removeShow(day, venue, show.time)") remove show
+        h4.time {{show.time}}
+        p.act(v-for="act in show.acts") 
+          | {{act}}
+          a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(day, venue, show.time, act)") remove act
+        p(v-show="$root.editMode")
+          a(href="#" @click.prevent="showAddActModal(day, venue, show.time)" data-toggle="modal" data-target="#add-act-modal") add act
+
+script.
+  Vue.component('shows', {
+    template: "#shows-template",
+    props: ['day', 'venue'],
+    computed: { 
+      shows() {
+        return store.getters.getShows(this.day, this.venue)
+      }
+    },
+    methods: {
+      showAddActModal(day, venue, time) {
+        this.$store.state.addActModal = {day, venue, time}
+        console.log("Add", day, venue, time)
+      },
+      removeAct(day, venue, time, act) {
+        console.log("Remove", day, venue, time, act)
+      },
+      removeShow(day, venue, time) {
+        console.log("Remove", day, venue, time)
+      }
+    }
+  })
+
+style.
+  .delete{ float: right}

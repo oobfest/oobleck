@@ -1,0 +1,43 @@
+#act-details-modal.modal
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        button.close(type="button" data-dismiss="modal") &times;
+      .modal-body
+        .text-center
+          img(alt="Submission Photo" ,:src="actDetailsModal.imageUrl | imgur")
+          h2.block-title {{actDetailsModal.actName}}
+          h3.block-subtitle {{actDetailsModal.showType}} from {{actDetailsModal.city}}, {{actDetailsModal.state}}, {{actDetailsModal.country}}
+          h4.block-subtitle {{actDetailsModal.homeTheater}}
+        h4(style="margin-bottom:-8px") Score: 
+          span(v-for="review in actDetailsModal.reviews") {{review.score | emojify}}
+      table.table.table-striped.table-bordered
+        thead.thead-light
+          tr
+            th Reviewer
+            th 
+            th Description
+        tbody
+          tr(v-for="review in actDetailsModal.reviews")
+            td
+              small.code {{review.username}}
+            td {{review.score | emojify}}
+            td
+              p {{review.notes}}
+      .modal-body
+        //.text-center
+          img.img-fluid(:src="actDetailsModal.imageUrl | imgur")
+        h4 Bio
+        p 
+          em {{actDetailsModal.publicDescription}}
+        h4 Description
+        p {{actDetailsModal.informalDescription}}
+        h4 Members
+        ul
+          li {{actDetailsModal.primaryContactName}}
+          li(v-for="member in actDetailsModal.additionalMembers") {{member.name}}
+        h4 Video Links
+        pre(v-for="videoUrl in actDetailsModal.videoUrls" v-if="videoUrl != ''") 
+          a(:href="videoUrl" target="_blank") {{videoUrl}}
+      .modal-footer
+        button.btn.btn-secondary(type="button" data-dismiss="modal") Close

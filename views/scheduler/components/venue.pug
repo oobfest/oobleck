@@ -1,35 +1,50 @@
 script#venue-template(type="text/template")
-	th.text-center
-		img(:src="name | logoify" ,:alt="name" width="50px" height="auto")
-		p.m-0(style="line-height:1")
-			small {{name}}
-			br
-			small(v-show="$root.show")
-				a(@click.prevent="removeVenue(day, name)" href="#") - remove venue
+  th.text-center
+    img(:src="name | logoify" ,:alt="name" width="50px" height="auto")
+    p.m-0(style="line-height:1")
+      small {{name}}
+      br
+      small(v-show="$root.show")
+        a(@click.prevent="removeVenue()" href="#") - remove venue
 
 script.
-	Vue.component('venue', {
-		template: '#venue-template',
-		props: ['name', 'day', 'image'],
-		methods: {
-			removeVenue(day, venue) {
-				if (confirm("Remove " + venue + "?")) {
-					store.commit('removeVenue', {day, venue})
-				}
-			}
-		},
-		filters: {
-			logoify(theater) {
-				switch(theater) {
-					case 'ColdTowne': return '/img/venues/coldtowne.png'
-					case 'Hideout': 
-					case 'Hideout Downstairs':
-					case 'Hideout Upstairs': return '/img/venues/hideout.png'
-					case 'Fallout': return '/img/venues/fallout.png'
-					case 'Spider House': return '/img/venues/spider-house.png'
-					default: return ''
-				}
-			},
+  Vue.component('venue', {
+    template: '#venue-template',
+    props: ['name', 'day', 'image'],
+    methods: {
+      removeVenue() {
+        let self = this
+        if (confirm(`Remove ${self.name} from ${self.day}?`)) {
+          day = self.$parent
+          axios
+            .put("/api/days/" + day._id, {
+              _id: day._id, 
+              name: day.name, 
+              order: day.order, 
+              venues: day.venues.filter(v=> v !== self.name)
+            })
+            .then(function(response) {
+              store.commit('removeVenue', {day: self.day, venue: self.name})
+            })
+            .catch(function(error) {
+              alert("Error :(")
+              console.log(error)
+            })
+        }
+      }
+    },
+    filters: {
+      logoify(theater) {
+        switch(theater) {
+          case 'ColdTowne': return '/img/venues/coldtowne.png'
+          case 'Hideout': 
+          case 'Hideout Downstairs':
+          case 'Hideout Upstairs': return '/img/venues/hideout.png'
+          case 'Fallout': return '/img/venues/fallout.png'
+          case 'Spider House': return '/img/venues/spider-house.png'
+          default: return ''
+        }
+      },
 
-		}
-	})
+    }
+  })

@@ -3,34 +3,34 @@ const model = require('./model')
 module.exports = {
 
 	create: function(request, response, next) {
-		let host = request.body
-		model.create(host, (error, saved)=> {
+		let day = request.body
+		model.create(day, (error, saved)=> {
 			if(error) next(error)
 			else response.json(saved)
 		})
 	},
 
 	getAll: function(request, response, next) {
-		model.getAll((error, hosts)=> {
+		model.getAll((error, days)=> {
 			if(error) next(error)
-			else response.send(hosts)
+			else response.send(days)
 		})
 	},
 
 	getById: function(request, response, next) {
 		let id = request.params.id
-		model.get(id, (error, host)=> {
+		model.get(id, (error, day)=> {
 			if(error) next(error)
-			else response.send(host)
+			else response.send(day)
 		})
 	},
 
 	update: function(request, response, next) {
 		let id = request.params.id
-		let host = request.body
-		model.update(id, host, (error, host)=> {
+		let day = request.body
+		model.update(id, day, (error, day)=> {
 			if(error) next(error)
-			else response.json(host)
+			else response.json(day)
 		})
 	},
 

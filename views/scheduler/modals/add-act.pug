@@ -1,0 +1,29 @@
+#add-act-modal.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5.modal-title Add Act
+        button.close(type="button" data-dismiss="modal")
+          span &times;
+      .modal-body
+        form(@submit.prevent)
+          .form-group
+            label.col-form-label(for="add-act-modal-day") Day
+            input#add-act-modal-day.form-control(type="text" readonly v-model="addActModal.day")
+          .form-group
+            label.col-form-label(for="add-act-modal-venue") Venue
+            input#add-act-modal-venue.form-control(type="text" readonly v-model="addActModal.venue")
+          .form-group
+            label.col-form-label(for="add-act-modal-time") Time
+            input#add-act-modal-time.form-control(type="text" readonly v-model="addActModal.time")
+          .form-group
+            label.col-form-label(for="add-act-modal-act") Act
+            input#add-act-modal-act(type="hidden" value="addActModal.domain")
+            pre(v-if="addActModal.domain") {{addActModal.domain}} 
+              a.btn.btn-danger(href="#" @click.prevent="selectAct('')") &times;
+            input.form-control(v-else v-model="actNameDropdownFilter")
+            .list-group(v-if="addActModal.domain === ''")
+              a.list-group-item(v-for="submission in submissionsDropdown" href="#" @click.prevent="selectAct(submission.domain)") {{submission.actName}}
+      .modal-footer
+        button.btn.btn-primary(type="button" @click="addAct") Add
+        button.btn.btn-secondary(type="button" data-dismiss="modal") Close

@@ -8,4 +8,6 @@ const controller = require('./view.controller')
 router.get('/', isLoggedIn, isRole(['admin', 'schedule']), controller.schedule)
 router.get('/old', isLoggedIn, controller.scheduleOld)
 
+router.get('/calendar', isLoggedIn, controller.calendar)
+
 module.exports = router;

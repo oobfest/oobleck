@@ -21,7 +21,7 @@ script#day-template(type="text/x-template")
 script.
 	Vue.component('day', {
 		template: '#day-template',
-		props: ['name', 'venues'],
+		props: ['name', 'venues', 'order', '_id'],
 		methods: {
 			setAddVenueDay(name) {
 				this.$emit('add-venue-modal', name)

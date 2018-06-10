@@ -1,0 +1,39 @@
+script.
+  let app = new Vue({ 
+    el: "#app",
+    store: store,
+    data() { 
+      return {
+        days: [
+          {day: "Tuesday", venues: ["Hideout Up", "Hideout Down", "ColdTowne"]},
+          {day: "Wednesday", venues: ["Hideout Up", "Hideout Down", "ColdTowne"]},
+          {day: "Thursday", venues: ["Hideout Up", "Hideout Down", "ColdTowne", "Fallout", "Velveeta"]},
+          {day: "Friday", venues: ["Hideout Up", "Hideout Down", "ColdTowne", "Fallout", "Velveeta", "Spider House"]},
+          {day: "Saturday", venues: ["Hideout Up", "Hideout Down", "ColdTowne", "Fallout", "Velveeta", "Spider House", "Institution"]},
+          {day: "Sunday", venues: ["Hideout Down", "Fallout", "Velveeta"]},
+          {day: "Monday", venues: ["Hideout Down"]}
+        ],
+      editMode: false,
+      hideNavigation: false
+      }
+    },
+    methods: {
+      toggleNavigation() {
+        if(this.hideNavigation) {
+          document.getElementById("dash-nav").style.display = 'flex';
+          document.getElementsByTagName("main")[0].style["margin-left"] = '206px'
+          document.getElementsByClassName('dash-toolbar')[0].style.left = '206px'
+        }
+        else {
+          document.getElementById("dash-nav").style.display = 'none';
+          document.getElementsByTagName("main")[0].style["margin-left"] = 0
+          document.getElementsByClassName('dash-toolbar')[0].style.left = 0
+        }
+        this.hideNavigation = !this.hideNavigation
+      },
+    },
+
+    created() {
+      
+    }
+  })

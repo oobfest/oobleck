@@ -1,0 +1,23 @@
+extends ../_layout
+block content
+  include style
+  #app
+    .m-3
+      p
+        a(href="#" @click.prevent="editMode = !editMode" v-cloak) {{ editMode ? 'Edit Mode On' : 'Edit Mode Off' }}
+      p
+        a(href="#" @click.prevent="toggleNavigation") {{ hideNavigation ? 'Show Navigation' : 'Hide Navigation'  }}
+    modal
+    .box.day(v-for="day in days")
+      day(v-bind="day")
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script(src="/js/vuex.js")
+
+  include store
+  include modals/add-act
+  include components/day
+  include components/venue
+  include components/shows
+  include app

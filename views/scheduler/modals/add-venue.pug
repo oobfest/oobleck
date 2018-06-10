@@ -1,0 +1,20 @@
+#add-venue-modal.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5.modal-title Add Venue
+        button.close(type="button" data-dismiss="modal")
+          span &times;
+      .modal-body
+        form(@submit.prevent="addVenue")
+          .form-group
+            label.col-form-label(for="add-venue-day") Day
+            input#add-venue-day.form-control(type="text" readonly v-model="addVenueDay")
+          .form-group
+            label.col-form-label(for="add-venue-name") Venue
+            select#add-venue-name.form-control(v-model="addVenueName")
+              option(disabled value="") Select Venue
+              option(v-for="venue in venues") {{venue}}
+      .modal-footer
+        button.btn.btn-primary(type="button" @click="addVenue") Add
+        button.btn.btn-secondary(type="button" data-dismiss="modal") Close

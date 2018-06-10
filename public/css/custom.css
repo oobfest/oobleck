@@ -110,11 +110,13 @@ a:hover { color: #016ff9; }
 .badge-other	{ color: white; background-color: #e41a1c; }
 .badge-secondary { color: white; }
 
+/*
 .time { 
-	border-bottom: 2px solid #35bd49; 
+	background-color: #35bd49;
 	padding: 0.25rem; 
 }
-
+.time a { color: white; }
+	*/
 .slot { display: block; }
 .act-slot:hover, .host-slot:hover { background-color: yellow; }
 .time-slot { margin-bottom: 1em; }

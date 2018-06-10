@@ -34,7 +34,7 @@ module.exports = {
 		})
 	},
 
-	getAllPaid: function(callback) {
+	getAllPaid: (callback)=> {
 		Submission.find({paymentInfo: {$ne: null}}, (error, submissions)=> {
 			callback(error, submissions)
 		})

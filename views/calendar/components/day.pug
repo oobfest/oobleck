@@ -1,0 +1,25 @@
+script#day-template(type="text/template")
+  div
+    h2 {{day}}
+    .day-container
+      div.box.venue(:class="venue | venueClass" v-for="venue in venues")
+        venue(:venue="venue" :day="day")
+
+script.
+  Vue.component('day', {
+    template: "#day-template",
+    props: ['day', 'venues'],
+    filters: {
+      venueClass(venue) {
+        switch(venue) {
+          case 'Hideout Up':   return 'hideout-up'
+          case 'Hideout Down': return 'hideout-down'
+          case 'ColdTowne':    return 'coldtowne'
+          case 'Fallout':      return 'fallout'
+          case 'Velveeta':     return 'velveeta'
+          case 'Spider House': return 'spider-house'
+          case 'Institution':  return 'institution'
+        }
+      }
+    }
+  })
