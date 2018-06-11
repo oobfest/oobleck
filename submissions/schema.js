@@ -60,7 +60,10 @@ let submissionSchema = mongoose.Schema({
 	// Are they in? Out? 
 	stamp: String,
 	// Any notes from the scheduler? 
-	scheduleNotes: String
+	scheduleNotes: String,
+
+	// Did they confirm?
+	confirmed: Boolean
 
 	// Mongoose loses the ability to auto-detect and save changes of Mixed type.
 	// To tell Mongoose that the value of a Mixed type has changed call `.markModified(path)`

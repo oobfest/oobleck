@@ -9,7 +9,25 @@ const isProductionEnvironment = require('../utilities/is-production-environment'
 const _ = require('lodash')
 
 router.get('/accept/:id', (request, response, next)=> {
-	response.render('accept/accept', {id:request.params.id})
+	let id = request.params.id
+	submissionModel.get(id, (error, submission)=> {
+		if(error) next(error)
+		else response.render('accept/accept', {submission})
+	})
+})
+
+router.post('/accept/:id', (request, response, next)=> {
+	let id = request.params.id
+
+	let confirmation = request.body['confirmation']
+	if (confirmation === 'yes') confirmation = true
+	else if (confirmation === 'cancel') confirmation = null
+	else if (confirmation === 'no') confirmation = false
+
+	submissionModel.setConfirmation(id, confirmation, (error, savedSubmission)=> {
+		if(error) next(error)
+		else response.render('accept/accept', {submission: savedSubmission})
+	})
 })
 
 router.get('/status', isLoggedIn, (request, response, next)=> {

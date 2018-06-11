@@ -13,7 +13,6 @@ router.route('/getAllPaidExceptStandup').get(isLoggedIn, isRole('panelist'), con
 router.route('/getAllPaidStandup').get(isLoggedIn, isRole('standup-panelist'), controller.getAllPaidStandup)
 router.route('/get-all-accepted').get(isLoggedIn, isRole(['admin', 'schedule']), controller.getAllAccepted)
 
-
 router.route('/delete-review').post(isLoggedIn, isRole(['admin', 'schedule']), controller.deleteReview)
 
 router.post('/add-theater-tag', isLoggedIn, isRole(['admin', 'schedule']), controller.addTheaterTag)

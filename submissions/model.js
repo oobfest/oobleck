@@ -219,5 +219,17 @@ module.exports = {
 				})
 			}
 		})
+	},
+
+	setConfirmation: function(objectId, confirmation, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.confirmed = confirmation
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
+		})
 	}
 }
