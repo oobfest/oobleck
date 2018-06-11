@@ -12,6 +12,9 @@ script.
     methods: {
       showAddShowModal(day, venue) {
         this.$store.commit('addShowModal', {day, venue})
+        $('#add-show-modal').on('shown.bs.modal', function () {
+          $("#add-show-modal-time").focus()
+        })
       }
     }
   })

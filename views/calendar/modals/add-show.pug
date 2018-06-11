@@ -16,10 +16,10 @@ script#add-show-modal-template(type="text/template")
               input#add-show-modal-venue.form-control(type="text" readonly v-model="show.venue")
             .form-group
               label(for="add-show-modal-time") Time
-              input#add-show-modal-time.form-control(type="number" min="0" max="1259" v-model="show.time")
+              input#add-show-modal-time.form-control(type="number" min="0" max="1259" v-model="show.time" @keyup.enter="addShow()")
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
-          button.btn.btn-primary(type="button" @click="addShow()" data-dismiss="modal") Add Show
+          button.btn.btn-primary(type="submit" @click="addShow()") Add Show
 
 script.
   Vue.component('add-show-modal', {
@@ -31,6 +31,7 @@ script.
     },
     methods: {
       addShow() {
+        $('#add-show-modal').modal('hide')
         let self = this
         axios
           .post('/api/shows', self.$store.state.addShowModal)
