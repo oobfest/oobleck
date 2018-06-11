@@ -21,10 +21,10 @@ router.post('/login', (request, response, next)=> {
 			else {
 				// Go to landing page depending on user's role
 				let roles = request.user.roles
-				if (roles.includes('admin')) 			return response.redirect('submissions')
-				if (roles.includes('schedule'))			return response.redirect('submissions')
-				if (roles.includes('panelist'))			return response.redirect('submissions/review')
-				if (roles.includes('standup-panelist'))	return response.redirect('submissions/review')
+				if (roles.includes('admin')) 			return response.redirect('calendar')
+				if (roles.includes('schedule'))			return response.redirect('calendar')
+				if (roles.includes('panelist'))			return response.redirect('error')
+				if (roles.includes('standup-panelist'))	return response.redirect('error')
 				else return response.redirect('users/account')
 			}
 		})

@@ -4,7 +4,7 @@ block content
   #app
     .m-3
       p
-        a(href="#" @click.prevent="editMode = !editMode" v-cloak) {{ editMode ? 'Edit Mode On' : 'Edit Mode Off' }}
+        a(href="#" @click.prevent="editMode = !editMode" v-cloak) {{ editMode ? 'Hide Edit Links' : 'Show Edit Links' }}
       p
         a(href="#" @click.prevent="toggleNavigation") {{ hideNavigation ? 'Show Navigation' : 'Hide Navigation'  }}
     add-act-modal
