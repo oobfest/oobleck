@@ -2,7 +2,7 @@ script#venue-template(type="text/template")
   .venue-container
     h3 {{venue}}
     p(v-show="$root.editMode") &nbsp;
-      a.add-show(href="#" @click="addShow(day, venue)") add show
+      a.add-show(href="#" @click="showAddShowModal(day, venue)" data-toggle="modal" data-target="#add-show-modal") add show
     shows(:day="day" :venue="venue")
 
 script.
@@ -10,8 +10,8 @@ script.
     template: "#venue-template",
     props: ['day', 'venue'],
     methods: {
-      addShow(day, venue) {
-        console.log("Add", day, venue)
+      showAddShowModal(day, venue) {
+        this.$store.commit('addShowModal', {day, venue})
       }
     }
   })

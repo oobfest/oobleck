@@ -12,13 +12,16 @@ nav#dash-nav.dash-nav
 		- var isScheduler = user.roles.includes('schedule')
 
 		if isAdmin || isScheduler
-			a.dash-nav-item(href="/submissions") Act Submissions
+			a.dash-nav-item(href="/acts") Acts
+			a.dash-nav-item(href="/calendar") Calendar
 			a.dash-nav-item(href='/hosts') Host Submissions
-			a.dash-nav-item(href='/submissions/stamp') Accept Acts &nbsp;
-				span.badge.badge-primary New!
+
 		if isAdmin
-			a.dash-nav-item(href="/submissions/unpaid") Unpaid Submissions
 			a.dash-nav-item(href="/users") Users
-			a.dash-nav-item(href="/scheduler") Scheduler
-		if isPanelist || isStandupPanelist || isScheduler
+		//if isPanelist || isStandupPanelist || isScheduler
 			a.dash-nav-item(href="/submissions/review") Review Submissions
+
+		if false
+			a.dash-nav-item(href="/submissions") Act Submissions
+			a.dash-nav-item(href='/submissions/stamp') Accept Acts
+			a.dash-nav-item(href="/submissions/unpaid") Unpaid Submissions

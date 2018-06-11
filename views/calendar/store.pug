@@ -1,20 +1,37 @@
 script.
   const store = new Vuex.Store({
     state: {
-      shows: [
-        {day: "Wednesday", venue: "ColdTowne", time: "8:00", acts: ['Frank Mills', 'Crossroads']},
-        {day: "Wednesday", venue: "ColdTowne", time: "10:00", acts: ['Trench Coat', 'Marinara Trench']},
-        {day: "Tuesday", venue: "ColdTowne", time: "8:00", acts: ['Channel 2', 'Tunnel Vision']},
-        {day: "Tuesday", venue: "Hideout Up", time: "8:00", acts: ['Midnight Society', 'Golden']},
-        {day: "Friday", venue: "Fallout", time: "11:00pm", acts: ['Nothing']}
-      ],
-      submissions: [],
-      showAddActModal: false,
-      addActModal: { day: '', venue: '', time: '' }
+      shows: [],
+      acts: [],
+      addShowModal: { day: '', venue: '', time: '' },
+      addActModal: { day: '', venue: '', time: '', _id: '' }
     },
     getters: {
       getShows: state => (day, venue) => {
         return state.shows.filter(show=> {return (show.day === day && show.venue === venue)})
+      }
+    },
+    mutations: {
+      setupShows(state, payload) {
+        state.shows = payload
+      },
+      addShowModal(state, payload) {
+        state.addShowModal = payload
+      },
+      addShow(state, payload) {
+        state.shows.push(payload)
+      },
+      updateShow(state, payload) {
+        let showIndex = state.shows.findIndex(s=> s._id === payload._id)
+        Vue.set(state.shows, showIndex, payload)
+      },
+      removeShow(state, payload) {
+        state.shows.splice(state.shows.findIndex(s=> s._id === payload), 1)
+      },
+
+      // Get all paid approved submissions, not scheduled acts
+      setupActs(state, payload) {
+        state.acts = payload
       }
     }
   })

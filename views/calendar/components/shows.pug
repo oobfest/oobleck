@@ -2,13 +2,13 @@ script#shows-template(type="text/template")
   div
     div(v-for="show in shows")
       .box.show2
-        a.delete(v-show="$root.editMode" href="#" @click="removeShow(day, venue, show.time)") remove show
-        h4.time {{show.time}}
+        a.delete(v-show="$root.editMode" href="#" @click="removeShow(show._id)") remove show
+        h4.time {{show.time | time}}
         p.act(v-for="act in show.acts") 
-          | {{act}}
-          a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(day, venue, show.time, act)") remove act
+          | {{act.name}}
+          a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
         p(v-show="$root.editMode")
-          a(href="#" @click.prevent="showAddActModal(day, venue, show.time)" data-toggle="modal" data-target="#add-act-modal") add act
+          a(href="#" @click="showAddActModal(day, venue, show.time, show._id)" data-toggle="modal" data-target="#add-act-modal") add act
 
 script.
   Vue.component('shows', {
@@ -19,16 +19,39 @@ script.
         return store.getters.getShows(this.day, this.venue)
       }
     },
+    filters: {
+      time(time) {
+        time = String(time)
+        return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+      }
+    },
     methods: {
-      showAddActModal(day, venue, time) {
-        this.$store.state.addActModal = {day, venue, time}
-        console.log("Add", day, venue, time)
+      showAddActModal(day, venue, time, _id) {
+        this.$store.state.addActModal = {day: day, venue: venue, time: time, _id: _id}
       },
-      removeAct(day, venue, time, act) {
-        console.log("Remove", day, venue, time, act)
+      removeAct(showId, actId) {
+        let self = this
+        axios
+          .post('/api/shows/remove-act', {showId: showId, actId: actId})
+          .then(function(response) {
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error) {
+            alert("Error removing act from show :(")
+            console.log(error)
+          })
       },
-      removeShow(day, venue, time) {
-        console.log("Remove", day, venue, time)
+      removeShow(id) {
+        let self = this
+        axios
+          .delete('/api/shows/'+id)
+          .then(function(response){
+            self.$store.commit('removeShow', id)
+          })
+          .catch(function(error) {
+            alert("Failed to delete show :(")
+            console.log(error)
+          })
       }
     }
   })

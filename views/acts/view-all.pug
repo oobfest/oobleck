@@ -1,0 +1,32 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Acts
+    a.btn.btn-secondary.ml-md-auto(href="/acts/create") Add Act
+
+  .dash-boxes.container-fluid
+    if (acts.length == 0)
+      p There are none!
+    else
+      .box.box-b
+        table.box-table.table
+          thead
+            tr
+              th
+              th Name
+              th Shows
+          tbody
+            for act in acts
+              tr
+                td.text-center=act.confirmed ? '✅' : act.confirmed === false ? '⛔️' : ''
+                td
+                  a(href="/acts/act/"+act.domain)=act.actName
+                td
+                  for show in shows
+                    for showAct in show.acts
+                      if (showAct._id == String(act._id))
+                        a(href="#") #{show.day}, #{show.venue}
+
+                    //if (show.acts.filter(a=> a._id == act._id).length > 0)
+                      

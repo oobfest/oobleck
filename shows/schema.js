@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 let showSchema = mongoose.Schema({
 	day: String,
 	venue: String,
-	time: String,
+	time: Number,
 	acts: []
 })
 

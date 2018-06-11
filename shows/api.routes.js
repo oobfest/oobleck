@@ -6,11 +6,14 @@ const isRole = require('../middleware/is-role')
 
 router.route('/')
 	.get(isLoggedIn, controller.getAll)
-	.post(controller.create)
+	.post(isLoggedIn, controller.create)
+
+router.post('/add-act/:id', isLoggedIn, controller.addAct)
+router.post('/remove-act/', isLoggedIn, controller.removeAct)
+
 
 router.route('/:id')
 	.get(isLoggedIn, controller.getById)
-	.put(controller.update)
 	.delete(isLoggedIn, controller.delete)
 
  module.exports = router

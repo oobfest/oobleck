@@ -30,7 +30,7 @@ script.
 		props: ['day', 'venue'],
 		computed: {
 			shows() {
-				return store.getters.getShows(this.day, this.venue)
+				return store.getters.getShowsForShowTemplate(this.day, this.venue)
 			}
 		},
 		methods: {

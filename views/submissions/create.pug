@@ -3,9 +3,9 @@ block content
 	header.dash-titlebar
 		.mb-md-0.mb-3
 			span.dash-titlebar-title
-				a.text-muted(href="/submissions") Submissions
+				a.text-muted(href="/acts") Acts
 				|  /
-				| Create Submission
+				| Add Act
 
 	form.container(method="POST" action="/submissions/create" name="apply")
 		input(type="hidden" value="checked" name="no-food")
@@ -161,7 +161,7 @@ block content
 							$("#conflicts").on('click', '.remove-conflict-button', function() {
 								$(this).closest(".conflict-item").remove()
 							})
-					.box-block.box-bb
+					//.box-block.box-bb
 						h4 Video Link
 						.form-group
 							label.col-form-label.required-field(for="video-url-0") Link to Video

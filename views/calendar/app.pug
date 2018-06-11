@@ -13,8 +13,8 @@ script.
           {day: "Sunday", venues: ["Hideout Down", "Fallout", "Velveeta"]},
           {day: "Monday", venues: ["Hideout Down"]}
         ],
-      editMode: false,
-      hideNavigation: false
+        editMode: true,
+        hideNavigation: true
       }
     },
     methods: {
@@ -34,6 +34,29 @@ script.
     },
 
     created() {
-      
+      let self = this
+
+      // Get Shows
+      axios
+        .get('/api/shows')
+        .then(function(response) {
+          //console.log(response.data)
+          self.$store.commit('setupShows', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting shows :(")
+          console.log(error)
+        })
+
+      // Get Acts
+      axios
+        .get('/api/submissions/get-all-accepted')
+        .then(function(response) {
+          self.$store.commit('setupActs', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting acts :(")
+          console.log(error)
+        })
     }
   })

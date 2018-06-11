@@ -32,7 +32,7 @@ module.exports = {
 		this.get(id, (error, oldShow)=> {
 			if(error) callback(error)
 			else {
-				let updatedShow = _.merge(oldShow, newShow)
+				let updatedShow = newShow //_.merge(oldShow, newShow)
 				this.save(updatedShow, (error, savedShow)=> {
 					callback(error, savedShow)
 				})
