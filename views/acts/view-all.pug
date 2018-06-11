@@ -3,7 +3,7 @@ block content
   header.dash-titlebar
     .mb-md-0.mb-3
       span.dash-titlebar-title Acts
-    a.btn.btn-secondary.ml-md-auto(href="/acts/create") Add Act
+    a.btn.btn-secondary.ml-md-auto(href="/acts/create") Create Act
 
   .dash-boxes.container-fluid
     if (acts.length == 0)
@@ -15,6 +15,7 @@ block content
             tr
               th
               th Name
+              th Type
               th Shows
           tbody
             for act in acts
@@ -22,6 +23,7 @@ block content
                 td.text-center=act.confirmed ? '✅' : act.confirmed === false ? '⛔️' : ''
                 td
                   a(href="/acts/act/"+act.domain)=act.actName
+                td=act.showType
                 td
                   for show in shows
                     for showAct in show.acts

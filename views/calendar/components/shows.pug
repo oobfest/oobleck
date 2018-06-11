@@ -2,10 +2,16 @@ script#shows-template(type="text/template")
   div
     div(v-for="show in shows")
       .box.show2
-        a.delete(v-show="$root.editMode" href="#" @click="removeShow(show._id)") remove show
+        a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
         h4.time {{show.time | time}}
         p.act(v-for="act in show.acts") 
-          | {{act.name}}
+          span(v-if="act.type === 'Sketch'") ✏️
+          span(v-if="act.type === 'Music'") 🎶
+          span(v-if="act.type === 'Improv'") ⚡️
+          span(v-if="act.type === 'Stand-Up'") 🎤
+          span(v-if="act.type === 'Individual'") 🗣
+          |  {{act.name | shorten(24)}}
+
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
         p(v-show="$root.editMode")
           a(href="#" @click="showAddActModal(day, venue, show.time, show._id)" data-toggle="modal" data-target="#add-act-modal") add act
@@ -23,11 +29,19 @@ script.
       time(time) {
         time = String(time)
         return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
-      }
+      },
+      shorten(value, characters) {
+      return value.length > characters
+        ? value.substring(0,characters)+'...'
+        : value
+      },
     },
     methods: {
       showAddActModal(day, venue, time, _id) {
         this.$store.state.addActModal = {day: day, venue: venue, time: time, _id: _id}
+        $('#add-act-modal').on('shown.bs.modal', function () {
+          $("#add-act-modal-search").focus()
+        })
       },
       removeAct(showId, actId) {
         let self = this

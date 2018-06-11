@@ -18,8 +18,8 @@ script#add-act-modal-template(type="text/template")
               label(for="add-act-modal-time") Time
               input#add-act-modal-time.form-control(type="text" readonly v-model="show.time")
             .form-group
-              label(for="add-act-modal-name") Act
-              input#add-act-modal-name.form-control(type="text" placeholder="Search for act" v-model="search")
+              label(for="add-act-modal-search") Act
+              input#add-act-modal-search.form-control(type="text" placeholder="Search for act" v-model="search")
             .form-group
               ul
                 li(v-for="act in filteredActs") 
