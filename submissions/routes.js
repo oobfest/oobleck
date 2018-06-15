@@ -8,6 +8,25 @@ const sendEmail = require('../utilities/send-email')
 const isProductionEnvironment = require('../utilities/is-production-environment')
 const _ = require('lodash')
 
+
+router.post('/finalize/:id', (request, response, next)=> {
+	let id = request.params.id
+	let newSubmissionData = request.body
+	submissionModel.finalize(id, newSubmissionData, (error, savedSubmision)=> {
+		if(error) next(error)
+		else response.redirect('/submissions/accept/'+id)
+	})
+})
+
+router.post('/reschedule/:id', (request, response, next)=> {
+	let id = request.params.id
+	let availability = request.body['available']
+	submissionModel.reschedule(id, availability, (error, savedSubmision)=> {
+		if(error) next(error)
+		else response.redirect('/submissions/accept/'+id)
+	})
+})
+
 router.get('/acts', isLoggedIn, (request, response, next)=> {
 	submissionModel.getAllAccepted((error, acts)=> {
 		if(error) next(error)
@@ -31,21 +50,42 @@ router.get('/accept/:id', (request, response, next)=> {
 	let id = request.params.id
 	submissionModel.get(id, (error, submission)=> {
 		if(error) next(error)
-		else response.render('accept/accept', {submission})
+		else {
+			if(submission.showType === 'Stand-Up') response.render('accept/accept', {act: submission})
+			else {
+				let showModel = require('../shows/model')
+				showModel.getAll((error, shows)=> {
+					if(error) next(error)
+					else {
+						let dates = shows.filter(s=> s.acts.filter(a=> String(a._id) == String(submission._id)).length > 0)
+					  let days = convertDay(dates[0].day)
+  					if(dates.length > 1) days += " and " + convertDay(dates[1].day)
+						response.render('accept/accept', {act: submission, days})
+					}
+				})
+			}
+		}
 	})
 })
 
+function convertDay(day) {
+	switch(day) {
+		case "Monday": return "Monday, September 3rd"
+		case "Tuesday": return "Tuesday, August 28th"
+		case "Wednesday": return "Wednesday, August 29th"
+		case "Thursday": return "Thursday, August 30th"
+		case "Friday": return "Friday, August 31st"
+		case "Saturday": return "Saturday, September 1st"
+		case "Sunday": return "Sunday, September 2nd"
+	}
+}
+
 router.post('/accept/:id', (request, response, next)=> {
 	let id = request.params.id
-
-	let confirmation = request.body['confirmation']
-	if (confirmation === 'yes') confirmation = true
-	else if (confirmation === 'cancel') confirmation = null
-	else if (confirmation === 'no') confirmation = false
-
-	submissionModel.setConfirmation(id, confirmation, (error, savedSubmission)=> {
+	let confirmationStatus = request.body['confirmation-status']
+	submissionModel.setConfirmationStatus(id, confirmationStatus, (error, savedSubmission)=> {
 		if(error) next(error)
-		else response.render('accept/accept', {submission: savedSubmission})
+		else response.redirect(savedSubmission._id)
 	})
 })
 

@@ -221,15 +221,47 @@ module.exports = {
 		})
 	},
 
-	setConfirmation: function(objectId, confirmation, callback) {
+	setConfirmationStatus: function(objectId, confirmationStatus, callback) {
 		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)
 			else {
-				submission.confirmed = confirmation
+				confirmationStatus == 'cancel'
+					? submission.confirmationStatus = null
+					: submission.confirmationStatus = confirmationStatus
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
+		})
+	},
+
+	// Weird esoteric update method
+	finalize: function(objectId, newSubmissionData, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.available = newSubmissionData.available
+				submission.bonusShows = newSubmissionData.bonusShows
+				submission.workshop = newSubmissionData.workshop
+				submission.techRehearsalNeeded = newSubmissionData.techRehearsalNeeded === 'yes' ? true : false
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
+		})
+	},
+
+	// Just the dates, plz
+	reschedule: function(objectId, availability, callback) {
+		this.get(objectId, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.available = availability
 				this.save(submission, (error, savedSubmission)=> {
 					callback(error, savedSubmission)
 				})
 			}
 		})
 	}
+
 }

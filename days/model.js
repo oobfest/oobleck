@@ -29,26 +29,9 @@ module.exports = {
 	},
 
 	update: function(id, newDay, callback) {
-
 		Day.findByIdAndUpdate(id, newDay, (error, savedDay)=> {
 			callback(error, savedDay)
 		})
-
-		/*
-
-		// The results from _.merge isn't saveable? 
-
-		this.get(id, (error, oldDay)=> {
-			if(error) callback(error)
-			else {
-				oldDay = _.merge(oldDay, newDay)
-				//console.log(updatedDay)
-				this.save(oldDay, (error, savedDay)=> {
-					console.log(savedDay)
-					callback(error, savedDay)
-				})
-			}
-		})*/
 	},
 
 	delete: function(id, callback) {

@@ -1,31 +1,50 @@
-if act.confirmationStatus == null 
-  p You have been accepted into the Out of Bounds Comedy Festival!
-  p  Please confirm your attendance to the festival by 
+if act.confirmationStatus == null
+  p If you are no longer available for then you may request a reschedule. We will accomodate as best we can but cannot guarantee another spot in the festival. 
+  p  Please confirm by 
     strong June 22nd 
     | or your spot will be forfeited. Cancelling your attendance 
     em after
     |  the June 22nd deadline will result in a two-year ban from Out of Bounds.
   form(action="/submissions/accept/"+act._id method="POST").text-center
     .form-group
-      button.btn.btn-lg.btn-primary(type="submit" name="confirmation-status" value="yes") Confirm Attendance
+      button.btn.btn-lg.btn-primary(type="submit" name="confirmation-status" value="yes") Commit to Performance Dates
     .form-group
-      button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Attendance
+      button.btn.btn-lg.btn-secondary(type="submit" name="confirmation-status" value="reschedule") Request Reschedule
+    .form-group
+      button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Festival Attendance
 
 if act.confirmationStatus === 'yes'
   form(action="/submissions/finalize/"+act._id method="POST")
     p.alert.alert-info You are now confirmed for Out of Bounds 2018!
-    p By attending this festival you agree to the following:
+      p You'll receive more info from us by July 15th about your show times and lengths. If you have any questions, don't hesitate to contact 
+        code ruby@oobfest.com
+
+    p By attending this festival, you agree to the following: 
     ul
       if act.city !== 'Austin'
-        li I will send my flight itinerary by 
+        li Flight itineraries will be submitted by 
           strong August 1st 
-          | to the festival, and if I don't, I risk forfeiting my place. (We will send a form for you to fill out mid-July so that we can set you up with an airport pick-up!)
-      li I will not perform any set that includes food, liquid or potential mess
-      li If I damage something at a venue, even by accident, I'll report it immediately and be cool and responsible about it
+      li The show does not include food, liquid or make a mess
+      li If someone damages something at a venue, even by accident, everyone will be cool and responsible about it and report it immediately
 
     hr
-    h3 Availability
-    p Please re-confirm all the days you are able to attend the festival
+    h3 Tech Needs
+    p If a tech rehearsal is needed, everyone should be in Austin no later than 12pm the day of the first show. All tech/prop needs will be finalized with us by 
+      strong August 1st
+      |  (A separate form will be supplied)
+    .form-group
+      .custom-control.custom-checkbox
+        input#tech-rehearsal-needed.custom-control-input(
+          type="checkbox" 
+          value="yes" 
+          name="techRehearsalNeeded"
+          checked=(act.techRehearsalNeeded)
+        )
+        label.custom-control-label(for="tech-rehearsal-needed") This show will require a tech rehearsal
+
+    hr
+    h3 Confirm Availability for Additional Shows
+    p In addition to the days you are scheduled, please let us know all days you can attend the festival. Should another act drop out we may schedule you for additional shows. 
     .form-group
       .custom-control.custom-checkbox
         input#available-tuesday.custom-control-input(
@@ -92,52 +111,25 @@ if act.confirmationStatus === 'yes'
 
     hr
     h3 Bonus Shows
-    p In addition to our standard stand-up showcases, please check any of our bonus shows you would you be interested in participating in
+    p In addition to our standard line up, we have a number of exciting all-star improv shows. Please check all shows you would you be interested in participating in.
     .form-group
       .custom-control.custom-checkbox
-        input#available-awkward-sex.custom-control-input(
+        input#available-maestro.custom-control-input(
           type="checkbox"
-          value="awkward-sex"
+          value="maestro"
           name="bonusShows[]"
-          checked=(act.bonusShows ? act.bonusShows.includes('awkward-sex') : false)
+          checked=(act.bonusShows ? act.bonusShows.includes('maestro') : false)
         )
-        label.custom-control-label(for="available-awkward-sex") A sex-themed show where you'd do material based on awkward sexual encounters
+        label.custom-control-label(for="available-maestro") An elimination-style short form improv show
     .form-group
       .custom-control.custom-checkbox
-        input#available-heckling.custom-control-input(
+        input#available-megapigeon.custom-control-input(
           type="checkbox"
-          value="heckling"
+          value="megapigeon"
           name="bonusShows[]"
-          checked=(act.bonusShows ? act.bonusShows.includes('heckling') : false)
+          checked=(act.bonusShows ? act.bonusShows.includes('megapigeon') : false)
         )
-        label.custom-control-label(for="available-heckling") A heckling / crowdwork show where the audience is encourage to interact with you during your set
-    .form-group
-      .custom-control.custom-checkbox
-        input#available-improvised-standup.custom-control-input(
-          type="checkbox"
-          value="improvised-standup"
-          name="bonusShows[]"
-          checked=(act.bonusShows ? act.bonusShows.includes('improvised-standup') : false)
-        )
-        label.custom-control-label(for="available-improvised-standup") An improvised standup show where you have to make up bits on the spot from prompts given to you on stage
-    .form-group
-      .custom-control.custom-checkbox
-        input#available-blind-date.custom-control-input(
-          type="checkbox"
-          value="blind-date"
-          name="bonusShows[]"
-          checked=(act.bonusShows ? act.bonusShows.includes('blind-date') : false)
-        )
-        label.custom-control-label(for="available-blind-date") A blind dating show where you and another random performer will go on a fake 15-minute "date" on stage, having a getting-to-know-you conversation in front of a live audience
-    .form-group
-      .custom-control.custom-checkbox
-        input#available-roast.custom-control-input(
-          type="checkbox"
-          value="roast"
-          name="bonusShows[]"
-          checked=(act.bonusShows ? act.bonusShows.includes('roast') : false)
-        )
-        label.custom-control-label(for="available-roast") A team roast battle where you'll be assigned an opponent with only their videos to work from
+        label.custom-control-label(for="available-megapigeon") An Armando/ASSSCAT-style long form improv show
 
     if act.city !== 'Austin'
       hr
@@ -147,9 +139,9 @@ if act.confirmationStatus === 'yes'
         textarea#workshop.form-control(maxlength="14000" name="workshop" rows="4")=act.workshop
 
     hr
-    p You'll receive more info from us by July 15th about your show times and lengths
-      br
-      | If you have any questions, don't hesitate to contact 
-      code ruby@oobfest.com
+    h3 Update Profile
+    p You can update your press photo, bio, contacts and more 
+      a(href="/submissions/edit/"+act._id) here
+      | .
     .form-group.text-center
       button.btn.btn-lg.btn-primary(type="submit") Update Submission

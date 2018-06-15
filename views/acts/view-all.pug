@@ -20,15 +20,15 @@ block content
           tbody
             for act in acts
               tr
-                td.text-center=act.confirmed ? '✅' : act.confirmed === false ? '⛔️' : ''
+                td.text-center
+                  pre.h3=act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''
                 td
-                  a(href="/acts/act/"+act.domain)=act.actName
+                  a(href="/submissions/accept/"+act._id)=act.actName
                 td=act.showType
                 td
                   for show in shows
                     for showAct in show.acts
-                      if (showAct._id == String(act._id))
-                        a(href="#") #{show.day}, #{show.venue}
-
-                    //if (show.acts.filter(a=> a._id == act._id).length > 0)
-                      
+                      ul
+                        if (showAct._id == String(act._id))
+                          li
+                            a(href="#") #{show.day}, #{show.venue}

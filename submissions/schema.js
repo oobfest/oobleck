@@ -62,9 +62,6 @@ let submissionSchema = mongoose.Schema({
 	// Any notes from the scheduler? 
 	scheduleNotes: String,
 
-	// Did they confirm?
-	confirmed: Boolean
-
 	// Mongoose loses the ability to auto-detect and save changes of Mixed type.
 	// To tell Mongoose that the value of a Mixed type has changed call `.markModified(path)`
 
@@ -72,6 +69,16 @@ let submissionSchema = mongoose.Schema({
 	// submission.paymentInfo = { ... }
 	// submission.markModified('paymentInfo')
 	// submission.save()
+
+
+	// Did they confirm?
+	// yes, no, reschedule, undefined
+	confirmationStatus: String,
+
+	// After confirming...
+	bonusShows: [],
+	workshop: String,
+	techRehearsalNeeded: Boolean
 
 })
 
