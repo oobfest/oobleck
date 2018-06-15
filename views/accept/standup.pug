@@ -14,6 +14,10 @@ if act.confirmationStatus == null
 if act.confirmationStatus === 'yes'
   form(action="/submissions/finalize/"+act._id method="POST")
     p.alert.alert-info You are now confirmed for Out of Bounds 2018!
+    p You'll receive more info from us by July 15th about your show times and lengths
+      br
+      | If you have any questions, don't hesitate to contact 
+      code ruby@oobfest.com
     p By attending this festival you agree to the following:
     ul
       if act.city !== 'Austin'
@@ -147,9 +151,5 @@ if act.confirmationStatus === 'yes'
         textarea#workshop.form-control(maxlength="14000" name="workshop" rows="4")=act.workshop
 
     hr
-    p You'll receive more info from us by July 15th about your show times and lengths
-      br
-      | If you have any questions, don't hesitate to contact 
-      code ruby@oobfest.com
     .form-group.text-center
       button.btn.btn-lg.btn-primary(type="submit") Update Submission
