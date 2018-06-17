@@ -1,0 +1,58 @@
+extends ../_layout
+block content
+  style.
+
+    .boxy { 
+      /*max-width: 1200px;*/
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .picy {
+      display: flex;
+      flex: 1 1 400px;
+      height: 400px;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .overlay {
+      /*background-color: rgba(240, 76, 35, 0.2);*/
+      background-color: rgba(21, 128, 140, 0.2);
+      width: 400px;
+      height: 300px;
+      position: absolute;
+    }
+    .overlay:hover{
+      background-color: transparent;
+    }
+
+    .act-banner {
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+      background-color: rgba(21, 128, 140, 0.75);
+      font-size: 36px;
+      color: white;
+      font-variant: small-caps;
+      font-weight: bold;
+      align-self: flex-end;
+      width: 100%;
+      height: 100px;
+      padding: 0.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .act-name {
+      text-align: center;
+    }
+  
+  .boxy
+    for act in acts
+      .picy(style="background-image: url(" + act.imageUrl.substr(0, act.imageUrl.length-4) + 'l.jpeg' + ");")
+        //.overlay
+        .act-banner
+          span.act-name(style=act.actName.length > 20 ? 'font-size: 26px' : '')=act.actName
