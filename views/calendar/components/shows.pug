@@ -10,7 +10,7 @@ script#shows-template(type="text/template")
           span(v-if="act.type === 'Improv'") ⚡️
           span(v-if="act.type === 'Stand-Up'") 🎤
           span(v-if="act.type === 'Individual'") 🗣
-          |  {{act.name | shorten(24)}}
+          span.bold {{act.name | shorten(24)}}
 
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
         p(v-show="$root.editMode")

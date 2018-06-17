@@ -40,6 +40,8 @@ let submissionSchema = mongoose.Schema({
 	videoInfo: String,
 
 	// Social Media
+	// socialMedia[0].type 
+	// socialMedia[0].url
 	socialMedia: Array,
 
 	// Availability

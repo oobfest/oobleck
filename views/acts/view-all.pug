@@ -23,7 +23,7 @@ block content
                 td.text-center
                   pre.h3=act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''
                 td
-                  a(href="/submissions/accept/"+act._id)=act.actName
+                  a(href="/acts/act/"+act.domain target="_blank")=act.actName
                 td=act.showType
                 td
                   for show in shows
