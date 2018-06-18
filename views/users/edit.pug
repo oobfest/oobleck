@@ -28,6 +28,15 @@ block content
 						label.form-check-label(for="admin-role-checkbox") Admin
 
 					.form-check
+						input#staff-role-checkbox.form-check-input.input(
+							type="checkbox" 
+							name="roles" 
+							value="staff" 
+							checked=editUser.roles.includes('staff')
+						)
+						label.form-check-label(for="staff-role-checkbox") Staff
+
+					.form-check
 						input#schedule-role-checkbox.form-check-input.input(
 							type="checkbox" 
 							name="roles" 

@@ -7,14 +7,14 @@ nav#dash-nav.dash-nav
 	.dash-nav-list
 
 		- var isAdmin = user.roles.includes('admin')
+		- var isStaff = user.roles.includes('staff')
 		- var isPanelist = user.roles.includes('panelist') 
 		- var isStandupPanelist  = user.roles.includes('standup-panelist')
 		- var isScheduler = user.roles.includes('schedule')
 
-		if isAdmin || isScheduler
+		if isStaff || isAdmin
 			a.dash-nav-item(href="/acts") Acts
 			a.dash-nav-item(href="/calendar") Calendar
-			a.dash-nav-item(href='/hosts') Host Submissions
 
 		if isAdmin
 			a.dash-nav-item(href="/users") Users

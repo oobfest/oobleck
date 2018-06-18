@@ -1,8 +1,13 @@
 script#venue-template(type="text/template")
   .venue-container
     h3 {{venue}}
-    p(v-show="$root.editMode") &nbsp;
-      a.add-show(href="#" @click="showAddShowModal(day, venue)" data-toggle="modal" data-target="#add-show-modal") add show
+    ul.list-inline(v-show="$root.editMode")
+      li.list-inline-item
+        a.add-show(href="#" @click.prevent="showAddShowModal(day, venue)" data-toggle="modal" data-target="#add-show-modal") add show
+      //li.list-inline-item
+        a.add-show(href="#" @click.prevent="todo" data-toggle="modal" data-target="#add-workshop-modal") add workshop
+      //li.list-inline-item
+        a.add-show(href="#" @click.prevent="todo" data-toggle="modal" data-target="#add-rehearsal-modal") add rehearsal
     shows(:day="day" :venue="venue")
 
 script.
@@ -15,6 +20,9 @@ script.
         $('#add-show-modal').on('shown.bs.modal', function () {
           $("#add-show-modal-time").focus()
         })
+      },
+      todo() {
+        alert("This has not been implemented 😢")
       }
     }
   })

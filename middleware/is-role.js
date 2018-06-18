@@ -4,7 +4,7 @@ const renderErrorPage = require('../utilities/handle-error')
 module.exports = function(allowedRoles) {
 	return function(request, response, next) {
 		let userRoles = request.user.roles
-		let userHasPermission = areElementsInCommon(userRoles, allowedRoles)
+		let userHasPermission = request.user.roles.includes('admin') || areElementsInCommon(userRoles, allowedRoles)
 		if (userHasPermission) next()
 		else renderErrorPage(response, "You do not have permission to do that :(")
 	}

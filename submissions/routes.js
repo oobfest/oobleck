@@ -96,20 +96,20 @@ router.get('/status', isLoggedIn, (request, response, next)=> {
 	})
 })
 
-router.get('/standardize', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/standardize', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	response.render('submissions/standardize')
 })
 
-router.get('/stamp', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/stamp', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	response.render('submissions/stamp')
 })
 
-router.get('/charts', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/charts', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	response.render('submissions/charts')
 })
 
 // GET /submissions
-router.get('/', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 
 	submissionModel.getAllPaid((error, submissions)=> {
 		if(error) next(error)
@@ -250,7 +250,7 @@ router.get('/unpaid', isLoggedIn, isRole(['admin']), (request, response, next)=>
 	})
 })
 
-router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/submission/:domain', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	let domain = request.params.domain
 	submissionModel.getByDomain(domain, (error, submission)=> {
 		if(error) next(error)
@@ -258,14 +258,18 @@ router.get('/submission/:domain', isLoggedIn, isRole(['admin', 'schedule']), (re
 	})
 })
 
-router.get('/create', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/create', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	response.render('submissions/create')
 })
 
-router.post('/create', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.post('/create', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 
 	let submission = formatSubmissionObject(request)
+
+	// Assumes: Paid, Accepted and Confirmed
 	submission.paymentInfo = true
+	submission.stamp = 'in'
+	submission.confirmationStatus = 'yes'
 
 	submissionModel.create(submission, (error, savedSubmission)=> {
 		if(error) next(error)
@@ -314,7 +318,7 @@ router.get('/review', isLoggedIn, (request, response, next)=> {
 	let userRoles = request.user.roles
 
 
-	if (userRoles.includes('schedule')) {
+	if (userRoles.includes('staff') || userRoles.includes('admin')) {
 		submissionModel.getAllPaid((error, submissions)=> {
 			callback(error, submissions)
 		})
@@ -353,7 +357,7 @@ function getVotes(submissions, username) {
 	return votes
 }
 
-router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panelist', 'standup-panelist']), (request, response, next)=> {
+router.get('/review/:objectId', isLoggedIn, isRole(['staff', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId
 	submissionModel.get(objectId, (error, submission)=> {
 		if(error) next(error)
@@ -361,7 +365,7 @@ router.get('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'paneli
 	})
 })
 
-router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panelist', 'standup-panelist']), (request, response, next)=> {
+router.post('/review/:objectId', isLoggedIn, isRole(['staff', 'panelist', 'standup-panelist']), (request, response, next)=> {
 	let objectId = request.params.objectId
 	let review = {
 		userId: request.user._id,
@@ -375,11 +379,11 @@ router.post('/review/:objectId', isLoggedIn, isRole(['admin', 'schedule', 'panel
 	})
 })
 
-router.get('/review2', isLoggedIn, isRole(['admin', 'panelist']), (request, response, next)=> {
+router.get('/review2', isLoggedIn, isRole(['panelist']), (request, response, next)=> {
 	response.render('submissions/review-submissions2')
 })
 
-router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/reviews/:domain', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	let domain = request.params.domain
 	submissionModel.getByDomain(domain, (error, submission)=> {
 		if(error) next(error)
@@ -387,7 +391,7 @@ router.get('/reviews/:domain', isLoggedIn, isRole(['admin', 'schedule']), (reque
 	})
 })
 
-router.get('/reviews-by-user/:username', isLoggedIn, isRole(['admin', 'schedule']), (request, response, next)=> {
+router.get('/reviews-by-user/:username', isLoggedIn, isRole(['staff']), (request, response, next)=> {
 	let username = request.params.username
 	submissionModel.getAll((error, submissions)=> {
 		if(error) next(error)
