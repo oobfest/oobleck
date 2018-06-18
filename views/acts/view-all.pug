@@ -5,30 +5,98 @@ block content
       span.dash-titlebar-title Acts
     a.btn.btn-secondary.ml-md-auto(href="/acts/create") Create Act
 
-  .dash-boxes.container-fluid
-    if (acts.length == 0)
-      p There are none!
-    else
-      .box.box-b
-        table.box-table.table
-          thead
-            tr
-              th
-              th Name
-              th Type
-              th Shows
-          tbody
-            for act in acts
+  #app.dash-boxes.container-fluid
+
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link.active(data-toggle="tab" href="#home") Acts
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#other") Performers
+
+    .tab-content
+      #home.tab-pane.show.active
+        .box.box-b
+          table.box-table.table
+            thead
               tr
-                td.text-center
-                  pre.h3=act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''
-                td
-                  a(href="/acts/act/"+act.domain target="_blank")=act.actName
-                td=act.showType
-                td
-                  for show in shows
-                    for showAct in show.acts
-                      ul
-                        if (showAct._id == String(act._id))
-                          li
-                            a(href="#") #{show.day}, #{show.venue}
+                th
+                th Name
+                th Type
+            tbody
+              tr(v-for="act in acts")
+                td.text-center {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''}}
+                td 
+                  a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.actName}}
+                td {{act.showType}}
+          act-modal(:act="currentAct")
+      #other.tab-pane
+        .box.box-b
+          table.box-table.table
+            thead
+              tr
+                th Name
+                th Act
+                th Type
+                th Email
+            tbody
+              tr(v-for="performer in performers")
+                td {{performer.name}}
+                td {{performer.act}}
+                td {{performer.type}}
+                td {{performer.email}}
+        
+  
+  include components/act-modal
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script.
+    Vue.component('act-modal', {
+      template: "#act-modal-template",
+      props: ['act']
+    })
+
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          acts: [],
+          performers: [],
+          currentAct: {name: "YAY", additionalMembers:[], bonusShows: [], socialMedia:[], videoUrls: []}
+        }
+      },
+      methods: {
+        clicky(selectedAct) {
+          this.currentAct = selectedAct
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/submissions/get-all-accepted')
+          .then(function(response) {
+            self.acts = response.data
+            let performers = []
+            for(let i=0; i<self.acts.length; i++) {
+              performers.push({
+                name: self.acts[i].primaryContactName,
+                email: self.acts[i].primaryContactEmail,
+                act: self.acts[i].actName,
+                type: self.acts[i].showType
+              })
+              for(let j=0; j<self.acts[i].additionalMembers.length; j++) {
+                performers.push({
+                  name: self.acts[i].additionalMembers[j].name,
+                  email: self.acts[i].additionalMembers[j].email,
+                  act: self.acts[i].actName,
+                  type: self.acts[i].showType
+                })
+              }
+            }
+            self.performers = performers
+          })
+          .catch(function(error) {
+            alert("Error getting acts :(")
+            console.log(error)
+          })
+      }
+    })

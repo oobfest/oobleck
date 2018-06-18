@@ -37,6 +37,8 @@ block content
               a(href=social.url)=social.type
         hr
         h2.text-center Performance Details
+        h3 Availability
+        pre=act.available
         h3 Set Length
         p Minimum #{act.minimumShowLength}, Maximum #{act.maximumShowLength}
         if act.showType !== 'Stand-Up'
@@ -48,19 +50,28 @@ block content
         hr
         h2.text-center Contact Information
         h3 Primary Contact
-        p #{act.primaryContactName}, #{act.primaryContactRole}
-        p.code=act.primaryContactEmail
-        p.code=act.primaryContactPhone
+        span=act.primaryContactName
+        br
+        span=act.primaryContactRole
+        br
+        code=act.primaryContactEmail
+        br
+        p=act.primaryContactPhone
         if act.additionalMembers.length > 0
           h3 Other Members
-          for person in act.additionalMembers
-            p #{person.name}, #{person.role}
-            .code=person.email
+          ul
+            for person in act.additionalMembers
+              li
+                strong=person.name
+                | , #{person.role} 
+                code=person.email
         hr
         h2.text-center Other Details
         h3 Confirmation Status
-        p=act.confirmationStatus
-        h3 Bonus Shows
-        pre=act.bonusShows
-        h3 Workshop
-        p=act.workshop
+        p=(act.confirmationStatus ? act.confirmationStatus : 'No Reply')
+        if act.bonusShows.length > 0
+          h3 Bonus Shows
+          pre=act.bonusShows
+        if act.city !== 'Austin' && act.workshop
+          h3 Workshop
+          p=act.workshop

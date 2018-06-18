@@ -5,12 +5,12 @@ script#shows-template(type="text/template")
         a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
         h4.time {{show.time | time}}
         p.act(v-for="act in show.acts") 
-          span(v-if="act.type === 'Sketch'") ✏️
-          span(v-if="act.type === 'Music'") 🎶
-          span(v-if="act.type === 'Improv'") ⚡️
-          span(v-if="act.type === 'Stand-Up'") 🎤
-          span(v-if="act.type === 'Individual'") 🗣
-          span.bold {{act.name | shorten(24)}}
+          span(v-if="act.type === 'Sketch'") ✏️ 
+          span(v-if="act.type === 'Music'") 🎶 
+          span(v-if="act.type === 'Improv'") ⚡️ 
+          span(v-if="act.type === 'Stand-Up'") 🎤 
+          span(v-if="act.type === 'Individual'") 🗣 
+          span(:class="actStatus") {{act.name | shorten(24)}}
 
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
         p(v-show="$root.editMode")
@@ -23,6 +23,9 @@ script.
     computed: { 
       shows() {
         return store.getters.getShows(this.day, this.venue)
+      },
+      actStatus() {
+        return 'font-weight-bold'
       }
     },
     filters: {
