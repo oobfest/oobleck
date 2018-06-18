@@ -22,24 +22,33 @@ block content
                 th
                 th Name
                 th Type
+                th Location
             tbody
               tr
+                th(style="width:180px")
+                  select.form-control(v-model="filterActsByConfirmation")
+                    option(value='all') All
+                    option(value='yes') ✅ Accepted
+                    option(value='reschedule') 🚸 Reschedule
+                    option(value='no') ⛔️ Rejected
                 th
+                  input.form-control(type="text" v-model="filterActsByName" placeholder="Filter by Name")
                 th
-                  input.form-control(type="text" v-model="filterByName" placeholder="Search by Name")
-                th
-                  select.form-control(v-model="filterByType")
+                  select.form-control(v-model="filterActsByType")
                     option(selected value="") All
                     option Improv
                     option Sketch
                     option Stand-Up
                     option Individual
                     option Music
+                th
+                  input.form-control(type="text" v-model="filterActsByCity" placeholder="Filter by City")
               tr(v-for="act in filteredActs")
-                td.text-center {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''}}
+                td.text-right {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''}}
                 td 
                   a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.actName}}
                 td {{act.showType}}
+                td {{act.city}}, {{act.state}}
       #other.tab-pane
         .box.box-b
           table.box-table.table
@@ -52,9 +61,9 @@ block content
             tbody
               tr
                 th
-                  input.form-control(type="text" v-model="filterPerformersByName" placeholder="Search by Name")
+                  input.form-control(type="text" v-model="filterPerformersByName" placeholder="Filter by Name")
                 th
-                  input.form-control(type="text" v-model="filterPerformersByAct" placeholder="Search by Act")
+                  input.form-control(type="text" v-model="filterPerformersByAct" placeholder="Filter by Act")
                 th
                   select.form-control(v-model="filterPerformersByType")
                     option(selected value="") All
@@ -63,6 +72,8 @@ block content
                     option Stand-Up
                     option Individual
                     option Music
+                th
+                  input.form-control(type="text" v-model="filterPerformersByEmail" placeholder="Filter by Email")
               tr(v-for="performer in filteredPerformers")
                 td {{performer.name}}
                 td 
@@ -87,18 +98,23 @@ block content
           acts: [],
           performers: [],
           currentAct: {name: "YAY", additionalMembers:[], bonusShows: [], socialMedia:[], videoUrls: []},
-          filterByName: '',
-          filterByType: '',
+          filterActsByConfirmation: 'all',
+          filterActsByName: '',
+          filterActsByType: '',
+          filterActsByCity: '',
           filterPerformersByName: '',
           filterPerformersByAct: '',
-          filterPerformersByType: ''
+          filterPerformersByType: '',
+          filterPerformersByEmail: ''
         }
       },
       computed: {
         filteredActs() {
           let filteredActs = this.acts
-          if (this.filterByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterByType)
-          if (this.filterByName !== '') filteredActs = filteredActs.filter(a=> a.actName.match(new RegExp(this.filterByName, 'i')))
+          if (this.filterActsByConfirmation !== 'all') filteredActs = filteredActs.filter(a=> a.confirmationStatus === this.filterActsByConfirmation)
+          if (this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterActsByType)
+          if (this.filterActsByName !== '') filteredActs = filteredActs.filter(a=> a.actName.match(new RegExp(this.filterActsByName, 'i')))
+            if (this.filterActsByCity !== '') filteredActs = filteredActs.filter(a=> a.city.match(new RegExp(this.filterActsByCity, 'i')))
           filteredActs.sort((a, b)=> { return a.actName.localeCompare(b.actName)})
           return filteredActs
         },
@@ -106,6 +122,7 @@ block content
           let filteredPerformers = this.performers
           if (this.filterPerformersByType !== '') filteredPerformers = filteredPerformers.filter(a=> a.type === this.filterPerformersByType)
           if (this.filterPerformersByName !== '') filteredPerformers = filteredPerformers.filter(a=> a.name.match(new RegExp(this.filterPerformersByName, 'i')))
+          if (this.filterPerformersByEmail !== '') filteredPerformers = filteredPerformers.filter(a=> a.email.match(new RegExp(this.filterPerformersByEmail, 'i')))
           if (this.filterPerformersByAct !== '') filteredPerformers = filteredPerformers.filter(a=> a.act.match(new RegExp(this.filterPerformersByAct, 'i')))
           filteredPerformers.sort((a, b)=> { return a.name.localeCompare(b.name)})
           return filteredPerformers          
