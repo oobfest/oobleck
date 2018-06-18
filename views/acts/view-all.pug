@@ -31,6 +31,7 @@ block content
                     option(value='yes') ✅ Accepted
                     option(value='reschedule') 🚸 Reschedule
                     option(value='no') ⛔️ Rejected
+                    option(value='null') 👻 N/A
                 th
                   input.form-control(type="text" v-model="filterActsByName" placeholder="Filter by Name")
                 th
@@ -111,10 +112,11 @@ block content
       computed: {
         filteredActs() {
           let filteredActs = this.acts
-          if (this.filterActsByConfirmation !== 'all') filteredActs = filteredActs.filter(a=> a.confirmationStatus === this.filterActsByConfirmation)
+          if (this.filterActsByConfirmation === 'null') filteredActs = filteredActs.filter(a=> a.confirmationStatus == null)
+          else if (this.filterActsByConfirmation !== 'all') filteredActs = filteredActs.filter(a=> a.confirmationStatus === this.filterActsByConfirmation)
           if (this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterActsByType)
           if (this.filterActsByName !== '') filteredActs = filteredActs.filter(a=> a.actName.match(new RegExp(this.filterActsByName, 'i')))
-            if (this.filterActsByCity !== '') filteredActs = filteredActs.filter(a=> a.city.match(new RegExp(this.filterActsByCity, 'i')))
+          if (this.filterActsByCity !== '') filteredActs = filteredActs.filter(a=> a.city.match(new RegExp(this.filterActsByCity, 'i')))
           filteredActs.sort((a, b)=> { return a.actName.localeCompare(b.actName)})
           return filteredActs
         },
