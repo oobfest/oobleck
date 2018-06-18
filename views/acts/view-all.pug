@@ -23,12 +23,23 @@ block content
                 th Name
                 th Type
             tbody
-              tr(v-for="act in acts")
+              tr
+                th
+                th
+                  input.form-control(type="text" v-model="filterByName" placeholder="Search by Name")
+                th
+                  select.form-control(v-model="filterByType")
+                    option(selected value="") All
+                    option Improv
+                    option Sketch
+                    option Stand-Up
+                    option Individual
+                    option Music
+              tr(v-for="act in filteredActs")
                 td.text-center {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : ''}}
                 td 
                   a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.actName}}
                 td {{act.showType}}
-          act-modal(:act="currentAct")
       #other.tab-pane
         .box.box-b
           table.box-table.table
@@ -39,12 +50,26 @@ block content
                 th Type
                 th Email
             tbody
-              tr(v-for="performer in performers")
+              tr
+                th
+                  input.form-control(type="text" v-model="filterPerformersByName" placeholder="Search by Name")
+                th
+                  input.form-control(type="text" v-model="filterPerformersByAct" placeholder="Search by Act")
+                th
+                  select.form-control(v-model="filterPerformersByType")
+                    option(selected value="") All
+                    option Improv
+                    option Sketch
+                    option Stand-Up
+                    option Individual
+                    option Music
+              tr(v-for="performer in filteredPerformers")
                 td {{performer.name}}
-                td {{performer.act}}
+                td 
+                  a(href="#" @click.prevent="clicky2(performer.actId)" data-toggle="modal" data-target="#act-modal") {{performer.act}}
                 td {{performer.type}}
                 td {{performer.email}}
-        
+    act-modal(:act="currentAct")  
   
   include components/act-modal
   script(src="/js/axios.min.js")
@@ -61,12 +86,37 @@ block content
         return {
           acts: [],
           performers: [],
-          currentAct: {name: "YAY", additionalMembers:[], bonusShows: [], socialMedia:[], videoUrls: []}
+          currentAct: {name: "YAY", additionalMembers:[], bonusShows: [], socialMedia:[], videoUrls: []},
+          filterByName: '',
+          filterByType: '',
+          filterPerformersByName: '',
+          filterPerformersByAct: '',
+          filterPerformersByType: ''
+        }
+      },
+      computed: {
+        filteredActs() {
+          let filteredActs = this.acts
+          if (this.filterByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterByType)
+          if (this.filterByName !== '') filteredActs = filteredActs.filter(a=> a.actName.match(new RegExp(this.filterByName, 'i')))
+          filteredActs.sort((a, b)=> { return a.actName.localeCompare(b.actName)})
+          return filteredActs
+        },
+        filteredPerformers() {
+          let filteredPerformers = this.performers
+          if (this.filterPerformersByType !== '') filteredPerformers = filteredPerformers.filter(a=> a.type === this.filterPerformersByType)
+          if (this.filterPerformersByName !== '') filteredPerformers = filteredPerformers.filter(a=> a.name.match(new RegExp(this.filterPerformersByName, 'i')))
+          if (this.filterPerformersByAct !== '') filteredPerformers = filteredPerformers.filter(a=> a.act.match(new RegExp(this.filterPerformersByAct, 'i')))
+          filteredPerformers.sort((a, b)=> { return a.name.localeCompare(b.name)})
+          return filteredPerformers          
         }
       },
       methods: {
         clicky(selectedAct) {
           this.currentAct = selectedAct
+        },
+        clicky2(actId) {
+          this.currentAct = this.acts.find(a=> a._id===actId)
         }
       },
       created() {
@@ -81,6 +131,7 @@ block content
                 name: self.acts[i].primaryContactName,
                 email: self.acts[i].primaryContactEmail,
                 act: self.acts[i].actName,
+                actId: self.acts[i]._id,
                 type: self.acts[i].showType
               })
               for(let j=0; j<self.acts[i].additionalMembers.length; j++) {
@@ -88,6 +139,7 @@ block content
                   name: self.acts[i].additionalMembers[j].name,
                   email: self.acts[i].additionalMembers[j].email,
                   act: self.acts[i].actName,
+                  actId: self.acts[i]._id,
                   type: self.acts[i].showType
                 })
               }
