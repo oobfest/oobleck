@@ -1,3 +1,4 @@
+const limax = require('limax')
 
 module.exports = {
   formatSubmissionObject(request) {
@@ -30,19 +31,19 @@ module.exports = {
       ],
       videoInfo: request.body['video-info'],
       available: request.body['available'],
-      conflicts: flattenConflicts(
+      conflicts: this.flattenConflicts(
         request.body['conflict-act'],
         request.body['conflict-person']
       ),
 
-      additionalMembers: flattenPersonnel(
+      additionalMembers: this.flattenPersonnel(
         request.body['personnel-name'], 
         request.body['personnel-email'], 
         request.body['personnel-role'],
         request.body['personnel-attending']
       ),
 
-      socialMedia: flattenSocialMedia(
+      socialMedia: this.flattenSocialMedia(
         request.body['social-media-type'],
         request.body['social-media-url']
       )

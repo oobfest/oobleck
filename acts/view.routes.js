@@ -45,12 +45,33 @@ router.post('/create', isLoggedIn, (request, response, next)=> {
 
   let submission = util.formatSubmissionObject(request)
   submission.paymentInfo = true
+  submission.stamp = 'in'
   submission.confirmed = true
+  submission.invited = true
 
   submissionModel.create(submission, (error, savedSubmission)=> {
     if(error) next(error)
     else response.redirect('/act/' + savedSubmission.domain)
   })
 })
+
+router.get('/create-public', (request, response, next)=> {
+  response.render('acts/create-public')
+})
+
+router.post('/create-public', (request, response, next)=> {
+
+  let submission = util.formatSubmissionObject(request)
+  submission.paymentInfo = true
+  submission.stamp = 'in'
+  submission.confirmed = true
+  submission.invited = true
+
+  submissionModel.create(submission, (error, savedSubmission)=> {
+    if(error) next(error)
+    else response.render('acts/create-public-thank-you', {submissionId: savedSubmission._id})
+  })
+})
+
 
 module.exports = router

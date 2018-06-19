@@ -80,7 +80,10 @@ let submissionSchema = mongoose.Schema({
 	// After confirming...
 	bonusShows: [],
 	workshop: String,
-	techRehearsalNeeded: Boolean
+	techRehearsalNeeded: Boolean,
+
+  // More special cases
+  invited: Boolean
 
 })
 

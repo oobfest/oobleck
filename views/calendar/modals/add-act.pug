@@ -32,7 +32,7 @@ script#add-act-modal-template(type="text/template")
               table.table.table-borderless.table-sm
                 tbody
                   tr(v-for="act in filteredActs") 
-                    td {{act.available.includes(show.day.toLowerCase()) ? '✅' : '⛔️'}}  
+                    td {{act.available.includes(show.day.toLowerCase()) ? '✅' : '⛔️'}}
                     td
                       a(href="#" @click.prevent="addAct(act)" data-dismiss="modal") {{act.actName | shorten(30)}} 
                     td {{act.minimumShowLength}} to {{act.maximumShowLength}}
