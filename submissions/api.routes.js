@@ -11,7 +11,7 @@ router.route('/get/:submissionId').get(isLoggedIn, isRole(['staff']), controller
 router.route('/getAllPaid').get(isLoggedIn, isRole(['staff']), controller.getAllPaid)
 router.route('/getAllPaidExceptStandup').get(isLoggedIn, isRole('panelist'), controller.getAllPaidExceptStandup)
 router.route('/getAllPaidStandup').get(isLoggedIn, isRole('standup-panelist'), controller.getAllPaidStandup)
-router.route('/get-all-accepted').get(isLoggedIn, isRole(['staff']), controller.getAllAccepted)
+router.route('/get-all-accepted').get(controller.getAllAccepted)
 
 router.route('/delete-review').post(isLoggedIn, isRole(['staff']), controller.deleteReview)
 
