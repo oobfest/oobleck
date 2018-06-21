@@ -58,7 +58,8 @@ router.get('/accept/:id', (request, response, next)=> {
 					if(error) next(error)
 					else {
 						let dates = shows.filter(s=> s.acts.filter(a=> String(a._id) == String(submission._id)).length > 0)
-					  let days = convertDay(dates[0].day)
+            let days = ""
+            if (dates) days = convertDay(dates[0].day)
   					if(dates.length > 1) days += " and " + convertDay(dates[1].day)
 						response.render('accept/accept', {act: submission, days})
 					}
