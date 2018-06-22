@@ -1,6 +1,8 @@
 const _ = require('lodash')
 const Submission = require('../submissions/schema')
 
+let publicFields = "actName domain publicDescription imageUrl primaryContactName additionalMembers"
+
 module.exports = {
 
 	create: function(submission, callback) {
@@ -29,12 +31,9 @@ module.exports = {
   },
 
   getActByDomain: function(domain, callback) {
-    Submission.findOne({domain: domain}, (error, submission)=> {
+    Submission.findOne({domain: domain}, publicFields, (error, submission)=> {
       if(error) callback(error, null)
       else {
-        // Hide plz
-        if(submission && submission.reviews) submission.reviews = null
-        if(submission.paymentInfo) submission.paymentInfo = null
         callback(null, submission)
       }
     })
@@ -77,7 +76,7 @@ module.exports = {
 	},
 
   getValidActs: function(callback) {
-    Submission.find({stamp: 'in', confirmationStatus: 'yes', imageUrl: { $nin: [null, undefined, ''] }}, (error, acts)=> {
+    Submission.find({stamp: 'in', confirmationStatus: 'yes', imageUrl: { $nin: [null, undefined, ''] }}, publicFields, (error, acts)=> {
       callback(error, acts)
     })
   },
