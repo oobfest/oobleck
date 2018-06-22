@@ -29,8 +29,13 @@ module.exports = {
   },
 
   getActByDomain: function(domain, callback) {
-    Submission.findOne({domain: domain, confirmationStatus: 'yes', imageUrl: { $nin: [null, undefined, '']}}, (error, submission)=> {
-      callback(error, submission)
+    Submission.findOne({domain: domain}, (error, submission)=> {
+      if(error) callback(error, null)
+      else {
+        // Hide plz
+        submission.reviews = []
+        callback(null, submission)
+      }
     })
   },
 
