@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const Submission = require('../submissions/schema')
 
-let publicFields = "actName domain publicDescription imageUrl primaryContactName additionalMembers"
+let publicFields = "actName domain publicDescription imageUrl primaryContactName additionalMembers showType"
 
 module.exports = {
 
