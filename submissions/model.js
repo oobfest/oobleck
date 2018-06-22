@@ -22,11 +22,17 @@ module.exports = {
 		})
 	},
 
-	getByDomain: function(domain, callback) {
-		Submission.findOne({domain: domain}, (error, submission)=> {
-			callback(error, submission)
-		})
-	},
+  getByDomain: function(domain, callback) {
+    Submission.findOne({domain: domain}, (error, submission)=> {
+      callback(error, submission)
+    })
+  },
+
+  getActByDomain: function(domain, callback) {
+    Submission.findOne({domain: domain, confirmationStatus: 'yes', imageUrl: { $nin: [null, undefined, '']}}, (error, submission)=> {
+      callback(error, submission)
+    })
+  },
 
 	getAll: function(callback) {
 		Submission.find((error, submissions)=> {

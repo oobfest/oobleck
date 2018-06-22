@@ -52,6 +52,14 @@ module.exports = {
     })
   },
 
+  getActByDomain: function(request, response, next) {
+    let domain = request.body.domain
+    model.getActByDomain(domain, (error, act)=> {
+      if(error) response.send({error})
+      else response.send(act)
+    })
+  },
+
 	addTheaterTag: function(request, response, next) {
 		let objectId = request.body.objectId
 		let tag = request.body.tag
