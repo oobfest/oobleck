@@ -33,7 +33,7 @@ module.exports = {
       if(error) callback(error, null)
       else {
         // Hide plz
-        submission.reviews = []
+        if(submission.review) submission.reviews = []
         callback(null, submission)
       }
     })
