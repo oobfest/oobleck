@@ -31,19 +31,26 @@ module.exports = {
 		})
 	},
 
-	getAllPaidExceptStandup: function(request,response, next) {
+	getAllPaidExceptStandup: function(request, response, next) {
 		model.getAllPaidExceptStandup((error, submissions)=> {
 			if(error) next(error)
 			else response.send(submissions)
 		})
 	},
 
-	getAllPaidStandup: function(request,response, next) {
+	getAllPaidStandup: function(request, response, next) {
 		model.getAllPaidStandup((error, submissions)=> {
 			if(error) next(error)
 			else response.send(submissions)
 		})
 	},
+
+  getValidActs: function(request, response, next) {
+    model.getValidActs((error, acts)=> {
+      if(error) response.send({error})
+      else response.send(acts)
+    })
+  },
 
 	addTheaterTag: function(request, response, next) {
 		let objectId = request.body.objectId

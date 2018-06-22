@@ -29,3 +29,9 @@ process.on('uncaughtException', (error)=> {
 app.listen(process.env.PORT, ()=> {
 	log.info("🐵  Listening on port " + process.env.PORT)
 })
+
+let SubmissionModel = require('./submissions/model')
+SubmissionModel.getValidActs((error, acts)=> {
+  if(error) console.log(error)
+  else acts.forEach(act=> console.log(act.actName))
+})

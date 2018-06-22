@@ -64,6 +64,12 @@ module.exports = {
 		})
 	},
 
+  getValidActs: function(callback) {
+    Submission.find({stamp: 'in', confirmationStatus: 'yes', imageUrl: { $nin: [null, undefined, ''] }}, (error, acts)=> {
+      callback(error, acts)
+    })
+  },
+
 	saveReview: function(objectId, newReview, callback) {
 		this.get(objectId, (error, submission)=> {
 			if(error) callback(error)
