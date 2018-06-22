@@ -53,7 +53,7 @@ module.exports = {
   },
 
   getActByDomain: function(request, response, next) {
-    let domain = request.body.domain
+    let domain = request.params.domain
     model.getActByDomain(domain, (error, act)=> {
       if(error) response.send({error})
       else response.send(act)
