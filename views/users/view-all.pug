@@ -5,32 +5,97 @@ block content
 			span.dash-titlebar-title Users
 		button.btn.btn-secondary.ml-md-auto(data-toggle="modal" data-target="#add-user-modal") Add User
 
+
 	.dash-boxes.container-fluid
-		.box.box-b
-			table.box-table.table
-				thead
-					tr
-						th Name
-						th Email
-						th Password Set
-						th
-						th Roles
-				tbody
-					for user in users
-						tr
-							td=user.username
-							td=user.email
-							td
-								if user.isPasswordSet
-									| true
-								else
-									a(href="/users/password/"+user._id) false
-							td
-								a(href="/users/edit/"+user._id) Edit
-							td
-								for role in user.roles
-									span.badge.badge-info=role
-									| &nbsp;
+		ul.nav.nav-pills
+			li.nav-item
+				a.nav-link(data-toggle="tab" href="#admin") Admin
+			li.nav-item
+				a.nav-link.active(data-toggle="tab" href="#staff") Staff
+			li.nav-item
+				a.nav-link(data-toggle="tab" href="#panelists") Panelists
+
+		.tab-content
+			#admin.tab-pane
+				.box.box-b
+					table.box-table.table
+						thead
+							tr
+								th Name
+								th Email
+								th Password Set
+								th
+								th Roles
+						tbody
+							for user in users.filter(u=> u.roles.includes('admin'))
+								tr
+									td=user.username
+									td=user.email
+									td
+										if user.isPasswordSet
+											| true
+										else
+											a(href="/users/password/"+user._id) false
+									td
+										a(href="/users/edit/"+user._id) Edit
+									td
+										for role in user.roles
+											span.badge.badge-info=role
+											| &nbsp;
+			#staff.tab-pane.show.active
+				.box.box-b
+					table.box-table.table
+						thead
+							tr
+								th Name
+								th Email
+								th Password Set
+								th
+								th Roles
+						tbody
+							for user in users.filter(u=> u.roles.includes('staff'))
+								tr
+									td=user.username
+									td=user.email
+									td
+										if user.isPasswordSet
+											| true
+										else
+											a(href="/users/password/"+user._id) false
+									td
+										a(href="/users/edit/"+user._id) Edit
+									td
+										for role in user.roles
+											span.badge.badge-info=role
+											| &nbsp;
+			#panelists.tab-pane
+				.box.box-b
+							table.box-table.table
+								thead
+									tr
+										th Name
+										th Email
+										th Password Set
+										th
+										th Roles
+								tbody
+									for user in users.filter(u=> u.roles.includes('panelist') || u.roles.includes('standup-panelist'))
+										tr
+											td=user.username
+											td=user.email
+											td
+												if user.isPasswordSet
+													| true
+												else
+													a(href="/users/password/"+user._id) false
+											td
+												a(href="/users/edit/"+user._id) Edit
+											td
+												for role in user.roles
+													span.badge.badge-info=role
+													| &nbsp;
+
+
 
 	#add-user-modal.modal.fade
 		.modal-dialog
