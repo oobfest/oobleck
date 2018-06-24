@@ -28,6 +28,12 @@ module.exports = {
 		})
 	},
 
+	getByActId: function(actId, callback) {
+		Show.find({'acts._id': actId}, (error, shows)=> {
+			callback(error, shows)
+		})
+	},
+
 	update: function(id, newShow, callback) {
 		this.get(id, (error, oldShow)=> {
 			if(error) callback(error)

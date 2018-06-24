@@ -26,6 +26,14 @@ module.exports = {
 		})
 	},
 
+	getByActId: function(request, response, next) {
+		let actId = convertToMongoId(request.params.actId)
+		model.getByActId(actId, (error, shows)=> {
+			if(error) next(error)
+			else response.send(shows)
+		})
+	},
+
 	update: function(request, response, next) {
 		let id = request.params.id
 		let show = request.body

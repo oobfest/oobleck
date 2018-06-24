@@ -11,6 +11,7 @@ router.route('/')
 router.post('/add-act/:id', isLoggedIn, controller.addAct)
 router.post('/remove-act/', isLoggedIn, controller.removeAct)
 
+router.get('/get-by-act/:id', controller.getByActId)
 
 router.route('/:id')
 	.get(isLoggedIn, controller.getById)
