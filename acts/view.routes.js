@@ -9,6 +9,10 @@ const isProductionEnvironment = require('../utilities/is-production-environment'
 const _ = require('lodash')
 const util = require('../acts/util')
 
+router.get('/sandbox', isLoggedIn, (request, response, next)=> {
+  response.render('acts/sandbox')
+})
+
 router.get('/fun', isLoggedIn, (request, response, next)=> {
   submissionModel.getAllAccepted((error, acts)=> {
     if(error) next(error)

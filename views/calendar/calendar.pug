@@ -13,6 +13,7 @@ block content
         a(href="#" @click.prevent="toggleNavigation") {{ hideNavigation ? 'Show Navigation' : 'Hide Navigation'  }}
     add-act-modal
     add-show-modal
+    add-workshop-modal
     .box.day(v-for="day in days")
       day(v-bind="day")
   
@@ -23,7 +24,9 @@ block content
   include store
   include modals/add-act
   include modals/add-show
+  include modals/add-workshop
   include components/day
   include components/venue
+  include components/workshop
   include components/shows
   include app

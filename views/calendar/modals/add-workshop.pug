@@ -1,0 +1,63 @@
+script#add-workshop-modal-template(type="text/template")
+  #add-workshop-modal.modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title Add Workshop
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          form
+            .form-group
+              label(for="add-workshop-modal-day") Day
+              input#add-workshop-modal-day.form-control(type="text" readonly v-model="workshop.day")
+            .form-group
+              label(for="add-workshop-modal-venue") Venue
+              input#add-workshop-modal-venue.form-control(type="text" readonly v-model="workshop.venue")
+            .form-group
+              label(for="add-workshop-modal-time") Time
+              select#add-workshop-modal-time.form-control(v-model="workshop.time")
+                option 11:00am
+                option 12:00pm
+                option 1:00pm
+                option 3:00pm
+            .form-group
+              label(for="add-workshop-modal-workshop") Workshop
+              select#add-workshop-modal-workshop.form-control(v-model="selectedWorkshopId")
+                option(v-for="workshop in workshops",:value="workshop._id") {{workshop.name}}
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="submit" @click="addWorkshop()") Add Workshop
+
+script.
+  Vue.component('add-workshop-modal', {
+    template: "#add-workshop-modal-template",
+    data() {
+      return {
+        selectedWorkshopId: null
+      }
+    },
+    computed: {
+      workshops() {
+        return this.$store.state.workshops
+      },
+      workshop() {
+        return this.$store.state.addWorkshopModal
+      }
+    },
+    methods: {
+      addWorkshop() {
+        $('#add-workshop-modal').modal('hide')
+        let self = this
+        axios
+          .post('/api/workshops/set-date/' + self.selectedWorkshopId, self.workshop)
+          .then((response)=> {
+            self.$store.commit('addWorkshop', response.data)
+          })
+          .catch((error)=> {
+            alert("Error adding workshop :(")
+            console.log(error)
+          })
+      }
+    }
+  })

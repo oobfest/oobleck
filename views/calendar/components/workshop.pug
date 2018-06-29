@@ -1,0 +1,25 @@
+script#workshop-template(type="text/template")
+  .box.workshop
+    a.delete(v-show="$root.editMode" href="#" @click.prevent="removeWorkshop(workshop._id)") remove workshop
+    h4.time {{workshop.time}}
+    p.font-weight-bold Workshop: {{workshop.name}}
+
+script.
+  Vue.component('workshop', {
+    template: "#workshop-template",
+    props: ['workshop'],
+    methods: {
+      removeWorkshop(id) {
+        let self = this
+        axios
+          .delete('/api/workshops/set-date/' + id)
+          .then((response)=> {
+            self.$store.commit('removeWorkshop', id)
+          })
+          .catch((error)=> {
+            alert("Error removing workshop :(")
+            console.log(error)
+          })
+      }
+    }
+  })

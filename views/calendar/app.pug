@@ -58,5 +58,17 @@ script.
           alert("Error getting acts :(")
           console.log(error)
         })
+
+      // Get Workshops
+      axios
+        .get('/api/workshops/')
+        .then(function(response) {
+          self.$store.commit('setupWorkshops', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting workshops :(")
+          console.log(error)
+        })
+
     }
   })

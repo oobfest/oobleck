@@ -144,22 +144,25 @@ block content
           .get('/api/submissions/get-all-accepted')
           .then(function(response) {
             self.acts = response.data
+
+            // For getting the performers, filter only acts that have confirmed
+            let confirmedActs = self.acts.filter(a=> a.confirmationStatus == 'yes' || a.confirmationStatus == 'reschedule')
             let performers = []
-            for(let i=0; i<self.acts.length; i++) {
+            for(let i=0; i<confirmedActs.length; i++) {
               performers.push({
-                name: self.acts[i].primaryContactName,
-                email: self.acts[i].primaryContactEmail,
-                act: self.acts[i].actName,
-                actId: self.acts[i]._id,
-                type: self.acts[i].showType
+                name: confirmedActs[i].primaryContactName,
+                email: confirmedActs[i].primaryContactEmail,
+                act: confirmedActs[i].actName,
+                actId: confirmedActs[i]._id,
+                type: confirmedActs[i].showType
               })
-              for(let j=0; j<self.acts[i].additionalMembers.length; j++) {
+              for(let j=0; j<confirmedActs[i].additionalMembers.length; j++) {
                 performers.push({
-                  name: self.acts[i].additionalMembers[j].name,
-                  email: self.acts[i].additionalMembers[j].email,
-                  act: self.acts[i].actName,
-                  actId: self.acts[i]._id,
-                  type: self.acts[i].showType
+                  name: confirmedActs[i].additionalMembers[j].name,
+                  email: confirmedActs[i].additionalMembers[j].email,
+                  act: confirmedActs[i].actName,
+                  actId: confirmedActs[i]._id,
+                  type: confirmedActs[i].showType
                 })
               }
             }

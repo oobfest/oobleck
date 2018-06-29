@@ -1,0 +1,92 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Workshops
+
+  #app.dash-boxes.container-fluid
+    add-workshop-modal(:workshop="modalWorkshop")
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Teacher(s)
+            th When
+            th Limit
+        tbody(v-for="(workshop, index) in workshops")
+          tr( style="background-color: white")
+            td
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{workshop.name}}
+            td {{workshop.teacher}}
+            td {{getWorkshopDate(workshop)}}
+            td {{workshop.capacity}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan="4")
+              h4 Description
+              p {{workshop.description}}
+              h4 Teacher Bio
+              p {{workshop.bio}}
+              div(v-if="workshop.imageUrl")
+                h4 View Image
+                pre
+                  a(:href="workshop.imageUrl" target="_blank") {{workshop.imageUrl}}
+              div(v-if="workshop.deleteImageUrl")
+                h4 Delete Image
+                pre(v-if="workshop.deleteImageUrl")
+                  a(:href="workshop.deleteImageUrl" target="_blank") {{workshop.deleteImageUrl}}
+              .form-group
+                //button.btn.btn-primary(@click="editWorkshop(workshop)" type="button" data-toggle="modal" data-target="#add-workshop-modal") Edit
+                | &nbsp;
+                button.btn.btn-danger(@click="deleteWorkshop(workshop._id, index)") Delete
+    .form-group
+      button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-workshop-modal") Add Workshop
+
+
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  include components/add-workshop
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          workshops: [],
+          modalWorkshop: {
+            capacity:12, 
+            imageUrl: '', 
+            deleteImageUrl: ''
+          }
+        }
+      },
+      methods: {
+        editWorkshop(selectedWorkshop) {
+          this.modalWorkshop = selectedWorkshop
+        },
+        deleteWorkshop(id, index) {
+          let self = this
+          axios
+            .delete('/api/workshops/' + id)
+            .then(function(response) {
+              self.workshops.splice(index, 1)
+            })
+        },
+        getWorkshopDate(workshop) {
+          if (workshop.day) return `${workshop.day}, ${workshop.venue}, ${workshop.time}`
+          else return 'N/A'
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/workshops/')
+          .then(function(response) {
+            self.workshops = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting workshops :(")
+            console.log(error)
+          })
+      }
+    })

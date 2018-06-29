@@ -1,0 +1,50 @@
+extends ../_layout
+block content
+  #app.dash-boxes.container-fluid
+
+    form(action="https://www.paypal.com/cgi-bin/webscr" method="POST")
+      input(type="hidden" name="cmd" value="_cart")
+      input(type="hidden" name="business" value="apply@outofboundscomedy.com")
+      input(type="hidden" name="amount_1" value="45")
+      input(type="hidden" name="item_name_1" value="Workshop 1")
+      input(type="hidden" name="amount_2" value="25")
+      input(type="hidden" name="item_name_2" value="Fun times")
+      input(type="number" name="quantity_2" value="1")
+      input(type="hidden" name="upload" value="1")
+      button.btn.btn-primary Buy all the things!
+
+
+    pre W6KZXHBKPPVX4
+    pre 37ZJETQ9946B8
+
+    form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+      input(type="hidden" name="cmd" value="_s-xclick")
+      input(type="hidden" name="hosted_button_id" value="W6KZXHBKPPVX4")
+      input(type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!")
+      img(alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1")
+
+    form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+      input(type="hidden" name="cmd" value="_s-xclick")
+      input(type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----")
+      input(type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!")
+      img(alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1")
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script.
+    Vue.component('act-modal', {
+      template: "#act-modal-template",
+      props: ['act']
+    })
+
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+        }
+      },
+      computed: {
+      },
+      methods: {
+      },
+    })

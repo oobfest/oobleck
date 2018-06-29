@@ -5,20 +5,32 @@ script#venue-template(type="text/template")
       li.list-inline-item
         a.add-show(href="#" @click.prevent="showAddShowModal(day, venue)" data-toggle="modal" data-target="#add-show-modal") add show
       //li.list-inline-item
-        a.add-show(href="#" @click.prevent="todo" data-toggle="modal" data-target="#add-workshop-modal") add workshop
+        a.add-show(href="#" @click.prevent="showWorkshopModal(day, venue)" data-toggle="modal" data-target="#add-workshop-modal") add workshop
       //li.list-inline-item
         a.add-show(href="#" @click.prevent="todo" data-toggle="modal" data-target="#add-rehearsal-modal") add rehearsal
-    shows(:day="day" :venue="venue")
+    workshop(v-for="(workshop, index) in workshopsForVenueAndDay",:workshop="workshop",:key="index")
+    shows(:day="day",:venue="venue")
 
 script.
   Vue.component('venue', {
     template: "#venue-template",
     props: ['day', 'venue'],
+    computed: {
+      workshopsForVenueAndDay() {
+        return this.$store.state.workshops.filter(w=> w.day == this.day && w.venue == this.venue)
+      }
+    },
     methods: {
       showAddShowModal(day, venue) {
         this.$store.commit('addShowModal', {day, venue})
         $('#add-show-modal').on('shown.bs.modal', function () {
           $("#add-show-modal-time").focus()
+        })
+      },
+      showWorkshopModal(day, venue) {
+        this.$store.commit('addWorkshopModal', {day, venue})
+        $('#add-workshop-modal').on('shown.bs.modal', function () {
+          $("#add-workshop-modal-workshop").focus()
         })
       },
       todo() {

@@ -11,6 +11,7 @@ module.exports = async function(app) {
 	app.use('/api/submissions',	require('../submissions/api.routes'))
 	app.use('/api/shows',				require('../shows/api.routes'))
 	app.use('/api/days', 				require('../days/api.routes'))
+	app.use('/api/workshops', 	require('../workshops/api.routes'))
 
 	app.use('/', 						require('../login/routes'))
 	app.use('/', 						require('../email/routes'))
@@ -20,6 +21,7 @@ module.exports = async function(app) {
 	app.use('/users', 			require('../users/routes'))
 	app.use('/hosts',				require('../hosts/view.routes'))
 	app.use('/calendar',		require('../calendar/view.routes'))
+	app.use('/workshops',		require('../workshops/view.routes'))
 	
 
 	// Home Page (Login screen)

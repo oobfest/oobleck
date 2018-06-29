@@ -3,8 +3,10 @@ script.
     state: {
       shows: [],
       acts: [],
+      workshops: [],
       addShowModal: { day: '', venue: '', time: '' },
-      addActModal: { day: '', venue: '', time: '', _id: '' }
+      addActModal: { day: '', venue: '', time: '', _id: '' },
+      addWorkshopModal: { day: '', venue: '', time: ''}
     },
     getters: {
       getShows: state => (day, venue) => {
@@ -28,10 +30,23 @@ script.
       removeShow(state, payload) {
         state.shows.splice(state.shows.findIndex(s=> s._id === payload), 1)
       },
-
+      addWorkshopModal(state, payload) {
+        state.addWorkshopModal = payload
+      },
+      addWorkshop(state, payload) {
+        state.workshops.push(payload)
+      },
+      removeWorkshop(state, payload) {
+        let workshopIndex = state.workshops.findIndex(w=> w._id === payload)
+        state.workshops.splice(workshopIndex, 1)
+      },
       // Get all paid approved submissions, not scheduled acts
       setupActs(state, payload) {
         state.acts = payload
+      },
+
+      setupWorkshops(state, payload) {
+        state.workshops = payload
       }
     }
   })
