@@ -12,9 +12,9 @@ module.exports = async function(app) {
 	app.use('/api/shows',				require('../shows/api.routes'))
 	app.use('/api/days', 				require('../days/api.routes'))
 	app.use('/api/workshops', 	require('../workshops/api.routes'))
+	app.use('/api/email',				require('../email/api.routes'))
 
 	app.use('/', 						require('../login/routes'))
-	app.use('/', 						require('../email/routes'))
 	app.use('/apply', 			require('../apply/routes'))
 	app.use('/submissions', require('../submissions/routes'))
 	app.use('/acts', 				require('../acts/view.routes'))
