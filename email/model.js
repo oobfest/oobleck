@@ -10,7 +10,8 @@ module.exports = {
   sendContactEmail: function(senderEmail, senderName, subject, message, callback) {
     transporter.sendMail({
       to: "admin@oobfest.com",
-      from: senderEmail,
+      from: "no-reply@oobfest.com",
+      replyTo: senderEmail,
       subject: subject,
       text: message
     }, (error, info)=> {callback(error, info)})

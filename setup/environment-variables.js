@@ -35,7 +35,10 @@ module.exports = function() {
 		'TWILIO_RECIPIENT',
 		'SUBMISSION_EMAIL',
 		'OOB_PROMO_CODE',
-		'LATE_SUBMISSION_PASSWORD'
+		'LATE_SUBMISSION_PASSWORD',
+		'AWS_ACCESS_KEY_ID',
+		'AWS_SECRET_ACCESS_KEY',
+		'AWS_REGION'
 	]
 
 	for(let i=0; i<variableNameList.length; i++) {
