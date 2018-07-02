@@ -25,9 +25,9 @@ block content
           tr.collapse(:id="'collapse-' + index")
             td(colspan="4")
               h4 Description
-              pre {{workshop.description}}
+              vue-markdown(:source="workshop.description")
               h4 Teacher Bio
-              pre {{workshop.bio}}
+              vue-markdown(:source="workshop.bio")
               div(v-if="workshop.imageUrl")
                 h4 View Image
                 pre
@@ -44,9 +44,11 @@ block content
 
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
+  script(src="/js/vue-markdown.js")
   include components/add-workshop
   include components/edit-workshop
   script.
+    Vue.use(VueMarkdown)
     let app = new Vue({ 
       el: "#app",
       data() { 

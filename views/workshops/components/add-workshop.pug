@@ -13,16 +13,16 @@ script#add-workshop-modal-template(type="text/template")
             input#add-workshop-modal-name.form-control(type="text" v-model="workshop.name")
           .form-group
             label(for="add-workshop-modal-description") Description
-            textarea#add-workshop-modal-description.form-control(v-model="workshop.description")
+            textarea#add-workshop-modal-description.form-control.code(v-model="workshop.description" rows=5)
           .form-group
             label(for="add-workshop-modal-teacher") Teacher(s)
             input#add-workshop-modal-teacher.form-control(type="text" v-model="workshop.teacher")
           .form-group
             label(for="add-workshop-modal-bio") Teacher Bio
-            textarea#add-workshop-modal-bio.form-control(v-model="workshop.bio")
+            textarea#add-workshop-modal-bio.form-control.code(v-model="workshop.bio" rows=5)
           .form-group
             label(for="add-workshop-modal-affiliation") Home Base 
-            textarea#add-workshop-modal-affiliation.form-control(v-model="workshop.affiliation")
+            input#add-workshop-modal-affiliation.form-control(v-model="workshop.affiliation")
           .form-group
             label(for="add-workshop-modal-capacity") Maximum Number of Students
             input#add-workshop-modal-capacity.form-control(type="number" v-model="workshop.capacity" min=0 max=120)
