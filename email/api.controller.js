@@ -8,7 +8,11 @@ module.exports = {
     let message = request.body.message
     model.sendContactEmail(email, name, subject, message, (error, info)=> {
       if(error) next(error)
-      else response.json(info)
+      else {
+        response.header("Access-Control-Allow-Origin", "*");
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        response.json(info)
+      }
     })
   }
 }
