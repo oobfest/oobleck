@@ -23,6 +23,7 @@ block content
                 th Name
                 th Type
                 th Location
+                th Image?
             tbody
               tr
                 th(style="width:180px")
@@ -50,6 +51,7 @@ block content
                   a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.actName}}
                 td {{act.showType}}
                 td {{act.city}}, {{act.state}}
+                td {{act.imageUrl ? '' : '⛔️'}}
       #other.tab-pane
         .box.box-b
           table.box-table.table
