@@ -6,6 +6,7 @@ block content
 
   #app.dash-boxes.container-fluid
     add-workshop-modal(:workshop="modalWorkshop")
+    edit-workshop-modal(:workshop="modalWorkshop")
     .box.box-b
       table.box-table.table
         thead
@@ -31,14 +32,11 @@ block content
                 h4 View Image
                 pre
                   a(:href="workshop.imageUrl" target="_blank") {{workshop.imageUrl}}
-              div(v-if="workshop.deleteImageUrl")
-                h4 Delete Image
-                pre(v-if="workshop.deleteImageUrl")
-                  a(:href="workshop.deleteImageUrl" target="_blank") {{workshop.deleteImageUrl}}
               .form-group
-                //button.btn.btn-primary(@click="editWorkshop(workshop)" type="button" data-toggle="modal" data-target="#add-workshop-modal") Edit
+                button.btn.btn-primary(@click="editWorkshop(workshop)" type="button" data-toggle="modal" data-target="#edit-workshop-modal") Edit
                 | &nbsp;
-                button.btn.btn-danger(@click="deleteWorkshop(workshop._id, index)") Delete
+                button.btn.btn-danger(v-if="!workshop.deleteImageUrl" @click="deleteWorkshop(workshop._id, index)") Delete
+                button.btn.btn-danger(v-else @click="deleteWorkshopImage(workshop)") Delete Image
     .form-group
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-workshop-modal") Add Workshop
 
@@ -47,6 +45,7 @@ block content
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
   include components/add-workshop
+  include components/edit-workshop
   script.
     let app = new Vue({ 
       el: "#app",
@@ -72,8 +71,31 @@ block content
               self.workshops.splice(index, 1)
             })
         },
+        deleteWorkshopImage(workshop) {
+          window.open(workshop.deleteImageUrl, '_blank')
+          workshop.imageUrl = ''
+          workshop.deleteImageUrl = ''
+          let self = this
+          axios
+            .put('/api/workshops/' + workshop._id, workshop)
+            .then(function(response) {
+              workshop = response.data
+            })
+            .catch(function(error){
+              alert("Error updating workshop :(")
+              console.log(error)
+            })        
+
+        },
         getWorkshopDate(workshop) {
-          if (workshop.day) return `${workshop.day}, ${workshop.venue}, ${workshop.time}`
+          if (workshop.day) {
+            let time = ''          
+            if(workshop.time=="10") time = "11:00am"
+            if(workshop.time=="20") time = "12:00pm"
+            if(workshop.time=="30") time = "1:00pm"
+            if(workshop.time=="40") time = "3:00pm"
+            return `${workshop.day}, ${workshop.venue}, ${time}`
+          }
           else return 'N/A'
         }
       },

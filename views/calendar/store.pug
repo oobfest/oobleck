@@ -11,6 +11,17 @@ script.
     getters: {
       getShows: state => (day, venue) => {
         return state.shows.filter(show=> {return (show.day === day && show.venue === venue)})
+      },
+      getWorkshops: state => (day, venue) => {
+        return state.workshops
+          .filter(workshop=> { return (workshop.day == day && workshop.venue == venue)})
+          .sort((a,b)=> { return (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0)})
+      },
+      getAllWorkshops: state => {
+        return state.workshops
+      },
+      getWorkshopModal: state => {
+        return state.addWorkshopModal
       }
     },
     mutations: {
@@ -33,8 +44,9 @@ script.
       addWorkshopModal(state, payload) {
         state.addWorkshopModal = payload
       },
-      addWorkshop(state, payload) {
-        state.workshops.push(payload)
+      updateWorkshop(state, payload) {
+        let workshop = state.workshops.findIndex(w=> w._id === payload._id)
+        Vue.set(state.workshops, workshop, payload)
       },
       removeWorkshop(state, payload) {
         let workshopIndex = state.workshops.findIndex(w=> w._id === payload)
