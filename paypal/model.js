@@ -1,10 +1,22 @@
 let paypalSdk = require('paypal-rest-sdk')
+let isProductionEnvironment = require('../utilities/is-production-environment')
 
-paypalSdk.configure({
-    'mode': 'sandbox',
-    'client_id': process.env.PAYPAL_SANDBOX_CLIENT,
-    'client_secret': process.env.PAYPAL_SANDBOX_SECRET,
-})
+if (isProductionEnvironment) {
+  console.log("Paypal Production")
+  paypalSdk.configure({
+      'mode': 'live',
+      'client_id': process.env.PAYPAL_CLIENT,
+      'client_secret': process.env.PAYPAL_SECRET,
+  })  
+}
+else {
+  console.log("PayPal Sandbox")
+  paypalSdk.configure({
+      'mode': 'sandbox',
+      'client_id': process.env.PAYPAL_SANDBOX_CLIENT,
+      'client_secret': process.env.PAYPAL_SANDBOX_SECRET,
+  })  
+}
 
 module.exports = {
   createBadgeAllSale: function(price, quantity, callback) {

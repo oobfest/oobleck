@@ -29,3 +29,9 @@ process.on('uncaughtException', (error)=> {
 app.listen(process.env.PORT, ()=> {
 	log.info("🐵  Listening on port " + process.env.PORT)
 })
+
+// Test
+var https = require('https')
+https.get('https://tlstest.paypal.com/', function(res){ 
+  console.log("Working?", res.statusCode) 
+})
