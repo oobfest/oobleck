@@ -41,6 +41,8 @@ module.exports = {
           if(error) next(error)
           else {
             emailModel.sendBadgeEmail(savedBadge.email)
+            response.header("Access-Control-Allow-Origin", "*")
+            response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
             response.json({message: "Success!"})
           }
         })
