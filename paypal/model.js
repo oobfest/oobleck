@@ -6,19 +6,6 @@ paypalSdk.configure({
     'client_secret': process.env.PAYPAL_SANDBOX_SECRET,
 })
 
-let checkoutExperience = {
-    "name": Math.random().toString(36).substring(2),
-    "temporary": true,
-    "presentation": {
-        "brand_name": "Out of Bounds Comedy Festival",
-        "logo_image": "https://app.oobfest.com/img/logo.png",
-        "locale_code": "US"
-    },
-    "input_fields": {
-        "no_shipping": 1,
-    }
-}
-
 module.exports = {
   createBadgeAllSale: function(price, quantity, callback) {
     let total = price * quantity
@@ -43,21 +30,30 @@ module.exports = {
     
     //paymentData.experience_profile_id = "XP-49QE-GA2W-CHMC-L2H3"
 
-    this.createCheckoutExperienceProfile((error, experienceProfileId)=> {
-      if(error) callback(error)
-      else {
-        paymentData.experience_profile_id = experienceProfileId
-        paypalSdk.payment.create(paymentData, (error, payment)=> {
-          callback(error, payment)
-        })
-      }
+    this.createCheckoutExperienceProfile((experienceProfileId)=> {
+      paymentData.experience_profile_id = experienceProfileId
+      paypalSdk.payment.create(paymentData, (error, payment)=> {
+        callback(error, payment)
+      })
     })
   },
 
   createCheckoutExperienceProfile: function(callback) {
+    let checkoutExperience = {
+        "name": Math.random().toString(36).substring(2),
+        "temporary": true,
+        "presentation": {
+            "brand_name": "Out of Bounds Comedy Festival",
+            "logo_image": "https://app.oobfest.com/img/logo.png",
+            "locale_code": "US"
+        },
+        "input_fields": {
+            "no_shipping": 1,
+        }
+    }
     paypalSdk.webProfile.create(checkoutExperience, function (error, webProfile) {
-      console.log("Profile", webProfile)
-      callback(error, webProfile.id)
+      if(error) callback(error)
+      else callback(webProfile.id)
     })
   },
 
