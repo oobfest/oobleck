@@ -8,25 +8,6 @@ block content
         p An email has been sent to 
           span.code {{badge.email}}
       .col-4.offset-4(v-show="!paymentComplete")
-        .form-group
-          label(for="name") Name
-          input#name.form-control(type="text" v-model="badge.name")
-        .form-group
-          label(for="email") Email
-          input#email.form-control(type="email" v-model="badge.email")
-        .form-group
-          label(for="phone") Phone Number
-          input#phone.form-control(type="tel" v-model="badge.phone")
-        .form-group
-          label(for="quantity") Quantity
-          select#quantity.custom-select(name="quantity" v-model="badge.quantity")
-            option(selected) 1
-            option 2
-            option 3
-            option 4
-            option 5
-        .form-group.text-center
-          #paypal-button
 
   script(src="/js/vue.js")
   script(src="https://www.paypalobjects.com/api/checkout.js")

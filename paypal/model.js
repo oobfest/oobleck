@@ -7,7 +7,7 @@ paypalSdk.configure({
 })
 
 let checkoutExperience = {
-    "name": Math.random().toString(36).substring(7),
+    "name": Math.random().toString(36).substring(2),
     "temporary": true,
     "presentation": {
         "brand_name": "Out of Bounds Comedy Festival",
@@ -56,6 +56,7 @@ module.exports = {
 
   createCheckoutExperienceProfile: function(callback) {
     paypalSdk.webProfile.create(checkoutExperience, function (error, webProfile) {
+      console.log("Profile", webProfile)
       callback(error, webProfile.id)
     })
   },

@@ -5,4 +5,4 @@ const controller = require('./view.controller')
 
 router.get('/', isLoggedIn, controller.viewAll)
 
- module.exports = router
+module.exports = router
