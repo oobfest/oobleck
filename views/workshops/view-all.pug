@@ -18,7 +18,7 @@ block content
         tbody(v-for="(workshop, index) in workshops")
           tr( style="background-color: white")
             td
-              a(:href="'#collapse-' + index" data-toggle="collapse") {{workshop.name}}
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{workshop.name ? workshop.name : '[no name]'}}
             td {{workshop.teacher}}
             td {{getWorkshopDate(workshop)}}
             td {{workshop.capacity}}

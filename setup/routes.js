@@ -13,6 +13,8 @@ module.exports = async function(app) {
 	app.use('/api/days', 				require('../days/api.routes'))
 	app.use('/api/workshops', 	require('../workshops/api.routes'))
 	app.use('/api/email',				require('../email/api.routes'))
+	app.use('/api/paypal',			require('../paypal/api.routes'))
+	app.use('/api/volunteers',	require('../volunteers/api.routes'))
 
 	app.use('/', 						require('../login/routes'))
 	app.use('/apply', 			require('../apply/routes'))
@@ -22,7 +24,8 @@ module.exports = async function(app) {
 	app.use('/hosts',				require('../hosts/view.routes'))
 	app.use('/calendar',		require('../calendar/view.routes'))
 	app.use('/workshops',		require('../workshops/view.routes'))
-	
+	app.use('/badges',			require('../badges/view.routes'))
+	app.use('/volunteers',	require('../volunteers/view.routes'))
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {

@@ -131,3 +131,9 @@ a:hover { color: #016ff9; }
 .page-link:not([disabled]):not(.disabled).availability { cursor: inherit; color: white; }
 .page-item.available   .page-link { background-color: #35bd49; }
 .page-item.unavailable .page-link { white; background-color: #fc2344; }
+
+.dash-nav-divider {
+	margin: 0;
+	border-top: 1px solid #2d303a;
+	border-bottom: 1px solid #454851;
+}

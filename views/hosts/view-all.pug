@@ -5,9 +5,7 @@ block content
 			span.dash-titlebar-title Host Submissions
 
 	.dash-boxes.container-fluid
-		if (hosts.length == 0)
-			p There are none!
-		else
+		if hosts.length > 0
 			.box.box-b
 				table.box-table.table
 					thead
@@ -21,3 +19,5 @@ block content
 									a(href="/hosts/"+host._id)=host.name
 								td
 									a(href="/hosts/delete/" + host._id) Delete
+		else
+			p.m2 No hosts yet

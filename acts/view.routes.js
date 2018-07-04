@@ -13,13 +13,6 @@ router.get('/sandbox', isLoggedIn, (request, response, next)=> {
   response.render('acts/sandbox')
 })
 
-router.get('/fun', isLoggedIn, (request, response, next)=> {
-  submissionModel.getAllAccepted((error, acts)=> {
-    if(error) next(error)
-    else response.render('acts/fun', {acts})
-  })
-})
-
 router.get('/', isLoggedIn, (request, response, next)=> {
   submissionModel.getAllAccepted((error, acts)=> {
     if(error) next(error)

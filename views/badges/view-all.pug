@@ -1,0 +1,24 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Badges
+
+  #app.dash-boxes.container-fluid
+    .box.box-b
+      table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+            th Badge Type
+            th Quantity
+        tbody
+          for badge in badges
+            tr 
+              td=badge.name
+              td=badge.email
+              td=badge.phone
+              td=badge.type
+              td=badge.quantity

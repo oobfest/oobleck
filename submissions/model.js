@@ -45,6 +45,22 @@ module.exports = {
 		})
 	},
 
+	getAllPerformerEmails: function(callback) {
+		Submission.find({stamp: 'in', confirmationStatus: 'yes'}, "primaryContactEmail additionalMembers", (error, submissions)=> {
+			if (error) callback(error)
+			else {
+				let performerEmails = []
+				for(let i=0; i<submissions.length; i++) {
+					performerEmails.push(submissions[i].primaryContactEmail)
+					for(let j=0; j<submissions[i].additionalMembers.length; j++) {
+						performerEmails.push(submissions[i].additionalMembers[j].email)
+					}
+				}
+				callback(null, performerEmails)			
+			}
+		})
+	},
+
 	getAllPaid: (callback)=> {
 		Submission.find({paymentInfo: {$ne: null}}, (error, submissions)=> {
 			callback(error, submissions)

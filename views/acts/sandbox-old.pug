@@ -1,0 +1,50 @@
+extends ../_layout
+block content
+  input#badge-all-quantity(type="number" name="badge-all-quantity" min=0 max=50  value=0)
+  input#badge-performer-weekend-quantity(type="number" name="badge-performer-weekend-quantity" min=0 max=50 value=0)
+  input#badge-performer-all-quantity(type="number" name="badge-performer-all-quantity" min=0 max=50 value=0)
+  
+  #paypal-button
+
+  script(src="https://www.paypalobjects.com/api/checkout.js")
+  script.
+    paypal.Button.render({
+      env: 'sandbox',
+      style: {
+        layout: 'vertical',
+        size:   'medium',
+        shape:  'rect',
+        color:  'gold' 
+      },
+      funding: {
+        allowed: [ paypal.FUNDING.CARD ],
+        disallowed: [ paypal.FUNDING.CREDIT ]
+      },
+      payment: function(data, actions) {
+        let badgeAllQuantity = document.getElementById('badge-all-quantity').value
+        let badgePerformerWeekendQuantity = document.getElementById('badge-performer-weekend-quantity').value
+        let badgePerformerAllQuantity = document.getElementById('badge-performer-all-quantity').value
+        if(badgeAllQuantity + badgePerformerWeekendQuantity + badgePerformerAllQuantity > 0) {
+          return actions.request
+            .post('/api/paypal/create-badge-sale', {
+              badgeAllQuantity: badgeAllQuantity, 
+              badgePerformerWeekendQuantity: badgePerformerWeekendQuantity, 
+              badgePerformerAllQuantity: badgePerformerAllQuantity
+            })
+            .then(function(response) {
+              return response.id;
+            })        
+        }
+        else {
+          alert("No badges selected")
+          return
+        }
+      },
+      onAuthorize: function(data, actions) {
+        return actions.request
+          .post('/api/paypal/execute-badge-sale', { paymentID: data.paymentID, payerID: data.payerID })
+          .then(function(response) {
+            console.log(response)
+          })
+      }
+    }, '#paypal-button')

@@ -1,0 +1,21 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Volunteers
+
+  #app.dash-boxes.container-fluid
+    if volunteers.length > 0 
+      .box.box-b
+        table.table
+          thead
+            tr
+              th Name
+              th Email
+          tbody
+            for volunteer in volunteers
+              tr 
+                td=badge.name
+                td=badge.Email
+    else
+      p.m2 No volunteers yet
