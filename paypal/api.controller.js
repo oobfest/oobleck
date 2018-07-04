@@ -9,7 +9,11 @@ module.exports = {
     let price = 99
     paypalModel.createBadgeAllSale(price, quantity, (error, payment)=> {
       if(error) next(error)
-      else response.json(payment)
+      else {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        response.json(payment)
+      }
     })
   },
 
