@@ -6,7 +6,7 @@ module.exports = {
 
   createBadgeAllSale: function(request, response, next) {
     let quantity = request.body.quantity
-    let price = 99
+    let price = 1
     paypalModel.createBadgeAllSale(price, quantity, (error, payment)=> {
       if(error) next(error)
       else {
