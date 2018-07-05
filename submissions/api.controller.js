@@ -129,5 +129,13 @@ module.exports = {
 			if(error) next(error)
 			else response.send("Success!")
 		})
+	},
+
+	confirmPerformerEmail: function(request, response, next) {
+		let email = request.body.email
+		model.confirmPerformerEmail(email, (error, isValid)=> {
+			if(error) next(error)
+			else response.json({valid: isValid})
+		})
 	}
 }

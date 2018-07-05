@@ -56,8 +56,14 @@ module.exports = {
 						performerEmails.push(submissions[i].additionalMembers[j].email)
 					}
 				}
-				callback(null, performerEmails)			
+				callback(performerEmails)			
 			}
+		})
+	},
+
+	confirmPerformerEmail: function(email, callback) {
+		this.getAllPerformerEmails((emails)=> {
+			callback(null, emails.includes(email))
 		})
 	},
 

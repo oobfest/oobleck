@@ -6,5 +6,9 @@ module.exports = {
 			if(error) next(error)
 			else response.render('volunteers/view-all', { volunteers })
 		})
-	}
+	},
+
+  apply: function(request, response, next) {
+    response.render('volunteers/apply')
+  }
 }

@@ -28,4 +28,6 @@ router.post('/stamp-reject', isLoggedIn, isRole(['staff']), controller.stampReje
 
 router.post('/add-note', isLoggedIn, isRole(['staff']), controller.addNote)
 
+router.post('/confirm-performer-email', controller.confirmPerformerEmail)
+
 module.exports = router

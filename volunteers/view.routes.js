@@ -6,4 +6,6 @@ const isNotARobot = require('../middleware/is-not-a-robot')
 const controller = require('./view.controller')
 
 router.get('/', isLoggedIn, controller.viewAll)
- module.exports = router
+router.get('/apply', controller.apply)
+
+module.exports = router
