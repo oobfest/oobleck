@@ -6,7 +6,7 @@ block content
 
   #app.dash-boxes.container-fluid
     .box.box-b
-      table.table
+      table.table.box-table
         thead
           tr
             th Name
@@ -14,11 +14,59 @@ block content
             th Phone
             th Badge Type
             th Quantity
-        tbody
-          for badge in badges
-            tr 
-              td=badge.name
-              td=badge.email
-              td=badge.phone
-              td=badge.type
-              td=badge.quantity
+        tbody(v-for="badge, index in badges")
+          tr(style="background-color: white")
+            td 
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{badge.name}}
+            td {{badge.email}}
+            td {{badge.phone}}
+            td {{badge.type}}
+            td {{badge.quantity}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan=5)
+              div(v-if="badge.payment && badge.payment.create_time")
+                h3 Payment Made
+                pre {{badge.payment.create_time}}
+                h3 Payment ID
+                pre {{badge.payment.transactions[0].related_resources[0].sale.id}}
+              button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script(src="/js/vue-markdown.js")
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          badges: []
+        }
+      },
+      methods: {
+        destroy(id, index) {
+          if (confirm("Delete badge? This is probably a bad idea.")) {
+            let self = this
+            axios
+              .delete('/api/badges/' + id)
+              .then(function(response) {
+                self.badges.splice(index, 1)
+              })
+              .catch(function(error) {
+                alert("Error deleting badge :(")
+              })
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/badges')
+          .then(function(response) {
+            self.badges = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting badges :(")
+            console.log(error)
+          })
+      }
+    })

@@ -15,6 +15,7 @@ module.exports = async function(app) {
 	app.use('/api/email',				require('../email/api.routes'))
 	app.use('/api/paypal',			require('../paypal/api.routes'))
 	app.use('/api/volunteers',	require('../volunteers/api.routes'))
+	app.use('/api/badges',			require('../badges/api.routes'))
 
 	app.use('/', 						require('../login/routes'))
 	app.use('/apply', 			require('../apply/routes'))
