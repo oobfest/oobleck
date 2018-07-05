@@ -52,8 +52,8 @@ module.exports = {
   createPerformerBadgeSale: function(weekendOnly, callback) {
     // Remember: you only buy one performer badge at a time
     let item = weekendOnly
-      ? { name: "Performer Badge Weekend Only", sku: "bdg-pfmr-wknd",  price: 45, currency: "USD", quantity: 1 }
-      : { name: "Performer Badge Full-Week",    sku: "bdg-prfmr-full", price: 69, currency: "USD", quantity: 1 }
+      ? { name: "Performer Badge Weekend Only", sku: "bdg-pfmr-wknd",  price: 1, currency: "USD", quantity: 1 }
+      : { name: "Performer Badge Full-Week",    sku: "bdg-prfmr-full", price: 2, currency: "USD", quantity: 1 }
     let paymentData = {
       intent: "sale",
       payer: { payment_method: "paypal" },
@@ -62,7 +62,7 @@ module.exports = {
         item_list: { 
           items: []
         },
-        amount: { currency: "USD", total: weekendOnly ? 45 : 69 },
+        amount: { currency: "USD", total: weekendOnly ? 1 : 2 },
         description: weekendOnly ? "Weekend-Only Performer Pass Upgrade" : "Full-Week Performer Pass Upgrade",
       }]
     }
