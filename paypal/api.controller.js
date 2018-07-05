@@ -40,7 +40,8 @@ module.exports = {
         badgeModel.create(newBadge, (error, savedBadge)=> {
           if(error) next(error)
           else {
-            emailModel.sendBadgeEmail(savedBadge.email)
+            let firstSentence = "Thank you for purchasing an Out of Bounds Festival badge! This means you get to reserve tickets to as many shows as you want throughout the entire week."
+            emailModel.sendBadgeEmail(firstSentence, savedBadge.email)
             response.header("Access-Control-Allow-Origin", "*")
             response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
             response.json({message: "Success!"})
@@ -69,7 +70,7 @@ module.exports = {
     let name = request.body.name
     let email = request.body.email
     let phone = request.body.phone
-    let weekendOnly = request.body.weekendOnly
+    let weekendOnly = request.body.weekendOnly == 'true'
 
     paypalModel.executeSale(paymentId, payerId, (error, payment)=> {
       if(error) next(error)
@@ -85,7 +86,10 @@ module.exports = {
         badgeModel.create(newBadge, (error, savedBadge)=> {
           if(error) next(error)
           else {
-            emailModel.sendBadgeEmail(savedBadge.email)
+            let firstSentence = weekendOnly
+              ? "Thank you for upgrading your performer badge for the Out of Bounds Festival! With the weekend-only upgrade you are able to reserve a ticket for as many shows as you'd like, Friday through Monday."
+              : "Thank you for upgrading your performer badge for the Out of Bounds Festival! This means you get to reserve a ticket for as many shows as you want throughout the entire week."
+            emailModel.sendBadgeEmail(firstSentence, savedBadge.email)
             response.header("Access-Control-Allow-Origin", "*")
             response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
             response.json({message: "Success!"})

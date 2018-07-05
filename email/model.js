@@ -8,8 +8,6 @@ let transporter = nodemailer.createTransport({
 
 let badgeEmail = 
 `
-<p>Thank you for purchasing an Out of Bounds Festival badge! This means you get to reserve your ticket to as many shows as you want throughout the entire week.</p>
-
 <p><b>How do I get my badge?</b><br>
 You will be sent specific information on how to pick up your badge closer to the fest, but registration takes place the first few days of the festival at one of our downtown venues.</p>
 
@@ -28,12 +26,12 @@ Unfortunately, <i>if you do not show up at least 5 minutes before the show start
 `
 
 module.exports = {
-  sendBadgeEmail: function(recipientEmail) {
+  sendBadgeEmail: function(firstSentence, recipientEmail) {
     transporter.sendMail({
       to: recipientEmail,
       from: "box-office@oobfest.com",
       subject: "Out of Bounds Badge Confirmation",
-      html: badgeEmail
+      html: `<p>${firstSentence}</p> ${badgeEmail}`
     }, (error, info)=> {
       if(error) console.log(error)
       else return
