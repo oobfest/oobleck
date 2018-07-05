@@ -28,6 +28,12 @@ router.post('/stamp-reject', isLoggedIn, isRole(['staff']), controller.stampReje
 
 router.post('/add-note', isLoggedIn, isRole(['staff']), controller.addNote)
 
-router.post('/confirm-performer-email', controller.confirmPerformerEmail)
+router.route('/confirm-performer-email')
+  .post(controller.confirmPerformerEmail)
+  .options(function(request, response) {
+    response.header("Access-Control-Allow-Origin", "*")
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    response.end()
+  })
 
 module.exports = router
