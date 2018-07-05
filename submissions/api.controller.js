@@ -132,13 +132,16 @@ module.exports = {
 	},
 
 	confirmPerformerEmail: function(request, response, next) {
-    response.header("Access-Control-Allow-Origin", "*")
-    response.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 		let email = request.body.email
 		model.confirmPerformerEmail(email, (error, isValid)=> {
-			if(error) next(error)
+			if(error) {
+				console.log("BUG!", error)
+				next(error)
+			}
 			else {
+		    response.header("Access-Control-Allow-Origin", "*")
+		    response.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+		    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 				response.json({valid: isValid})
 			}
 		})
