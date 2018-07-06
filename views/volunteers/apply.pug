@@ -9,89 +9,131 @@ block content
     a(href="http://oobfest.com/" target="_parent")
       img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
     h1.p-3.text-light.font-weight-bold 2018 Volunteer Application
-  .container
+  #app.container
     .row
       .col-lg-8.mx-auto.pb-5
         .box
-          form#app(action="/volunteers" method="POST")
+          form
             .box-head.box-head-accent-oob
-            
-            .box-block(v-show="formState==0")
-              h3 Volunteer Application
-              p Be a volunteer!
-              button.btn.btn-primary(type="button" @click="formState++") Next
-
-            .box-block(v-show="formState==1")
-              h3 General Information
-              .form-group
-                label.col-form-label.required-field(for="name") Full Name
-                input#name.form-control(type="text" required autofocus maxlength="280" name="name" v-model="volunteer.name")
-              .form-group
-                label.col-form-label.required-field(for="email") Email
-                input#email.form-control(type="email" required  maxlength="280" name="email" v-model="volunteer.email")
-              .form-group
-                label.col-form-label.required-field(for="phone") Phone Number
-                input#phone.form-control(type="tel" required maxlength="280" name="phone" v-model="volunteer.phone")
-              .form-group
-                label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
-                select#hours.form-control(v-model="volunteer.hours")
-                  option 
-                  option 1
-                  option 2
-                  option 3
-                  option 4
-                  option 5
-                  option 6
-                  option 7
-                  option 8
-                  option 9
-                  option 10
-                  option 11
-                  option 12
-                  option 13
-                  option 14
-                  option 15
-                  option 16
-                  option 17
-                  option 18
-                  option 19
-                  option 20
-              .form-group
-                label.col-form-label(for="referral") How did you hear about volunteering?
-                textarea#referral.form-control(maxlength="1500" name="referral" v-model="volunteer.referral")
-              .form-group
-                label.col-form-label(for="experience") Have you volunteered at Out of Bounds before?
-                select#experience.form-control(v-model="volunteer.experience")
-                  option No
-                  option Yes
-              button.btn.btn-secondary(type="button" @click="formState--") Back
-              | &nbsp;
-              button.btn.btn-primary(type="button" @click="formState++") Next
-
-            .box-block(v-show="formState==2")
-              h3 Volunteer Type
-              p What type of volunteer are you interested in being?
-              ul
-                li
-                  strong Show 
-                  | Description of show volunteering
-                li
-                  strong Tech 
-                  | Description of tech volunteering
-              .form-group
-                label.col-form-label.required-field(for="type") What type of volunteering are you interested in?
-                select#type.form-control(v-model="volunteer.type")
-                  option Show
-                  option Tech
-                  option Driver
-                  option Party
-                  option Workshop
-              button.btn.btn-secondary(type="button" @click="formState--") Back
-              | &nbsp;
-              button.btn.btn-primary(type="button" @click="formState++") Next
-            .box-block(v-show="formState==3")
-              p {{volunteer.type}}
-              button.btn.btn-secondary(type="button" @click="formState--") Back
+            div(v-show="submitted==false")
+              .box-block
+                .alert.alert-danger(v-show="validationErrors.length > 0")
+                  h4.alert-heading Errors
+                  ul(v-for="validationError in validationErrors")
+                      li {{validationError}}
+                h3 Volunteer Application
+                p Be a volunteer!
+                p Lots of types of volunteers
+                ul
+                  li
+                    strong Show 
+                    | Description of show volunteering
+                  li
+                    strong Tech  
+                    | Description of tech volunteering
+                  li
+                    strong Driver 
+                    | Description of driver volunteering
+                  li
+                    strong Party 
+                    | Description of party volunteering
+                  li
+                    strong Workshop 
+                    | Description of workshop volunteering
+              .box-block.box-bt
+                h3 General Information
+                .form-group
+                  label.col-form-label.required-field(for="name") Full Name
+                  input#name.form-control(type="text" required autofocus maxlength="280" name="name" v-model="volunteer.name")
+                .form-group
+                  label.col-form-label.required-field(for="email") Email
+                  input#email.form-control(type="email" required  maxlength="280" name="email" v-model="volunteer.email")
+                .form-group
+                  label.col-form-label.required-field(for="phone") Phone Number
+                  input#phone.form-control(type="tel" required maxlength="280" name="phone" v-model="volunteer.phone")
+              .box-block.box-bt
+                h3 Volunteering Specifics
+                .form-group
+                  label.col-form-label.required-field(for="type") What type of volunteering are you interested in?
+                  select#type.form-control(v-model="volunteer.type")
+                    option(value="show") Show
+                    option(value="tech") Tech
+                    option(value="driver") Driver
+                    option(value="party") Party
+                    option(value="workshop") Workshop
+                .form-group
+                  label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
+                  select#hours.form-control(v-model="volunteer.hours")
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option 5
+                    option 6
+                    option 7
+                    option 8
+                    option 9
+                    option 10
+                    option 11
+                    option 12
+                    option 13
+                    option 14
+                    option 15
+                    option 16
+                    option 17
+                    option 18
+                    option 19
+                    option 20
+                .form-group
+                  label.col-form-label(for="referral") How did you hear about volunteering?
+                  textarea#referral.form-control(maxlength="1500" name="referral" v-model="volunteer.referral")
+                .form-group
+                  label.col-form-label.required-field(for="volunteered-before") Have you volunteered at Out of Bounds before?
+                  select#volunteered-before.form-control(v-model="volunteer.volunteeredBefore")
+                    option(value="no") No
+                    option(value="yes") Yes
+              .box-block.box-bt(v-show="volunteer.type == 'driver'")
+                h3 Driver Information
+                .form-group
+                  label.col-form-label.required-field(for="car-type") What is your car's make and model? 
+                  input#car-type.form-control(type="text" autofocus maxlength="280" name="car-type" v-model="volunteer.carType")
+                .form-group
+                  label.col-form-label.required-field(for="passenger-count") How many additional passengers can you fit? 
+                  select#passenger-count.form-control(v-model="volunteer.passengerCount")
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option 5
+                .form-group
+                  label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
+                  input#license-plate-number.form-control(type="text" autofocus maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
+              .box-block.box-bt(v-show="volunteer.type == 'tech'")
+                h3 Tech Information
+                .form-group
+                  label.col-form-label(for="tech-experience") What is your previous experience doing tech? Be sure to include whether it was sketch or improv, and and at what theaters. 
+                  textarea#tech-experience.form-control(type="text" name="tech-experience" v-model="volunteer.techExperience")
+                .form-group
+                  label.col-form-label(for="volunteered-tech-before") Have you done tech for Out of Bounds before?
+                  select#volunteered-tech-before.form-control(v-model="volunteer.volunteeredTechBefore")
+                    option(value="no") No
+                    option(value="yes") Yes
+              .box-block.box-bt
+                .form-group
+                  label.col-form-label.required-field(for="attending-orientation") We will have an orientation meeting on 
+                    span(v-if="volunteer.type=='tech'").code [tech orientation date]
+                    span(v-else).code [non-tech orientation date]
+                    |, will you be able to attend?
+                  select#attending-orientation.form-control(v-model="volunteer.attendingOrientation")
+                    option(value="no") No
+                    option(value="yes") Yes
+                .text-center
+                  button.btn.btn-primary.btn-lg(type="button" @click="add") Submit
+            .box-block(v-show="submitted")
+              h3 Thank You!
+              p Your submission has been recorded!
+              p Any questions, email 
+                span.code volunteers@oobfest.com
 
   script(src="/js/vue.js")
   script(src="/js/axios.min.js")
@@ -100,15 +142,48 @@ block content
       el: '#app',
       data() {
         return {
-          formState: 0,
+          submitted: false,
+          validationErrors: [],
           volunteer: {
             name: '',
             email: '',
             phone: '',
-            hours: '',
+            type: '',
+            hours: 1,
             referral: '',
-            experience: 'No',
-            type: ''
+            volunteeredBefore: 'no',
+            attendingOrientation: 'yes',
+
+            carType: '',
+            passengerCount: 4,
+            licensePlateNumber: '',
+
+            techExperience: '',
+            volunteeredTechBefore: 'no',
+          }
+        }
+      },
+      methods: {
+        getValidationErrors() {
+          let validationErrors = []
+          if(this.volunteer.name == '') validationErrors.push("Your name is required")
+          if(this.volunteer.email == '') validationErrors.push("Your email is required")
+          if(this.volunteer.phone == '') validationErrors.push("Your phone number is required")
+          if(this.volunteer.type == '') validationErrors.push("The type of volunteering is required")
+          if(this.volunteer.type == 'driver') {
+            if(this.volunteer.carType == '') validationErrors.push("Car Type is required for driver volunteers")
+            if(this.volunteer.licensePlateNumber == '') validationErrors.push("License Plate Number is required for driver volunteers")
+          }
+          return validationErrors
+        },
+        add() {
+          let validationErrors = this.getValidationErrors()
+          if(validationErrors.length == 0) {
+            this.submitted = true
+          }
+          else {
+            alert("Some required fields were left blank")
+            this.validationErrors = validationErrors
           }
         }
       }
