@@ -3,7 +3,23 @@ const model = require('./model')
 module.exports = {
 
 	create: function(request, response, next) {
-		let volunteer = request.body
+		let volunteer = {
+			name: request.body.name,
+			email: request.body.email,
+			phone: request.body.phone,
+			type: request.body.type,
+			hours: request.body.hours,
+			volunteeredBefore: request.body.volunteeredBefore == 'yes' ? true : false,
+			referral: request.body.referral,
+			attendingOrientation: request.body.attendingOrientation == 'yes' ? true : false,
+
+			carType: request.body.carType,
+			passengerCount: request.body.passengerCount,
+			licensePlateNumber: request.body.licensePlateNumber,
+
+			techExperience: request.body.techExperience,
+			volunterredTechBefore: request.body.volunterredTechBefore == 'yes' ? true : false,
+		}
 		model.create(volunteer, (error, saved)=> {
 			if(error) next(error)
 			else response.json(saved)

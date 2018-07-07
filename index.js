@@ -14,6 +14,7 @@ require('./setup/logging')(app)
 require('./setup/passport')(app)
 require('./setup/routes')(app)
 require('./setup/database')()
+require('./setup/paypal')()
 
 const log = require('winston')
 

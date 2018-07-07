@@ -5,7 +5,7 @@ const isLoggedIn = require('../middleware/is-logged-in')
 const isRole = require('../middleware/is-role')
 
 router.route('/')
-  .get(isLoggedIn, controller.getAll)
+  .get(controller.getAll)
   .post(isLoggedIn, controller.create)
 
 router.route('/set-date/:id')

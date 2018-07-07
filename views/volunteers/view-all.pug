@@ -5,18 +5,101 @@ block content
       span.dash-titlebar-title Volunteers
 
   #app.dash-boxes.container-fluid
-    if volunteers.length > 0
-      // Tabs for each type
-      .box.box-b
-        table.table
-          thead
-            tr
-              th Name
-              th Email
-          tbody
-            for volunteer in volunteers
-              tr 
-                td=badge.name
-                td=badge.Email
-    else
-      p.m2 No volunteers yet
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link.active(data-toggle="tab" href="#show") Show
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#driver") Driver
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#tech") Tech
+    .tab-content.mt-3
+
+      #show.tab-pane.fade.show.active
+        p(v-if="showVolunteers.length == 0") No show volunteers yet
+        .box.box-b(v-else)
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Scheduled
+                th Remaining
+                th Phone
+                th Email
+            tbody
+              tr(v-for="showVolunteer in showVolunteers")
+                td {{showVolunteer.name}}
+                td 0
+                td {{showVolunteer.hours}}
+                td {{showVolunteer.phone}}
+                td {{showVolunteer.email}}
+
+      #driver.tab-pane.fade
+        p(v-if="driverVolunteers.length == 0") No driver volunteers yet
+        .box.box-b(v-else)
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Email
+                th Phone
+                th Passengers
+            tbody
+              tr(v-for="driverVolunteer in driverVolunteers")
+                td {{driverVolunteer.name}}
+                td {{driverVolunteer.email}}
+                td {{driverVolunteer.phone}}
+                td {{driverVolunteer.passengerCount}}
+
+      #tech.tab-pane.fade
+        p(v-if="techVolunteers.length == 0") No tech volunteers yet
+        .box.box-b(v-else)
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Phone
+                th Email
+            tbody
+              tr(v-for="techVolunteer in techVolunteers")
+                td {{techVolunteer.name}}
+                td {{techVolunteer.phone}}
+                td {{techVolunteer.email}}
+
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script(src="/js/vue-markdown.js")
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          volunteers: []
+        }
+      },
+      computed: {
+        showVolunteers() {
+          return this.volunteers.filter(v=> v.type != 'tech' && v.type != 'driver')
+        },
+        driverVolunteers() {
+          return this.volunteers.filter(v=> v.type == 'driver')
+        },
+        techVolunteers() {
+          return this.volunteers.filter(v=> v.type == 'tech')
+        }
+      },
+      methods: {
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/volunteers')
+          .then(function(response) {
+            self.volunteers = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting volunteers :(")
+            console.log(error)
+          })
+      }
+    })

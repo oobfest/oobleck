@@ -12,7 +12,7 @@ let volunteerSchema = mongoose.Schema({
 
   // Driver
   carType: String,
-  passenegers: Number,
+  passengerCount: Number,
   licensePlateNumber: String,
 
   // Tech

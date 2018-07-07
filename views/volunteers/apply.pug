@@ -64,6 +64,7 @@ block content
                 .form-group
                   label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
                   select#hours.form-control(v-model="volunteer.hours")
+                    option(value=0)
                     option 1
                     option 2
                     option 3
@@ -128,7 +129,7 @@ block content
                     option(value="no") No
                     option(value="yes") Yes
                 .text-center
-                  button.btn.btn-primary.btn-lg(type="button" @click="add") Submit
+                  button.btn.btn-primary.btn-lg(type="button" @click="create") Submit
             .box-block(v-show="submitted")
               h3 Thank You!
               p Your submission has been recorded!
@@ -149,7 +150,7 @@ block content
             email: '',
             phone: '',
             type: '',
-            hours: 1,
+            hours: 0,
             referral: '',
             volunteeredBefore: 'no',
             attendingOrientation: 'yes',
@@ -170,16 +171,25 @@ block content
           if(this.volunteer.email == '') validationErrors.push("Your email is required")
           if(this.volunteer.phone == '') validationErrors.push("Your phone number is required")
           if(this.volunteer.type == '') validationErrors.push("The type of volunteering is required")
+          if(this.volunteer.hours == 0) validationErrors.push("How many hours available is required")
           if(this.volunteer.type == 'driver') {
             if(this.volunteer.carType == '') validationErrors.push("Car Type is required for driver volunteers")
             if(this.volunteer.licensePlateNumber == '') validationErrors.push("License Plate Number is required for driver volunteers")
           }
           return validationErrors
         },
-        add() {
+        create() {
           let validationErrors = this.getValidationErrors()
+          let self = this
           if(validationErrors.length == 0) {
-            this.submitted = true
+            axios
+              .post('/api/volunteers', self.volunteer)
+              .then(function(response) {
+                self.submitted = true
+              })
+              .catch(function(error) {
+                alert("Error submitting application :(")
+              })
           }
           else {
             alert("Some required fields were left blank")
