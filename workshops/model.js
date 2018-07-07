@@ -1,6 +1,8 @@
 const Workshop = require('./schema')
 var _ = require('lodash')
 
+let publicFields = "name description teacher bio affiliation imageUrl day venue time capacity"
+
 module.exports = {
 
   create: function(workshop, callback) {
@@ -24,6 +26,12 @@ module.exports = {
 
   getAll: function(callback) {
     Workshop.find((error, workshops)=> {
+      callback(error, workshops)
+    })
+  },
+
+  getAllPublic: function(callback) {
+    Workshop.find({}, publicFields, (error, workshops)=> {
       callback(error, workshops)
     })
   },

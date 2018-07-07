@@ -30,3 +30,9 @@ process.on('uncaughtException', (error)=> {
 app.listen(process.env.PORT, ()=> {
 	log.info("🐵  Listening on port " + process.env.PORT)
 })
+
+let workshopModel = require('./workshops/model')
+workshopModel.getAllPublic((error, workshops)=> {
+  if(error) console.log(error)
+  else console.log(workshops[0])
+})

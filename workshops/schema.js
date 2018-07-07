@@ -19,7 +19,7 @@ let workshopSchema = mongoose.Schema({
     email: String,
     quantity: Number,
     auditing: Boolean,
-    paypal: Mixed
+    payment: {}
   }]
 
 })
