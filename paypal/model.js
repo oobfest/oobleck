@@ -19,7 +19,7 @@ module.exports = {
           }]
         },
         amount: { currency: "USD", total: total },
-        description: "Workshop:" + workshopName,
+        description: "Workshop: " + workshopName,
       }]
     }
 

@@ -68,6 +68,18 @@ module.exports = {
     })
   },
 
+  addStudent: function(student, domain, callback)  {
+    this.getByDomain(domain, (error, workshop)=> {
+      if(error) callback(error)
+      else {
+        workshop.students.push(student)
+        this.save(workshop, (error, savedWorkshop)=> {
+          callback(error, savedWorkshop)
+        })
+      }
+    })
+  },
+
   delete: function(id, callback) {
     this.get(id, (error, workshop)=> {
       if(error) callback(error, null)

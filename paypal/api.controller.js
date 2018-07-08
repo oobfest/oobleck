@@ -20,7 +20,28 @@ module.exports = {
   },
 
   executeWorkshopSale: function(request, response, next) {
-    response.end()
+    let paymentId = request.body.paymentId
+    let payerId = { "payer_id": request.body.payerId }
+    let name = request.body.name
+    let email = request.body.email
+    let phone = request.body.phone
+    let quantity = request.body.quantity
+    let auditing = false
+    let domain = request.body.domain
+
+    paypalModel.executeSale(paymentId, payerId, (error, payment)=> {
+      if(error) next(error)
+      else {
+        let newStudent = { name, email, phone, quantity, auditing, payment }
+        workshopModel.addStudent(newStudent, domain, (error, workshop)=> {
+          console.log("NEW STUDENT", workshop)
+          response.header("Access-Control-Allow-Origin", "*")
+          response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+          response.json({message: "Success!"})
+        })
+      }
+    })
+
   },
 
   createBadgeAllSale: function(request, response, next) {
