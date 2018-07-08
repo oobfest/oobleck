@@ -20,8 +20,16 @@ module.exports = {
         },
         amount: { currency: "USD", total: total },
         description: "Workshop:" + workshopName,
-      }]      
+      }]
     }
+
+    this.createCheckoutExperienceProfile((experienceProfileId)=> {
+      paymentData.experience_profile_id = experienceProfileId
+      paypalSdk.payment.create(paymentData, (error, payment)=> {
+        callback(error, payment)
+      })
+    })
+
   },
 
   createBadgeAllSale: function(price, quantity, callback) {
