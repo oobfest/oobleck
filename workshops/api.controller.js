@@ -6,6 +6,8 @@ module.exports = {
   create: function(request, response, next) {
     let workshop = request.body
     workshop.domain = limax(workshop.name)
+    workshop.remaining = workshop.capacity
+    console.log("CREATE", workshop)
     model.create(workshop, (error, saved)=> {
       if(error) next(error)
       else response.json(saved)
@@ -37,7 +39,6 @@ module.exports = {
   update: function(request, response, next) {
     let id = request.params.id
     let workshop = request.body
-    workshop.remaining = workshop.capacity
     model.update(id, workshop, (error, workshop)=> {
       if(error) next(error)
       else response.json(workshop)
