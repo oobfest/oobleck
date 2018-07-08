@@ -21,7 +21,7 @@ module.exports = {
     model.getAllPublic((error, workshops)=> {
       if(error) next(error)
       else response.send(workshops)
-    }
+    })
   },
 
   getById: function(request, response, next) {
