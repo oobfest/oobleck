@@ -3,6 +3,7 @@ const Mixed = mongoose.Schema.Types.Mixed
 
 let workshopSchema = mongoose.Schema({
   name: String,
+  domain: String,
   description: String,
   teacher: String,
   bio: String,

@@ -1,9 +1,11 @@
-const model = require('./model')
+let model = require('./model')
+let limax = require('limax') 
 
 module.exports = {
 
   create: function(request, response, next) {
     let workshop = request.body
+    workshop.domain = limax(workshop.name)
     model.create(workshop, (error, saved)=> {
       if(error) next(error)
       else response.json(saved)
@@ -35,6 +37,7 @@ module.exports = {
   update: function(request, response, next) {
     let id = request.params.id
     let workshop = request.body
+    workshop.domain = limax(workshop.name)
     model.update(id, workshop, (error, workshop)=> {
       if(error) next(error)
       else response.json(workshop)
