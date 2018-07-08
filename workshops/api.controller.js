@@ -17,6 +17,13 @@ module.exports = {
     })
   },
 
+  getAllPublic: function(request, response, next) {
+    model.getAllPublic((error, workshops)=> {
+      if(error) next(error)
+      else response.send(workshops)
+    }
+  },
+
   getById: function(request, response, next) {
     let id = request.params.id
     model.get(id, (error, workshop)=> {
