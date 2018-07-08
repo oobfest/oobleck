@@ -14,7 +14,9 @@ block content
             th Name
             th Teacher(s)
             th When
-            th Limit
+            th Cap
+            th Sold
+            th Remain
         tbody(v-for="(workshop, index) in workshops")
           tr( style="background-color: white")
             td
@@ -22,6 +24,8 @@ block content
             td {{workshop.teacher}}
             td {{getWorkshopDate(workshop)}}
             td {{workshop.capacity}}
+            td {{workshop.capacity - workshop.remaining}}
+            td {{workshop.remaining}}
           tr.collapse(:id="'collapse-' + index")
             td(colspan="4")
               h4 Description
@@ -37,6 +41,7 @@ block content
                 | &nbsp;
                 button.btn.btn-danger(v-if="!workshop.deleteImageUrl" @click="deleteWorkshop(workshop._id, index)") Delete
                 button.btn.btn-danger(v-else @click="deleteWorkshopImage(workshop)") Delete Image
+
     .form-group
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-workshop-modal") Add Workshop
 

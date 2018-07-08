@@ -1,6 +1,29 @@
 let paypalSdk = require('paypal-rest-sdk')
 
 module.exports = {
+  
+  createWorkshopSale: function(workshopName, price, quantity, callback) {
+    let total = price * quantity
+    let paymentData = {
+      intent: "sale",
+      payer: { payment_method: "paypal" },
+      redirect_urls: { return_url: "http://oobfest.com/workshops", cancel_url: "http://oobfest.com/workshops" },
+      transactions: [{
+        item_list: { 
+          items: [{
+            name: "Workshop",
+            sku: "workshop",
+            price: price,
+            currency: "USD",
+            quantity: quantity
+          }]
+        },
+        amount: { currency: "USD", total: total },
+        description: "Workshop:" + workshopName,
+      }]      
+    }
+  },
+
   createBadgeAllSale: function(price, quantity, callback) {
     let total = price * quantity
     let paymentData = {

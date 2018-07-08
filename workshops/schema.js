@@ -16,10 +16,14 @@ let workshopSchema = mongoose.Schema({
   time: String,
 
   capacity: Number,
+  remaining: Number, 
+
   students: [{
+    name: String,
     email: String,
-    quantity: Number,
+    phone: String,
     auditing: Boolean,
+    quantity: Number,
     payment: {}
   }]
 

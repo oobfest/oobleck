@@ -1,8 +1,27 @@
 let paypalModel = require('./model')
 let badgeModel = require('../badges/model')
+let workshopModel = require('../workshops/model')
 let emailModel = require('../email/model')
 
 module.exports = {
+
+  createWorkshopSale: function(request, response, next) {
+    let name = request.body.workshopName
+    let quantity = request.body.quantity
+    let price = 45
+    paypalModel.createWorkshopSale(name, price, quantity, (error, payment)=> {
+      if(error) next(error)
+      else {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        response.json(payment)        
+      }
+    })
+  },
+
+  executeWorkshopSale: function(request, response, next) {
+    response.end()
+  },
 
   createBadgeAllSale: function(request, response, next) {
     let quantity = request.body.quantity

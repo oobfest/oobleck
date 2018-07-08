@@ -48,6 +48,7 @@ script.
         axios
           .put('/api/workshops/' + self.workshop._id, self.workshop)
           .then(function(response) {
+            // TODO: This should affect $parent.workshops[index], not this child property
             self.workshop = response.data
           })
           .catch(function(error){

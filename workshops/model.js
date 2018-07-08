@@ -1,7 +1,7 @@
 const Workshop = require('./schema')
 var _ = require('lodash')
 
-let publicFields = "name domain description teacher bio affiliation imageUrl day venue time capacity"
+let publicFields = "name domain description teacher bio affiliation imageUrl day venue time capacity remaining"
 
 module.exports = {
 
@@ -20,6 +20,12 @@ module.exports = {
 
   get: function(id, callback) {
     Workshop.findById(id, (error, workshop)=> {
+      callback(error, workshop)
+    })
+  },
+
+  getByDomain: function(domain, callback) {
+    Workshop.findOne({domain: domain}, (error, workshop)=> {
       callback(error, workshop)
     })
   },
