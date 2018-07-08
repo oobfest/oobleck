@@ -12,12 +12,12 @@ router.route('/set-date/:id')
   .post(isLoggedIn, controller.setDate)
   .delete(isLoggedIn, controller.deleteDate)
 
+router.route('/public')
+  .get(controller.getAllPublic)
+
 router.route('/:id')
   .get(isLoggedIn, controller.getById)
   .put(isLoggedIn, controller.update)
   .delete(isLoggedIn, controller.delete)
-
-router.route('/public')
-  .get(controller.getAllPublic)
 
  module.exports = router
