@@ -1,7 +1,7 @@
 const Workshop = require('./schema')
 var _ = require('lodash')
 
-let publicFields = "name description teacher bio affiliation imageUrl day venue time capacity"
+let publicFields = "name domain description teacher bio affiliation imageUrl day venue time capacity"
 
 module.exports = {
 
