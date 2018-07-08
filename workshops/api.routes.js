@@ -8,6 +8,8 @@ router.route('/')
   .get(isLoggedIn, controller.getAll)
   .post(isLoggedIn, controller.create)
 
+router.get('/get-by-domain/:domain', controller.getByDomain)
+
 router.route('/set-date/:id')
   .post(isLoggedIn, controller.setDate)
   .delete(isLoggedIn, controller.deleteDate)

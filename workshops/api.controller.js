@@ -36,6 +36,14 @@ module.exports = {
     })
   },
 
+  getByDomain: function(request, response, next) {
+    let domain = request.params.domain
+    model.getByDomain(domain, (error, workshop)=> {
+      if(error) next(error)
+      else response.send(workshop)
+    })
+  },
+
   update: function(request, response, next) {
     let id = request.params.id
     let workshop = request.body
