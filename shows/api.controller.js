@@ -43,6 +43,15 @@ module.exports = {
 		})
 	},
 
+	updateDuration: function(request, response, next) {
+		let showId = request.params.id
+		let act = request.body
+		model.updateDuration(showId, act, (error, show)=> {
+			if(error) next(error)
+			else response.json(show)
+		})
+	},
+
 	addAct: function(request, response, next) {
 		let id = request.params.id
 		let act = {

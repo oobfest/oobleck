@@ -1,22 +1,10 @@
 const mongoose = require('mongoose')
 
 let hostSchema = mongoose.Schema({
-	name: {
-		type: String,
- 		required: [true, 'Host must have a name']
- 	},
-	email: {
-		type: String,
-		required: [true, 'Host must have an email address']
-	},
-	phone: {
-		type: String,
-		required: [true, 'Host must have a phone number']
-	},
-	bio: {
-		type: String,
-		required: [true, 'Host nust have a bio']
-	}, 
+	name: String,
+	email: String,
+	phone: String,
+	bio: String,
 	experience: String,
 	videoUrl: String,
 	imageUrl: String,

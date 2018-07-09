@@ -40,7 +40,6 @@ script.
       axios
         .get('/api/shows')
         .then(function(response) {
-          //console.log(response.data)
           self.$store.commit('setupShows', response.data)
         })
         .catch(function(error) {

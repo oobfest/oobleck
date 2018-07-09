@@ -6,7 +6,8 @@ script.
       workshops: [],
       addShowModal: { day: '', venue: '', time: '' },
       addActModal: { day: '', venue: '', time: '', _id: '' },
-      addWorkshopModal: { day: '', venue: '', time: ''}
+      addWorkshopModal: { day: '', venue: '', time: ''},
+      updateActDurationModal: {id: '', minimumShowLength: 0, maximumShowLength: 0, duration: 0 }
     },
     getters: {
       getShows: state => (day, venue) => {
@@ -22,9 +23,15 @@ script.
       },
       getWorkshopModal: state => {
         return state.addWorkshopModal
+      },
+      getUpdateActDurationModal: state => {
+        return state.updateActDurationModal
       }
     },
     mutations: {
+      updateActDurationModal(state, payload) {
+        state.updateActDurationModal = payload
+      },
       setupShows(state, payload) {
         state.shows = payload
       },
@@ -59,6 +66,6 @@ script.
 
       setupWorkshops(state, payload) {
         state.workshops = payload
-      }
+      },
     }
   })

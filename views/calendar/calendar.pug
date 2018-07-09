@@ -14,6 +14,7 @@ block content
     add-act-modal
     add-show-modal
     add-workshop-modal
+    update-act-duration-modal
     .box.day(v-for="day in days")
       day(v-bind="day")
   
@@ -25,6 +26,7 @@ block content
   include modals/add-act
   include modals/add-show
   include modals/add-workshop
+  include modals/update-act-duration
   include components/day
   include components/venue
   include components/workshop

@@ -19,8 +19,8 @@ block content
               .box-block
                 .alert.alert-danger(v-show="validationErrors.length > 0")
                   h4.alert-heading Errors
-                  ul(v-for="validationError in validationErrors")
-                      li {{validationError}}
+                  ul
+                      li(v-for="validationError in validationErrors") {{validationError}}
                 h3 Volunteer Application
                 p Be a volunteer!
                 p Lots of types of volunteers

@@ -4,12 +4,15 @@ script#shows-template(type="text/template")
       .box.show2
         a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
         h4.time {{show.time | time}}
-        p.act(v-for="act in show.acts") 
+        p.act(v-for="act in show.acts")
+          a(href="#" @click.prevent="promptDuration(show._id, act)")
+            span.badge.badge-light.code(style="vertical-align: 2px") {{act.duration | duration}}
+          | &nbsp;
           span(v-if="act.type === 'Sketch'") ✏️ 
           span(v-if="act.type === 'Music'") 🎶 
           span(v-if="act.type === 'Improv'") ⚡️ 
           span(v-if="act.type === 'Stand-Up'") 🎤 
-          span(v-if="act.type === 'Individual'") 🗣 
+          span(v-if="act.type === 'Individual'") 🗣           
           span(:class="actStatus") {{act.name | shorten(24)}}
 
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
@@ -29,6 +32,11 @@ script.
       }
     },
     filters: {
+      duration(time) {
+        if(time == null) return '\xa0\xa0'
+        if(time < 10) return '\xa0' + time
+        else return time
+      },
       time(time) {
         time = String(time)
         return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
@@ -40,6 +48,30 @@ script.
       },
     },
     methods: {
+      promptDuration(showId, act) {
+        let message = "Input performance length (in minutes)"
+        let duration = window.prompt(message, act.duration ? act.duration : 0)
+        if(duration == null) return
+        let durationInt = parseInt(duration)
+        if(Number.isNaN(durationInt)) alert("Invalid input: " + duration)
+        else if (durationInt < 0) alert("Input can't be negative")
+        else {
+          let self = this
+          act.duration = durationInt
+          axios
+            .put('/api/shows/update-duration/' + showId, act)
+            .then(function(response) {
+              self.$store.commit('updateShow', response.data)
+            })
+            .catch(function(error) {
+              alert("Error updating duration")
+              console.log(error)
+            })
+        }
+      },
+      showUpdateActDurationModal(act) {
+        this.$store.commit('updateActDurationModal', act)
+      },
       showAddActModal(day, venue, time, _id) {
         this.$store.state.addActModal = {day: day, venue: venue, time: time, _id: _id}
         $('#add-act-modal').on('shown.bs.modal', function () {

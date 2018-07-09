@@ -10,11 +10,12 @@ router.route('/')
 
 router.post('/add-act/:id', isLoggedIn, controller.addAct)
 router.post('/remove-act/', isLoggedIn, controller.removeAct)
-
 router.get('/get-by-act/:id', controller.getByActId)
+router.put('/update-duration/:id', isLoggedIn, controller.updateDuration)
 
 router.route('/:id')
 	.get(isLoggedIn, controller.getById)
+  .put(isLoggedIn, controller.update)
 	.delete(isLoggedIn, controller.delete)
 
  module.exports = router

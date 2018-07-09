@@ -46,6 +46,20 @@ module.exports = {
 		})
 	},
 
+	updateDuration: function(showId, act, callback) {
+		this.get(showId, (error, oldShow)=> {
+			if(error) callback(error)
+			else {
+				let index = oldShow.acts.findIndex(a=> a._id.toString() == act._id)
+				oldShow.acts[index] = act
+				oldShow.markModified('acts') 
+				this.save(oldShow, (error, savedShow)=> {
+					callback(error, savedShow)
+				})
+			}
+		})
+	},
+
 	delete: function(id, callback) {
 		this.get(id, (error, show)=> {
 			if(error) callback(error, null)

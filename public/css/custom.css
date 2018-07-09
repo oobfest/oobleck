@@ -137,3 +137,8 @@ a:hover { color: #016ff9; }
 	border-top: 1px solid #2d303a;
 	border-bottom: 1px solid #454851;
 }
+
+/* Make those nav icons bloop!
+.dash-nav-item .far { margin-right: 5px; transition: all .2s ease-in-out; }
+.dash-nav-item:hover .far { transform: scale(1.25); }
+*/

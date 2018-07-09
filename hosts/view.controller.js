@@ -3,7 +3,7 @@ const model = require('./model')
 module.exports = {
 
 	apply: function(request, response, next) {
-		response.render('apply/host-application-vue')
+		response.render('hosts/apply')
 	},
 
 	view: function(request, response, next) {
@@ -17,7 +17,7 @@ module.exports = {
 	viewAll: function(request, response, next) {
 		model.getAll((error, hosts)=> {
 			if(error) next(error)
-			else response.render('hosts/view-all', { hosts: hosts })
+			else response.render('hosts/view-all', { hosts })
 		})
 	},
 
