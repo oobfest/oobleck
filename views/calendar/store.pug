@@ -4,10 +4,11 @@ script.
       shows: [],
       acts: [],
       workshops: [],
+      hosts: [],
       addShowModal: { day: '', venue: '', time: '' },
       addActModal: { day: '', venue: '', time: '', _id: '' },
       addWorkshopModal: { day: '', venue: '', time: ''},
-      updateActDurationModal: {id: '', minimumShowLength: 0, maximumShowLength: 0, duration: 0 }
+      showId: '',
     },
     getters: {
       getShows: state => (day, venue) => {
@@ -18,6 +19,9 @@ script.
           .filter(workshop=> { return (workshop.day == day && workshop.venue == venue)})
           .sort((a,b)=> { return (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0)})
       },
+      getAct: state => (id) => {
+        return state.acts.find(a=> a._id == id)
+      },
       getAllWorkshops: state => {
         return state.workshops
       },
@@ -26,14 +30,20 @@ script.
       },
       getUpdateActDurationModal: state => {
         return state.updateActDurationModal
+      },
+      getAllHosts: state => {
+        return state.hosts
+      },
+      getHost: state => (id) => {
+        return state.hosts.find(h=> h._id == id)
+      },
+      getShowId: state => {
+        return state.showId
       }
     },
     mutations: {
       updateActDurationModal(state, payload) {
         state.updateActDurationModal = payload
-      },
-      setupShows(state, payload) {
-        state.shows = payload
       },
       addShowModal(state, payload) {
         state.addShowModal = payload
@@ -59,13 +69,20 @@ script.
         let workshopIndex = state.workshops.findIndex(w=> w._id === payload)
         state.workshops.splice(workshopIndex, 1)
       },
-      // Get all paid approved submissions, not scheduled acts
+      setShowId(state, payload) {
+        state.showId = payload
+      },      
+      setupShows(state, payload) {
+        state.shows = payload
+      },
       setupActs(state, payload) {
         state.acts = payload
       },
-
       setupWorkshops(state, payload) {
         state.workshops = payload
       },
+      setupHosts(state, payload) {
+        state.hosts = payload
+      }
     }
   })

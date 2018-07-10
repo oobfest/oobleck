@@ -87,6 +87,35 @@ module.exports = {
 		})		
 	},
 
+	setHost: function(request, response, next) {
+		let showId = request.params.id
+		let host = request.body
+		model.get(showId, (error, show)=> {
+			if(error) next(error)
+			else {
+				show.host = host
+				model.update(showId, show, (error, savedShow)=> {
+					if(error) next(error)
+					else response.json(savedShow)
+				})
+			}
+		})
+	},
+
+	removeHost: function(request, response, next) {
+		let showId = request.params.id
+		model.get(showId, (error, show)=> {
+			if(error) next(error)
+			else {
+				show.host = null
+				model.update(showId, show, (error, savedShow)=> {
+					if(error) next(error)
+					else response.json(savedShow)
+				})
+			}
+		})
+	},
+
 	delete: function(request, response, next) {
 		let id = request.params.id
 		model.delete(id, (error)=> {

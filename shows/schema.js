@@ -4,7 +4,8 @@ let showSchema = mongoose.Schema({
 	day: String,
 	venue: String,
 	time: Number,
-	acts: []
+	acts: [],
+  host: {}
 })
 
 let Show = mongoose.model('Show', showSchema)

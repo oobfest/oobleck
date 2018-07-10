@@ -9,7 +9,7 @@ let hostSchema = mongoose.Schema({
 	videoUrl: String,
 	imageUrl: String,
 	deleteImageUrl: String,
-	available: Array,
+	availability: Array,
 	canAttendMeeting: Boolean
 })
 

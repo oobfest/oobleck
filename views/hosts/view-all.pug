@@ -1,23 +1,56 @@
 extends ../_layout
 block content
-	header.dash-titlebar
-		.mb-md-0.mb-3
-			span.dash-titlebar-title Host Submissions
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Host Submissions
 
-	.dash-boxes.container-fluid
-		if hosts.length > 0
-			.box.box-b
-				table.box-table.table
-					thead
-						tr
-							th Name
-							th Delete
-					tbody
-						for host in hosts
-							tr
-								td
-									a(href="/hosts/"+host._id)=host.name
-								td
-									a(href="/hosts/delete/" + host._id) Delete
-		else
-			p.m2 No hosts yet
+  #app.dash-boxes.container-fluid
+    .box.box-b(v-if="hosts.length > 0")
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+        tbody(v-for="(host, index) in hosts")
+          tr
+            td 
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{host.name}}
+            td {{host.email}}
+            td {{host.phone}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan="3")
+              h4 Bio
+              p {{host.bio}}
+              div(v-if="host.experience")
+                h4 Experience
+                p {{host.experience}}
+              h4 Availability
+              ul.list-inline
+                li.list-inline-item(v-for="day in host.availability") {{day}}
+    p.m2(v-else) No hosts yet
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          hosts: []
+        }
+      },
+      methods: {},
+      created() {
+        let self = this
+        axios
+          .get('/api/hosts/')
+          .then(function(response) {
+            self.hosts = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting hosts :(")
+            console.log(error)
+          })
+      }
+    })

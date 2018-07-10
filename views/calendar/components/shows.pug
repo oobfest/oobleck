@@ -4,8 +4,16 @@ script#shows-template(type="text/template")
       .box.show2
         a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
         h4.time {{show.time | time}}
+        div(v-if="show.host")
+          a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
+          p 
+            strong Host: 
+            | {{show.host.name}}
+        div(v-else)
+          p
+            a(href="#" @click.prevent="setShowId(show._id)" data-toggle="modal" data-target="#add-host-modal") add host
         p.act(v-for="act in show.acts")
-          a(href="#" @click.prevent="promptDuration(show._id, act)")
+          a(href="#" @click.prevent="promptDuration(show._id, act._id)")
             span.badge.badge-light.code(style="vertical-align: 2px") {{act.duration | duration}}
           | &nbsp;
           span(v-if="act.type === 'Sketch'") ✏️ 
@@ -28,6 +36,7 @@ script.
         return store.getters.getShows(this.day, this.venue)
       },
       actStatus() {
+        // Todo: get confirmation status
         return 'font-weight-bold'
       }
     },
@@ -48,8 +57,26 @@ script.
       },
     },
     methods: {
-      promptDuration(showId, act) {
-        let message = "Input performance length (in minutes)"
+      removeHost(showId) {
+        let self = this
+        axios
+          .post('/api/shows/remove-host/' + showId)
+          .then(function(response) {
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error) {
+            alert("Error removing host :(")
+            console.log(error)
+          })
+      },
+      setShowId(showId) {
+        this.$store.commit('setShowId', showId)
+      },
+      promptDuration(showId, actId) {
+        let act = store.getters.getAct(actId)
+        let message = "Set performance length"
+        if(act.minimumShowLength) message += ("\nMin: " + act.minimumShowLength)
+        if(act.maximumShowLength) message += ("\nMax: " + act.maximumShowLength)
         let duration = window.prompt(message, act.duration ? act.duration : 0)
         if(duration == null) return
         let durationInt = parseInt(duration)

@@ -12,6 +12,8 @@ router.post('/add-act/:id', isLoggedIn, controller.addAct)
 router.post('/remove-act/', isLoggedIn, controller.removeAct)
 router.get('/get-by-act/:id', controller.getByActId)
 router.put('/update-duration/:id', isLoggedIn, controller.updateDuration)
+router.post('/set-host/:id', isLoggedIn, controller.setHost)
+router.post('/remove-host/:id', isLoggedIn, controller.removeHost)
 
 router.route('/:id')
 	.get(isLoggedIn, controller.getById)

@@ -5,6 +5,7 @@ block content
       span.dash-titlebar-title Badges
 
   #app.dash-boxes.container-fluid
+    p(v-if="total") Total: {{total}}
     .box.box-b
       table.table.box-table
         thead
@@ -39,7 +40,13 @@ block content
       el: "#app",
       data() { 
         return {
-          badges: []
+          badges: [],
+        }
+      },
+      computed: {
+        total() {
+          if(this.badges.length == 0) return null
+          return this.badges.reduce((total, badge)=> {return total + badge.quantity}, 0)
         }
       },
       methods: {
