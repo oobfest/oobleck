@@ -36,7 +36,6 @@ script.
         let self = this
         let host = self.$store.getters.getHost(self.selectedHost)
         let showId = self.$store.getters.getShowId
-        console.log(showId)
         axios
           .post('/api/shows/set-host/' + showId, host)
           .then(function(response){

@@ -77,7 +77,6 @@ script.
         axios
           .post('/api/shows/add-act/' + this.show._id, act)
           .then(function(response) {
-            console.log(response.data)
             self.$store.commit('updateShow', response.data)
           })
           .catch(function(error){

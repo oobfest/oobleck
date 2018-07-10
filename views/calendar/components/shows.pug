@@ -50,10 +50,10 @@ script.
         time = String(time)
         return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
       },
-      shorten(value, characters) {
-      return value.length > characters
-        ? value.substring(0,characters)+'...'
-        : value
+      shorten(actName, characters) {
+      return actName.length > characters
+        ? actName.substring(0,characters)+'...'
+        : actName
       },
     },
     methods: {
@@ -84,9 +84,14 @@ script.
         else if (durationInt < 0) alert("Input can't be negative")
         else {
           let self = this
-          act.duration = durationInt
+          let showAct = {
+            _id: act._id,
+            name: act.actName,
+            type: act.showType,
+            duration: durationInt
+          }
           axios
-            .put('/api/shows/update-duration/' + showId, act)
+            .put('/api/shows/update-duration/' + showId, showAct)
             .then(function(response) {
               self.$store.commit('updateShow', response.data)
             })
