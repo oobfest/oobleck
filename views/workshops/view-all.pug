@@ -42,7 +42,8 @@ block content
                 button.btn.btn-danger(v-if="!workshop.deleteImageUrl" @click="deleteWorkshop(workshop._id, index)") Delete
                 button.btn.btn-danger(v-else @click="deleteWorkshopImage(workshop)") Delete Image
               h4 Students
-              ul
+              pre {{workshop.students}}
+              //ul
                 li(v-for="student in workshop.students") {{student.quantity}}: {{student.name}}
 
     .form-group

@@ -73,6 +73,7 @@ module.exports = {
       if(error) callback(error)
       else {
         workshop.students.push(student)
+        workshop.markModified('students')
         workshop.remaining -= student.quantity
         this.save(workshop, (error, savedWorkshop)=> {
           callback(error, savedWorkshop)

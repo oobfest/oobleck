@@ -8,7 +8,7 @@ module.exports = {
   createWorkshopSale: function(request, response, next) {
     let name = request.body.workshopName
     let quantity = request.body.quantity
-    let price = 45
+    let price = 1
     paypalModel.createWorkshopSale(name, price, quantity, (error, payment)=> {
       if(error) next(error)
       else {
@@ -22,17 +22,19 @@ module.exports = {
   executeWorkshopSale: function(request, response, next) {
     let paymentId = request.body.paymentId
     let payerId = { "payer_id": request.body.payerId }
-    let name = request.body.name
-    let email = request.body.email
-    let phone = request.body.phone
-    let quantity = request.body.quantity
-    let auditing = false
-    let domain = request.body.domain
 
     paypalModel.executeSale(paymentId, payerId, (error, payment)=> {
       if(error) next(error)
       else {
-        let newStudent = { name, email, phone, quantity, auditing, payment }
+        let newStudent = {
+          name: request.body.name,
+          email: request.body. email,
+          phone: request.body.phone,
+          quantity: request.body.quantity,
+          auditing: false,
+          payment: payment
+        }
+        let domain = request.body.domain
         workshopModel.addStudent(newStudent, domain, (error, workshop)=> {
           console.log("NEW STUDENT", workshop)
           response.header("Access-Control-Allow-Origin", "*")

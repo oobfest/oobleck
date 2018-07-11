@@ -21,16 +21,18 @@ block content
               a(:href="'#collapse-' + index" data-toggle="collapse") {{badge.name}}
             td {{badge.email}}
             td {{badge.phone}}
-            td {{badge.type}}
+            td 
+              span.badge.badge-pill(:class="getBadgeClass(badge.type)") {{getBadgeName(badge.type)}}
             td {{badge.quantity}}
           tr.collapse(:id="'collapse-' + index")
             td(colspan=5)
               div(v-if="badge.payment && badge.payment.create_time")
                 h3 Payment Made
-                pre {{badge.payment.create_time}}
-                h3 Payment ID
-                pre {{badge.payment.transactions[0].related_resources[0].sale.id}}
-              button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete
+                pre {{formatDate(badge.payment.create_time)}}
+                h3 Transaction ID
+                p.code
+                  a(:href="'https://www.paypal.com/activity/payment/' + badge.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{badge.payment.transactions[0].related_resources[0].sale.id}}
+              //button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete
 
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
@@ -50,6 +52,21 @@ block content
         }
       },
       methods: {
+        formatDate(date) {
+          return new Date(Date.parse(date)).toLocaleString('en-US')
+        },
+        getBadgeName(type) {
+          if(type=='all') return "All-Access"
+          if(type=='performer-weekend-upgrade') return "Weekend Upgrade"
+          if(type=='performer-all') return "Full Upgrade"
+          else return "error"
+        },
+        getBadgeClass(type) {
+          if(type=='all') return "badge-primary"
+          if(type=='performer-weekend-upgrade') return "badge-info"
+          if(type=='performer-all') return "badge-success"
+          else return "badge-danger"
+        },
         destroy(id, index) {
           if (confirm("Delete badge? This is probably a bad idea.")) {
             let self = this

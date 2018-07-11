@@ -6,7 +6,7 @@ let badgeSchema = mongoose.Schema({
   phone: String,
   quantity: Number,
 
-  // Badge Types: all, performer-weekend, performer-all
+  // Badge Types: all, performer-weekend-upgrade, performer-all
   type: String,
 
   payment: {},
