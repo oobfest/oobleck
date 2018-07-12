@@ -28,6 +28,8 @@ router.post('/stamp-reject', isLoggedIn, isRole(['staff']), controller.stampReje
 
 router.post('/add-note', isLoggedIn, isRole(['staff']), controller.addNote)
 
+router.post('/set-headliner-status/:id', isLoggedIn, controller.setHeadlinerStatus)
+
 router.route('/confirm-performer-email')
   .post(controller.confirmPerformerEmail)
   .options(function(request, response) {

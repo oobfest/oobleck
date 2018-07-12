@@ -83,7 +83,8 @@ let submissionSchema = mongoose.Schema({
 	techRehearsalNeeded: Boolean,
 
   // More special cases
-  invited: Boolean
+  invited: Boolean,
+  headliner: Boolean,
 
 })
 

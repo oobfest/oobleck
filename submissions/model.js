@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const Submission = require('../submissions/schema')
 
-let publicFields = "actName domain publicDescription imageUrl primaryContactName additionalMembers showType socialMedia"
+let publicFields = "actName domain publicDescription imageUrl primaryContactName additionalMembers showType socialMedia headliner"
 
 module.exports = {
 
@@ -270,6 +270,18 @@ module.exports = {
 				confirmationStatus == 'cancel'
 					? submission.confirmationStatus = null
 					: submission.confirmationStatus = confirmationStatus
+				this.save(submission, (error, savedSubmission)=> {
+					callback(error, savedSubmission)
+				})
+			}
+		})
+	},
+
+	setHeadlinerStatus: function(id, headlinerStatus, callback) {
+		this.get(id, (error, submission)=> {
+			if(error) callback(error)
+			else {
+				submission.headliner = headlinerStatus
 				this.save(submission, (error, savedSubmission)=> {
 					callback(error, savedSubmission)
 				})

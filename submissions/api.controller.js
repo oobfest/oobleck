@@ -122,6 +122,15 @@ module.exports = {
 		})
 	},
 
+	setHeadlinerStatus: function(request, response, next) {
+		let id = request.params.id
+		let headlinerStatus = request.body.headliner
+		model.setHeadlinerStatus(id, headlinerStatus, (error, savedSubmission)=> {
+			if(error) next(error)
+			else response.send(savedSubmission)
+		})
+	},
+
 	deleteReview: function(request, response, next) {
 		let submissionId = request.body.submissionId
 		let userId = request.body.userId
