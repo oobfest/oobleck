@@ -4,6 +4,10 @@ let showSchema = mongoose.Schema({
 	day: String,
 	venue: String,
 	time: Number,
+
+  capacity: Number,
+  remaining: Number,
+
 	acts: [],
   host: {}
 })

@@ -3,6 +3,17 @@ var _ = require('lodash')
 
 module.exports = {
 
+	temp: function() {
+		this.getAll((error, shows)=> {
+			for(let show of shows) {
+				show.capacity = 50
+				show.remaining = 50
+				this.save(show, ()=> {})
+			}
+		})
+		console.log("Set show tickets to 50")
+	},
+
 	create: function(show, callback) {
 		let newShow = Show(show)
 		this.save(newShow, (error, savedShow)=> {
