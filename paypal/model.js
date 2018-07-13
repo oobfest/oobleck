@@ -95,7 +95,7 @@ module.exports = {
         "temporary": true,
         "presentation": {
             "brand_name": "Out of Bounds Comedy Festival",
-            "logo_image": "https://app.oobfest.com/img/logo.png",
+            //"logo_image": "https://app.oobfest.com/img/logo.png",
             "locale_code": "US"
         },
         "input_fields": {

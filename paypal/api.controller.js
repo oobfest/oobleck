@@ -6,7 +6,7 @@ let emailModel = require('../email/model')
 module.exports = {
 
   createWorkshopSale: function(request, response, next) {
-    let name = request.body.workshopName
+    let name = request.body.name
     let quantity = request.body.quantity
     let price = 45
     paypalModel.createWorkshopSale(name, price, quantity, (error, payment)=> {
@@ -28,7 +28,7 @@ module.exports = {
       else {
         let newStudent = {
           name: request.body.name,
-          email: request.body. email,
+          email: request.body.email,
           phone: request.body.phone,
           quantity: request.body.quantity,
           auditing: false,
@@ -36,10 +36,12 @@ module.exports = {
         }
         let domain = request.body.domain
         workshopModel.addStudent(newStudent, domain, (error, workshop)=> {
-          console.log("NEW STUDENT", workshop)
-          response.header("Access-Control-Allow-Origin", "*")
-          response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-          response.json({message: "Success!"})
+          if(error) next(error)
+          else {
+            response.header("Access-Control-Allow-Origin", "*")
+            response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+            response.json({message: "Success!"})            
+          }
         })
       }
     })
