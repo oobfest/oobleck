@@ -1,0 +1,69 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Shows
+
+  #app.dash-boxes.container-fluid
+    .box.box-b(v-if="shows.length > 0")
+      table.box-table.table
+        thead
+          tr
+            th 
+            th 
+            th Cap
+            th Sold
+            th Left
+          tr
+            th
+            th(colspan="3")
+              input.form-control(type="text")
+        tbody(v-for="(show, index) in shows")
+          tr
+            td.text-center
+              a.badge.badge-primary(:href="'#collapse-' + index" data-toggle="collapse") {{index}}
+            td {{show.day}}, {{show.venue}}, {{show.time | time}}
+            td {{show.capacity}}
+            td {{show.capacity - show.remaining}}
+            td {{show.remaining}}
+          tr
+            td
+            td(colspan="4")
+              p(v-if="show.host") Host: {{show.host.name}}
+              ul
+                li(v-for="act in show.acts") {{act.name}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan="7")
+              p Hello, world!
+    p.m2(v-else) No shows yet
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          shows: []
+        }
+      },
+      methods: {},
+      filters: {
+        time(time) {
+          time = String(time)
+          return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+        },
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/shows/')
+          .then(function(response) {
+            self.shows = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting shows :(")
+            console.log(error)
+          })
+      }
+    })

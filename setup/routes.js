@@ -27,6 +27,7 @@ module.exports = async function(app) {
 	app.use('/workshops',		require('../workshops/view.routes'))
 	app.use('/badges',			require('../badges/view.routes'))
 	app.use('/volunteers',	require('../volunteers/view.routes'))
+	app.use('/shows',				require('../shows/view.routes'))
 
 	// Home Page (Login screen)
 	app.use(router.get('/', (request, response) => {

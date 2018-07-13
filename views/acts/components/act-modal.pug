@@ -9,7 +9,7 @@ script#act-modal-template(type="text/template")
         .modal-body
           .text-center
             div(v-if="typeof act.imageUrl != 'undefined' && act.imageUrl != ''")
-              a(href="act.imageUrl")
+              a(:href="act.imageUrl" target="_blank")
                 img.mb-1(alt="Submission Photo",:src="act.imageUrl.substr(0, act.imageUrl.length-4) + 'b.jpeg'")
             div(v-else)
               small [no picture]
