@@ -8,7 +8,7 @@ module.exports = {
   createWorkshopSale: function(request, response, next) {
     let name = request.body.workshopName
     let quantity = request.body.quantity
-    let price = 1
+    let price = 45
     paypalModel.createWorkshopSale(name, price, quantity, (error, payment)=> {
       if(error) next(error)
       else {
