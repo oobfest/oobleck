@@ -9,8 +9,20 @@ let showSchema = mongoose.Schema({
   remaining: Number,
 
 	acts: [],
-  host: {}
+  host: {},
+  tickets: []
 })
+
+/* Ticket
+  
+  Name String
+  Email String
+  Phone String
+  Quantity Number
+  Badge: false, 'all', 'performer-all', 'performer-upgrade'
+  Payment: {paypal}
+
+*/
 
 let Show = mongoose.model('Show', showSchema)
 

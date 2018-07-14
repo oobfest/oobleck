@@ -1,6 +1,8 @@
 const Show = require('./schema')
 var _ = require('lodash')
 
+let publicFields = "_id day venue time capacity remaining acts host"
+
 module.exports = {
 
 	temp: function() {
@@ -89,6 +91,18 @@ module.exports = {
 					callback(error, savedShow)
 				})
 			}
+		})
+	},
+	
+	getShows: function(callback) {
+		Show.find({}, publicFields, (error, shows)=> {
+			callback(error, shows)
+		})
+	},
+
+	getShowById: function(id, callback) {
+		Show.findById(id, publicFields, (error, show)=> {
+			callback(error, show)
 		})
 	}
 }

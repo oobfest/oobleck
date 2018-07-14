@@ -42,9 +42,28 @@ block content
                 button.btn.btn-danger(v-if="!workshop.deleteImageUrl" @click="deleteWorkshop(workshop._id, index)") Delete
                 button.btn.btn-danger(v-else @click="deleteWorkshopImage(workshop)") Delete Image
               h4 Students
-              pre {{workshop.students}}
-              //ul
-                li(v-for="student in workshop.students") {{student.quantity}}: {{student.name}}
+              div(v-if="workshop.students.length > 0")
+                table.table.table-sm
+                  thead
+                    tr
+                      th
+                      th Name
+                      th Email
+                      th Quantity
+                      th Audit?
+                      th Date
+                      th Payment ID
+                  tbody
+                    tr(v-for="(student, index) in workshop.students")
+                      td {{index+1}}
+                      td {{student.name}}
+                      td {{student.email}}
+                      td {{student.quantity}}
+                      td {{student.auditing ? "Yes" : "" }}
+                      td {{new Date(Date.parse(student.payment.create_time)).toLocaleString('en-US')}}
+                      td 
+                        a(:href="'https://www.paypal.com/activity/payment/' + student.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{student.payment.transactions[0].related_resources[0].sale.id}}
+              p(v-else) No students
 
     .form-group
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-workshop-modal") Add Workshop

@@ -122,5 +122,20 @@ module.exports = {
 			if(error) next(error)
 			else response.status(204).end()
 		})
+	},
+
+	getShows: function(request, response, next) {
+		model.getShows((error, shows)=> {
+			if(error) next(error)
+			else response.json(shows)
+		})
+	},
+
+	getShowById: function(request, response, next) {
+		let id = request.params.id
+		model.getShowById(id, (error, show)=> {
+			if(error) next(error)
+			else response.json(show)
+		})
 	}
 }

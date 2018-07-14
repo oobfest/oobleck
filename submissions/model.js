@@ -46,7 +46,7 @@ module.exports = {
 	},
 
 	getAllPerformerEmails: function(callback) {
-		Submission.find({stamp: 'in', confirmationStatus: 'yes'}, "primaryContactEmail additionalMembers", (error, submissions)=> {
+		Submission.find({stamp: 'in', confirmationStatus: 'yes', headliner: false}, "primaryContactEmail additionalMembers", (error, submissions)=> {
 			if (error) callback(error)
 			else {
 				let performerEmails = []
@@ -58,6 +58,15 @@ module.exports = {
 				}
 				callback(null, performerEmails)			
 			}
+		})
+	},
+
+	doTheThing: function(callback) {
+		Submission.find({stamp: 'in', confirmationStatus: 'yes'}, "_id actName headliner showType primaryContactEmail", (error, submissions)=> {
+			let nonHeadlinerSubmissions = submissions
+			.filter(s=> s.headliner == null || s.headliner == false)
+			.filter(s=> s.showType != 'Stand-Up' && s.showType != 'Other' && s.showType != 'Podcast')
+			callback(null, nonHeadlinerSubmissions)
 		})
 	},
 

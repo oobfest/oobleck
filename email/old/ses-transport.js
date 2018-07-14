@@ -14,13 +14,13 @@ function createTransporter() {
   })
 }
 
-function sendEmail(transporter, recipient, htmlMessage) {
+function sendEmail(transporter, recipient, htmlMessage, subject) {
   transporter.sendMail(
     {
       to: recipient,
       bcc: "admin@oobfest.com",
       from: "ruby@oobfest.com",
-      subject: "Confirm Attendance to Out of Bounds 2018",
+      subject: subject || "Confirm Attendance to Out of Bounds 2018",
       html: htmlMessage
     },
     (error, info) => {
@@ -65,5 +65,13 @@ function sendAcceptanceEmails() {
       sendEmail(transporter, submission.primaryContactEmail, getMessage(submission._id, submission.actName, submission.showType))
     }
   })  
+}
+
+
+
+function sendShowDetailsEmail(actInfo) {
+  let transporter = createTransporter()
+  let recipient = 'ruby@oobfest.com'
+  let subject = "OoB 2018 - Your Show Details! Workshops Announced!"
 }
 
