@@ -450,7 +450,7 @@ router.post('/edit', (request, response, next)=> {
 					`<b>Image URL:</b>		${newSubmission.imageUrl ? newSubmission.imageUrl : 'No image uploaded'}<br>` +
 					`<b>Availability:</b> 	${newSubmission.available.join(' ')}<br>` + 
 					`<b>Video URLs:</b><br>	${newSubmission.videoUrls.join('<br>')}`
-				sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
+				//sendEmail(process.env.SUBMISSION_EMAIL, 'OoB | Application Updated | ' + newSubmission.actName, archiveMessage)
 			}
 			response.redirect('/submissions/edit/' + submission.id)
 		}
