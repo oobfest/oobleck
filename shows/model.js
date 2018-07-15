@@ -1,5 +1,6 @@
 const Show = require('./schema')
 var _ = require('lodash')
+let badgesModel= require('../badges/model')
 
 let publicFields = "_id day venue time capacity remaining acts host"
 
@@ -104,5 +105,48 @@ module.exports = {
 		Show.findById(id, publicFields, (error, show)=> {
 			callback(error, show)
 		})
+	},
+
+	addTicket: function(showId, ticket, callback) {
+		this.get(showId, (error, show)=> {
+			if(error) callback(error)
+			else {
+				if(show.remaining > ticket.quantity) {
+					show.tickets.push(ticket)
+					show.remaining-=ticket.quantity
+				  show.markModified('tickets')
+				  this.save(show, (error, savedShow)=> {
+				  	callback(error, savedShow)
+				  })					
+				}
+				else callback(true, {message: "SOLD OUT!"})	// TODO: something better
+			}
+		})
+	},
+
+	badgeReservation: function(showId, email, quantity, callback) {
+		badgesModel.getByEmail(email, (error, badge)=> {
+			if(error) callback(error)
+			else {
+				if(badge == null) callback(null, {valid: false, message: "Badge not found"})
+				else {
+					if (quantity > badge.quantity) callback(null, {valid: false, message: "vm"})
+					else {
+						let ticket = {
+							name: badge.name,
+							email: badge.email,
+							phone: badge.phone,
+							quantity: quantity,
+							badge: badge.type,
+							payment: false
+						}
+						this.addTicket(showId, ticket, (error, savedShow)=> {
+							callback(null, {valid: true, savedShow: savedShow})
+						})
+					}
+				}
+			}
+		})
 	}
+	
 }

@@ -137,5 +137,15 @@ module.exports = {
 			if(error) next(error)
 			else response.json(show)
 		})
+	},
+
+	badgeReservation: function(request, response, next) {
+		let showId = request.params.id
+		let email = request.body.email
+		let quantity = request.body.quantity
+		model.badgeReservation(showId, email, quantity, (error, status)=> {
+			if(error) next(error)
+			else response.json(status)
+		})
 	}
 }

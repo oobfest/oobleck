@@ -27,6 +27,12 @@ module.exports = {
     })
   },
 
+  getByEmail: function(email, callback) {
+    Badge.findOne({email}, (error, badge)=> {
+      callback(error, badge)
+    })
+  },
+
   update: function(id, newBadge, callback) {
     this.get(id, (error, oldBadge)=> {
       if(error) callback(error)
