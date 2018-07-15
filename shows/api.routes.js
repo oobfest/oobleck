@@ -13,6 +13,7 @@ router.get('/public/:id', controller.getShowById)
 router.post('/badge-reservation/:id', controller.badgeReservation)
 router.options('/badge-reservation/:id', controller.coorz)
 router.post('/clear-tickets/:id', controller.clearTickets)
+router.post('/set-capacity/:id', controller.setCapacity)
 
 router.post('/add-act/:id', isLoggedIn, controller.addAct)
 router.post('/remove-act/', isLoggedIn, controller.removeAct)

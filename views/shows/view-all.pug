@@ -24,6 +24,8 @@ block content
               ul(v-if="show.tickets.length > 0")
                 li(v-for="ticket in show.tickets") {{ticket.name}}
               button.btn.btn-danger(type="button" @click="clearTickets(show._id)") Clear
+              | &nbsp;
+              button.btn.btn-primary(type="button" @click="setCapacity(show._id)") Set Capacity
 
             td.digits {{show.capacity}}
             td.digits 
@@ -56,13 +58,25 @@ block content
         }
       },
       methods: {
-        clearTickets() {
+        setCapacity(id) {
+          let capacity = Number(prompt("New capacity"))
           axios
-            .post('/api/shows/clear-tickets/:id')
+            .post('/api/shows/set-capacity/' + id, {capacity: capacity})
             .then((response)=> {
               alert("YAY")
             })
-            .catch((response)=> {
+            .catch((error)=> {
+              alert("Boo")
+              console.log(error)
+            })
+        },
+        clearTickets(id) {
+          axios
+            .post('/api/shows/clear-tickets/' + id)
+            .then((response)=> {
+              alert("YAY")
+            })
+            .catch((error)=> {
               alert("BOO")
             })
         },

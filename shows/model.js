@@ -153,12 +153,27 @@ module.exports = {
 		this.get(id, (error, show)=> {
 			if(error) callback(error)
 			else {
+				console.log(show)
 				show.tickets = []
 				show.markModified('tickets')
 				show.remaining = show.capacity
-				show.save((error, show)=> {
+				this.save((error, show)=> {
 					callback(error, show)
 				})				
+			}
+		})
+	},
+
+	setCapacity: function(id, capacity, callback) {
+		this.get(id, (error, show)=> {
+			if(error) callback(error)
+			else {
+				let ticketsReserved = show.capacity - show.remaining
+				show.capacity = capacity
+				show.remaining = capacity - ticketsReserved
+				this.save(show, (error, savedShow)=> {
+					callback(error, savedShow)
+				})			
 			}
 		})
 	}

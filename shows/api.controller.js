@@ -160,5 +160,13 @@ module.exports = {
 		model.clearTickets(showId, (error, yay)=> {
 			response.json({yay: true})
 		})
+	},
+
+	setCapacity: function(request, response, next) {
+		let showId = request.params.id
+		let capacity = request.body.capacity
+		model.setCapacity(showId, capacity, (error, yay)=> {
+			response.json({yay: true})
+		})
 	}
 }
