@@ -28,6 +28,7 @@ module.exports = {
   },
 
   getByEmail: function(email, callback) {
+    // TODO: Shouldn't do findOne, what if performer buys all-access for partner?
     Badge.findOne({email}, (error, badge)=> {
       callback(error, badge)
     })

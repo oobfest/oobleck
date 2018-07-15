@@ -20,8 +20,10 @@ block content
               p.font-weight-bold {{show.day}}, {{show.venue}}, {{show.time | time}}
               ul
                 li(v-for="act in show.acts") {{act.name}}
-              p
-                a(href="#" @click.prevent="todo") Show details here
+              p Tickets
+              ul(v-if="show.tickets.length > 0")
+                li(v-for="ticket in show.tickets") {{ticket.name}}
+              button.btn.btn-danger(type="button" @click="clearTickets(show._id)") Clear
 
             td.digits {{show.capacity}}
             td.digits 
@@ -54,6 +56,16 @@ block content
         }
       },
       methods: {
+        clearTickets() {
+          axios
+            .post('/api/shows/clear-tickets/:id')
+            .then((response)=> {
+              alert("YAY")
+            })
+            .catch((response)=> {
+              alert("BOO")
+            })
+        },
         todo() {
           alert("Not implemented yet 👻")
         }

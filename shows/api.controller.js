@@ -153,5 +153,12 @@ module.exports = {
     response.header("Access-Control-Allow-Origin", "*")
     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     response.json({yay: true})
+	},
+
+	clearTickets: function(request, response, next) {
+		let showId = request.params.id
+		model.clearTickets(showId, (error, yay)=> {
+			response.json({yay: true})
+		})
 	}
 }

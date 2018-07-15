@@ -128,7 +128,7 @@ module.exports = {
 		badgesModel.getByEmail(email, (error, badge)=> {
 			if(error) callback(error)
 			else {
-				if(badge == null) callback(null, {valid: false, message: "Badge not found"})
+				if(badge == null) callback(null, {valid: false, message: "No badges found for this email"})
 				else {
 					if (quantity > badge.quantity) callback(null, {valid: false, message: "vm"})
 					else {
@@ -145,6 +145,20 @@ module.exports = {
 						})
 					}
 				}
+			}
+		})
+	},
+
+	clearTickets: function(id, callback) {
+		this.get(id, (error, show)=> {
+			if(error) callback(error)
+			else {
+				show.tickets = []
+				show.markModified('tickets')
+				show.remaining = show.capacity
+				show.save((error, show)=> {
+					callback(error, show)
+				})				
 			}
 		})
 	}
