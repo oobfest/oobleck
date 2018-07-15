@@ -145,7 +145,11 @@ module.exports = {
 		let quantity = request.body.quantity
 		model.badgeReservation(showId, email, quantity, (error, status)=> {
 			if(error) next(error)
-			else response.json(status)
+			else {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+				response.json(status)
+			}
 		})
 	}
 }
