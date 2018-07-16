@@ -17,6 +17,7 @@ let workshopSchema = mongoose.Schema({
 
   capacity: Number,
   remaining: Number, 
+  refunded: Number,
 
   students: [{
     name: String,
@@ -24,6 +25,7 @@ let workshopSchema = mongoose.Schema({
     phone: String,
     auditing: Boolean,
     quantity: Number,
+    refunded: Boolean,
     payment: {}
   }]
 

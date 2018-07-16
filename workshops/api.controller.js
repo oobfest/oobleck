@@ -81,5 +81,15 @@ module.exports = {
       if(error) next(error)
       else response.status(204).end()
     })
+  },
+
+  setRefund: function(request, response, next) {
+    let id = request.params.id
+    let email = request.body.email
+    let refunded = request.body.refunded
+    model.setRefund(id, email, refunded, (error, updatedWorkshop)=> {
+      if(error) next(error)
+      else response.json(updatedWorkshop)
+    })
   }
 }

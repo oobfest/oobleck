@@ -148,3 +148,7 @@ a:hover { color: #016ff9; }
 	font-size: 1.25rem;
 	vertical-align: middle;
 }
+
+.line-through {
+	text-decoration: line-through
+}

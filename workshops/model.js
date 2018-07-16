@@ -89,6 +89,29 @@ module.exports = {
         callback(error, workshop)
       })
     })
+  },
+
+  setRefund: function(id, email, refunded, callback) {
+    this.get(id, (error, workshop)=> {
+      if(error) callback(error)
+      else {
+        let index = workshop.students.map(s=> s.email).indexOf(email)
+        workshop.students[index].refunded = refunded
+        if(refunded) {
+          workshop.remaining += workshop.students[index].quantity
+          if(workshop.refunded == undefined) workshop.refunded = 1
+          else workshop.refunded++
+        }
+        else {
+          workshop.remaining -= workshop.students[index].quantity
+          workshop.refunded--
+        }
+        workshop.markModified('students')
+        this.save(workshop, (error, savedWorkshop)=> {
+          callback(error, savedWorkshop)
+        })
+      }
+    })
   }
 
 }
