@@ -6,13 +6,58 @@ script.
     data() { 
       return {
         days: [
-          {day: "Tuesday", venues: ["Hideout Down", "Hideout Up", "ColdTowne"]},
-          {day: "Wednesday", venues: ["Hideout Down", "Hideout Up", "ColdTowne"]},
-          {day: "Thursday", venues: ["Hideout Down", "Hideout Up", "ColdTowne", "Fallout", "Velveeta"]},
-          {day: "Friday", venues: ["Hideout Down", "Hideout Up", "ColdTowne", "Fallout", "Velveeta", "Spider House"]},
-          {day: "Saturday", venues: ["Hideout Down", "Hideout Up", "Hideout Classroom", "ColdTowne", "Fallout", "Velveeta", "Spider House", "Institution"]},
-          {day: "Sunday", venues: ["Hideout Down", "Hideout Up", "Hideout Classroom", "Fallout", "Velveeta"]},
-          {day: "Monday", venues: ["Hideout Down"]}
+          {day: "Tuesday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"}, 
+            {name: "Hideout Up", availability: "3pm"}, 
+            {name: "ColdTowne", availability: "4pm"}
+          ]},
+          {day: "Wednesday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"},
+            {name: "Hideout Up", availability: "3pm"},
+            {name: "ColdTowne", availability: "4pm"},
+          ]},
+          {day: "Thursday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"},
+            {name: "Hideout Up", availability: "3pm"},
+            {name: "ColdTowne", availability: "3pm"},
+            {name: "Fallout", availability: "4pm"},
+            {name: "Velveeta"},
+          ]},
+          {day: "Friday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"},
+            {name: "Hideout Up", availability: "3pm"},
+            {name: "ColdTowne", availability: "3pm"},
+            {name: "Fallout", availability: "3pm"},
+            {name: "Velveeta"},
+            {name: "Spider House"},
+          ]},
+          {day: "Saturday", 
+          venues: [
+            {name: "Hideout Down", availability: "8am"},
+            {name: "Hideout Up", availability: "8am"},
+            {name: "Hideout Classroom", availability: "8am"},
+            {name: "ColdTowne", availability: "4pm"},
+            {name: "Fallout", availability: "all day"},
+            {name: "Velveeta"},
+            {name: "Spider House", availability: "1pm"},
+            {name: "Institution"},
+          ]},
+          {day: "Sunday", 
+          venues: [
+            {name: "Hideout Down", availability: "8am"},
+            {name: "Hideout Up", availability: "8am"},
+            {name: "Hideout Classroom", availability: "8am"},
+            {name: "Fallout", availability: "all day"},
+            {name: "Velveeta"},
+          ]},
+          {day: "Monday", 
+          venues: [
+            {name: "Hideout Down", availability: "5pm"},
+          ]}
         ],
         editMode: true,
         hideNavigation: false

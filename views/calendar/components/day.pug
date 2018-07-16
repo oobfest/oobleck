@@ -2,8 +2,8 @@ script#day-template(type="text/template")
   div
     h2 {{day}}
     .day-container
-      .box.venue(:class="getVenueClass(venue)" v-for="venue in venues")
-        venue(:venue="venue" :day="day")
+      .box.venue(:class="getVenueClass(venue.name)" v-for="venue in venues")
+        venue(:venue="venue",:day="day")
 
 script.
   Vue.component('day', {
