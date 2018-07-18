@@ -63,7 +63,7 @@ block content
                       td {{student.quantity}}
                       td ${{student.payment.transactions[0].amount.total.slice(0, -3)}}
                       td {{student.auditing ? "Yes" : "" }}
-                      td {{new Date(Date.parse(student.payment.create_time)).toLocaleString('en-US')}}
+                      td {{new Date(Date.parse(student.payment.create_time)).toLocaleDateString('en-US')}}
                       td 
                         a(:href="'https://www.paypal.com/activity/payment/' + student.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{student.payment.transactions[0].related_resources[0].sale.id}}
                       td

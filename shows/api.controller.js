@@ -165,8 +165,9 @@ module.exports = {
 	setCapacity: function(request, response, next) {
 		let showId = request.params.id
 		let capacity = request.body.capacity
-		model.setCapacity(showId, capacity, (error, yay)=> {
-			response.json({yay: true})
+		model.setCapacity(showId, capacity, (error, savedShow)=> {
+			if(error) next(error)
+			else response.json(savedShow)
 		})
 	}
 }

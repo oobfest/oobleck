@@ -63,7 +63,8 @@ block content
           axios
             .post('/api/shows/set-capacity/' + id, {capacity: capacity})
             .then((response)=> {
-              alert("YAY")
+              let index = this.shows.findIndex(s=> s._id == id)
+              Vue.set(this.shows, index, response.data)
             })
             .catch((error)=> {
               alert("Boo")
