@@ -125,6 +125,7 @@ module.exports = {
 			        let submission = submissions.find(s=> s.domain == domain)
 			        shows[i].acts[j].imageUrl = submission.imageUrl.substr(0, submission.imageUrl.length-4)
 			        shows[i].acts[j].description = submission.publicDescription
+			        shows[i].acts[j].domain = domain
 			      }
 			      shows[i].markModified('acts')
 			      shows[i].save(function(error, savedShow) {

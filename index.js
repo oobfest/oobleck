@@ -30,6 +30,3 @@ process.on('uncaughtException', (error)=> {
 app.listen(process.env.PORT, ()=> {
 	log.info("🐵  Listening on port " + process.env.PORT)
 })
-
-//let showModel = require('./shows/model')
-//showModel.publish()
