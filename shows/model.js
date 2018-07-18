@@ -1,6 +1,7 @@
 const Show = require('./schema')
 var _ = require('lodash')
 let badgesModel= require('../badges/model')
+let mongoose = require('mongoose')
 
 let publicFields = "_id day venue time capacity remaining acts host"
 
@@ -125,6 +126,8 @@ module.exports = {
 		})
 	},*/
 
+	// TODO: payPalReservation
+
 	badgeReservation: function(showId, email, quantity, callback) {
 		badgesModel.getByEmail(email, (error, badge)=> {
 			if(error) callback(error)
@@ -135,7 +138,7 @@ module.exports = {
 					if (quantity > badge.quantity) callback(null, {reservationSuccessful: false, message: `Badge only supports up to ${badge.quantity} reservations`})
 					else {
 						let ticket = {
-							_id: badge._id,
+							_id: mongoose.Types.ObjectId(),
 							name: badge.name,
 							email: badge.email,
 							phone: badge.phone,
@@ -146,9 +149,29 @@ module.exports = {
 						this.get(showId, (error, show)=> {
 							if(error) callback(error)
 							else {
-								if(show.remaining <= 0 ) callback(null, {reservationSuccessful: false, message: "Show is sold out"})
-								else if (quantity > show.remaining) callback(null, {reservationSuccessful: false, message: `There are less than ${quantity} tickets available`})
-								// TODO: Check if weekend badge.type == 'performer-weekend'
+
+								// Reserving non-weekend day with weekend badge
+								if (badge.type == 'performer-weekend-upgrade' && (show.day == 'Tuesday' || show.day=='Wednesday' || show.day=='Thursday')) {
+									// Todo: assumes they've only bought one badge
+									callback(null, {reservationSuccessful: false, message: "Badge can only reserve shows on Friday, Saturday, Sunday or Monday"})
+								}
+
+								// Show is sold out
+								else if(show.remaining <= 0 ) {
+									callback(null, {reservationSuccessful: false, message: "Show is sold out"})
+								}
+
+								// Asking for more tickets than show has left
+								else if (quantity > show.remaining) {
+									callback(null, {reservationSuccessful: false, message: `There are less than ${quantity} tickets available`})
+								}
+
+								// Has already reserved tickets up to the quantity on the badge
+								else if (show.tickets.filter(t=> t.email == badge.email).map(t=> t.quantity).reduce((total, quantity)=> total + quantity, 0) >= badge.quantity) {
+									// Todo: assumes they've only bought one badge D:
+									callback(null, {reservationSuccessful: false, message: `${badge.email} has already made ${badge.quantity} reservation(s) for this show`})
+								}
+
 								else {
 									show.tickets.push(ticket)
 									show.remaining = (show.remaining - ticket.quantity)
