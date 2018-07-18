@@ -17,19 +17,37 @@ block content
         tbody
           tr(v-for="(show, index) in filteredShows")
             td.text-left 
-              p.font-weight-bold {{show.day}}, {{show.venue}}, {{show.time | time}}
+              h4 {{show.day}}, {{show.venue}}, {{show.time | time}}
               ul
                 li(v-for="act in show.acts") {{act.name}}
-              p Tickets
-              ul(v-if="show.tickets.length > 0")
-                li(v-for="ticket in show.tickets") {{ticket.name}}
-              button.btn.btn-danger(type="button" @click="clearTickets(show._id)") Clear
-              | &nbsp;
+              div(v-if="show.tickets.length > 0" ) 
+                h4 
+                  a(:href="'#collapse'+index" data-toggle="collapse") Tickets
+                .collapse(:id="'collapse'+index")
+                  table.table
+                    thead
+                      tr
+                        th Name
+                        th Email
+                        th Quantity
+                        th Type
+                        th
+                    tbody
+                      tr(v-for="ticket in show.tickets")
+                        td {{ticket.name}}
+                        td {{ticket.email}}
+                        td {{ticket.quantity}}
+                        td {{ticket.badge ? ticket.badge : 'PayPal'}}
+                        td 
+                          a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
+              p(v-else) No tickets sold
               button.btn.btn-primary(type="button" @click="setCapacity(show._id)") Set Capacity
+              | &nbsp;
+              button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Create Badge Reservation
 
-            td.digits {{show.capacity}}
-            td.digits 
-              a(href="#" @click.prevent="todo") {{show.capacity - show.remaining}}
+            td
+              a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity}}
+            td.digits {{show.capacity - show.remaining}}
             td.digits {{show.remaining}}              
     p.m2(v-else) No shows yet
 
@@ -60,38 +78,54 @@ block content
       methods: {
         reserveWithBadge(showId) {
           let badgeEmail = prompt("Badge email")
+          if(badgeEmail == null) return
+          let quantity = Number(prompt("Quantity"))
+          if(quantity == 0) return
+
+          let self = this
           axios
-            .post('/api/shows/badge-reservation/' + showId, {email: badgeEmail})
+            .post('/api/shows/badge-reservation/' + showId, {email: badgeEmail, quantity: quantity})
             .then(function(response) {
-              let index = this.shows.findIndex(s=> s._id == id)
-              Vue.set(this.shows, index, response.data)
+              if(response.data.reservationSuccessful) {
+                let index = self.shows.findIndex(s=> s._id == showId)
+                Vue.set(self.shows, index, response.data.savedShow)
+              }
+              else {
+                alert(response.data.message)
+              }
+            })
+            .catch(function(error) {
+              alert("Error reserving for show with badge :(")
+              console.log(error)
+            })
+        },
+        removeReservation(showId, ticketId) {
+          let self = this
+          axios
+            .post('/api/shows/remove-reservation/' + showId, {ticketId: ticketId})
+            .then(function(response) {
+              let showIndex = self.shows.findIndex(s=> s._id == showId)
+              Vue.set(self.shows, showIndex, response.data)
+            })
+            .catch(function(error) {
+              alert("Error removing reservation from show :(")
+              console.log(error)
             })
         },
         setCapacity(id) {
           let capacity = Number(prompt("New capacity"))
+          if(capacity == 0) return
+          let self = this
           axios
             .post('/api/shows/set-capacity/' + id, {capacity: capacity})
             .then((response)=> {
-              let index = this.shows.findIndex(s=> s._id == id)
-              Vue.set(this.shows, index, response.data)
+              let index = self.shows.findIndex(s=> s._id == id)
+              Vue.set(self.shows, index, response.data)
             })
             .catch((error)=> {
               alert("Boo")
               console.log(error)
             })
-        },
-        clearTickets(id) {
-          axios
-            .post('/api/shows/clear-tickets/' + id)
-            .then((response)=> {
-              alert("YAY")
-            })
-            .catch((error)=> {
-              alert("BOO")
-            })
-        },
-        todo() {
-          alert("Not implemented yet 👻")
         }
       },
       filters: {

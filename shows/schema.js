@@ -14,12 +14,12 @@ let showSchema = mongoose.Schema({
 })
 
 /* Ticket
-  
+  ID  
   Name String
   Email String
   Phone String
   Quantity Number
-  Badge: false, 'all', 'performer-all', 'performer-upgrade'
+  Badge: false, 'all', 'performer-all', 'performer-weekend'
   Payment: {paypal}
 
 */

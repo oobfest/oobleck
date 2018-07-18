@@ -149,6 +149,15 @@ module.exports = {
 		})
 	}, 
 
+	removeReservation: function(request, response, next) {
+		let showId = request.params.id
+		let ticketId = request.body.ticketId
+		model.removeReservation(showId, ticketId, (error, savedShow)=> {
+			if(error) next(error)
+			else response.json(savedShow)
+		})
+	},
+
 	coorz: function(request, response, next) {
     response.header("Access-Control-Allow-Origin", "*")
     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")

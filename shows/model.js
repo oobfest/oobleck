@@ -107,6 +107,7 @@ module.exports = {
 		})
 	},
 
+	/*
 	addTicket: function(showId, ticket, callback) {
 		this.get(showId, (error, show)=> {
 			if(error) callback(error)
@@ -119,20 +120,22 @@ module.exports = {
 				  	callback(error, savedShow)
 				  })					
 				}
-				else callback(true, {message: "SOLD OUT!"})	// TODO: something better
+				else callback(true, {reservationSuccessful: false, message: "SOLD OUT!"})	// TODO: something better
 			}
 		})
-	},
+	},*/
 
 	badgeReservation: function(showId, email, quantity, callback) {
 		badgesModel.getByEmail(email, (error, badge)=> {
 			if(error) callback(error)
 			else {
-				if(badge == null) callback(null, {valid: false, message: "No badges found for this email"})
+				if(badge == null) callback(null, {reservationSuccessful: false, message: "No badges found for this email"})
 				else {
-					if (quantity > badge.quantity) callback(null, {valid: false, message: "vm"})
+					if (quantity <= 0) callback(null, {reservationSuccessful: false, message: "Invalid quantity: " + quantity})
+					if (quantity > badge.quantity) callback(null, {reservationSuccessful: false, message: `Badge only supports up to ${badge.quantity} reservations`})
 					else {
 						let ticket = {
+							_id: badge._id,
 							name: badge.name,
 							email: badge.email,
 							phone: badge.phone,
@@ -140,11 +143,43 @@ module.exports = {
 							badge: badge.type,
 							payment: false
 						}
-						this.addTicket(showId, ticket, (error, savedShow)=> {
-							callback(null, {valid: true, savedShow: savedShow})
+						this.get(showId, (error, show)=> {
+							if(error) callback(error)
+							else {
+								if(show.remaining <= 0 ) callback(null, {reservationSuccessful: false, message: "Show is sold out"})
+								else if (quantity > show.remaining) callback(null, {reservationSuccessful: false, message: `There are less than ${quantity} tickets available`})
+								// TODO: Check if weekend badge.type == 'performer-weekend'
+								else {
+									show.tickets.push(ticket)
+									show.remaining = (show.remaining - ticket.quantity)
+									console.log("TICEKT", ticket)
+									console.log("SHOW", show)
+									show.markModified('tickets')
+									this.save(show, (error, savedShow)=> {
+										if(error) callback(error)
+										else callback(null, {reservationSuccessful: true, savedShow})
+									})
+								}
+							}
 						})
 					}
 				}
+			}
+		})
+	},
+
+	removeReservation: function(showId, ticketId, callback) {
+		this.get(showId, (error, show)=> {
+			if(error) callback(error)
+			else {
+				let ticketIndex = show.tickets.findIndex(t=> t._id == ticketId)
+				show.remaining += show.tickets[ticketIndex].quantity
+				show.tickets.splice(ticketIndex, 1)
+				show.markModified('tickets')
+				this.save(show, (error, savedShow)=> {
+					if(error) callback(error)
+					else callback(null, savedShow)
+				})
 			}
 		})
 	},
