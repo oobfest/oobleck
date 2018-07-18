@@ -46,7 +46,7 @@ module.exports = {
 	},
 
 	getAllPerformerEmails: function(callback) {
-		Submission.find({stamp: 'in', confirmationStatus: 'yes', headliner: false}, "primaryContactEmail additionalMembers", (error, submissions)=> {
+		Submission.find({stamp: 'in', confirmationStatus: 'yes', headliner: {$ne: true}}, "primaryContactEmail additionalMembers", (error, submissions)=> {
 			if (error) callback(error)
 			else {
 				let performerEmails = []

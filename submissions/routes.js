@@ -9,6 +9,15 @@ const isProductionEnvironment = require('../utilities/is-production-environment'
 const _ = require('lodash')
 
 
+router.get('/emails', isLoggedIn, (request, response, next)=> {
+	submissionModel.getAllPerformerEmails((error, emails)=> {
+		if(error) next(error)
+		else {
+			response.render('acts/emails', {emails: emails})
+		}
+	})
+})
+
 router.post('/finalize/:id', (request, response, next)=> {
 	let id = request.params.id
 	let newSubmissionData = request.body
