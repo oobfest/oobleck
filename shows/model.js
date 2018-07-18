@@ -2,21 +2,12 @@ const Show = require('./schema')
 var _ = require('lodash')
 let badgesModel= require('../badges/model')
 let mongoose = require('mongoose')
+let submissionModel = require('../submissions/model')
+let limax = require('limax')
 
 let publicFields = "_id day venue time capacity remaining acts host"
 
 module.exports = {
-
-	temp: function() {
-		this.getAll((error, shows)=> {
-			for(let show of shows) {
-				show.capacity = 50
-				show.remaining = 50
-				this.save(show, ()=> {})
-			}
-		})
-		console.log("Set show tickets to 50")
-	},
 
 	create: function(show, callback) {
 		let newShow = Show(show)
@@ -53,7 +44,7 @@ module.exports = {
 		this.get(id, (error, oldShow)=> {
 			if(error) callback(error)
 			else {
-				let updatedShow = newShow //_.merge(oldShow, newShow)
+				let updatedShow = newShow
 				this.save(updatedShow, (error, savedShow)=> {
 					callback(error, savedShow)
 				})
@@ -61,14 +52,14 @@ module.exports = {
 		})
 	},
 
-	updateDuration: function(showId, act, callback) {
-		this.get(showId, (error, oldShow)=> {
+	updateDuration: function(showId, actId, duration, callback) {
+		this.get(showId, (error, show)=> {
 			if(error) callback(error)
 			else {
-				let index = oldShow.acts.findIndex(a=> a._id.toString() == act._id)
-				oldShow.acts[index] = act
-				oldShow.markModified('acts') 
-				this.save(oldShow, (error, savedShow)=> {
+				let index = show.acts.findIndex(a=> a._id == actId)
+				show.acts[index].duration = duration
+				show.markModified('acts') 
+				show.save((error, savedShow)=> {
 					callback(error, savedShow)
 				})
 			}
@@ -84,13 +75,28 @@ module.exports = {
 		})
 	},
 
-	addAct: function(id, act, callback) {
-		this.get(id, (error, show)=> {
+	addAct: function(showId, actId, callback) {
+		this.get(showId, (error, show)=> {
 			if(error) callback(error)
 			else {
-				show.acts.push(act)
-				this.save(show, (error, savedShow)=> {
-					callback(error, savedShow)
+				submissionModel.get(actId, (error, submission)=> {
+					if(error) next(error)
+					else {
+						let act = {
+							_id: submission._id,
+							name: submission.actName,
+							type: submission.showType,
+							duration: null,
+							imageUrl: submission.imageUrl.substr(0, submission.imageUrl.length-4),
+							domain: submission.domain,
+							description: submission.publicDescription
+						}
+						show.acts.push(act)
+						this.update(showId, show, (error, savedShow)=> {
+							if(error) next(error)
+							else callback(null, savedShow)
+						})
+					}
 				})
 			}
 		})
@@ -108,23 +114,28 @@ module.exports = {
 		})
 	},
 
-	/*
-	addTicket: function(showId, ticket, callback) {
-		this.get(showId, (error, show)=> {
-			if(error) callback(error)
-			else {
-				if(show.remaining > ticket.quantity) {
-					show.tickets.push(ticket)
-					show.remaining-=ticket.quantity
-				  show.markModified('tickets')
-				  this.save(show, (error, savedShow)=> {
-				  	callback(error, savedShow)
-				  })					
-				}
-				else callback(true, {reservationSuccessful: false, message: "SOLD OUT!"})	// TODO: something better
-			}
+	publish: function(callback) {
+		this.getAll((error, shows)=> {
+		  submissionModel.getAllAccepted((error, submissions)=> {
+		  	if(error) console.log(error)
+		  	else {
+			    for(let i=0; i<shows.length; i++) {
+			      for(let j=0; j<shows[i].acts.length; j++) {
+			        let domain = limax(shows[i].acts[j].name)
+			        let submission = submissions.find(s=> s.domain == domain)
+			        shows[i].acts[j].imageUrl = submission.imageUrl.substr(0, submission.imageUrl.length-4)
+			        shows[i].acts[j].description = submission.publicDescription
+			      }
+			      shows[i].markModified('acts')
+			      shows[i].save(function(error, savedShow) {
+			        if(error) callback(error)
+			      })
+			    }
+			    callback(null)
+		  	}
+		  })
 		})
-	},*/
+	},
 
 	// TODO: payPalReservation
 
@@ -163,7 +174,7 @@ module.exports = {
 
 								// Asking for more tickets than show has left
 								else if (quantity > show.remaining) {
-									callback(null, {reservationSuccessful: false, message: `There are less than ${quantity} tickets available`})
+									callback(null, {reservationSuccessful: false, message: `There are less than ${quantity} tickets available for this show`})
 								}
 
 								// Has already reserved tickets up to the quantity on the badge
@@ -201,21 +212,6 @@ module.exports = {
 					if(error) callback(error)
 					else callback(null, savedShow)
 				})
-			}
-		})
-	},
-
-	clearTickets: function(id, callback) {
-		this.get(id, (error, show)=> {
-			if(error) callback(error)
-			else {
-				console.log(show)
-				show.tickets = []
-				show.markModified('tickets')
-				show.remaining = show.capacity
-				this.save((error, show)=> {
-					callback(error, show)
-				})				
 			}
 		})
 	},

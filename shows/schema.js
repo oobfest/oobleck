@@ -19,9 +19,22 @@ let showSchema = mongoose.Schema({
   Email String
   Phone String
   Quantity Number
-  Badge: false, 'all', 'performer-all', 'performer-weekend'
-  Payment: {paypal}
+  Badge: 
+    false, 
+    'all', 
+    'performer-all', 
+    'performer-weekend-upgrade'
+  Payment: {paypal}, false
+*/
 
+/* Act
+  name
+  type
+  _id
+  duration
+  imageUrl
+  domain
+  public description
 */
 
 let Show = mongoose.model('Show', showSchema)

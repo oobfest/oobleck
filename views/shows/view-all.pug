@@ -19,7 +19,7 @@ block content
             td.text-left 
               h4 {{show.day}}, {{show.venue}}, {{show.time | time}}
               ul
-                li(v-for="act in show.acts") {{act.name}}
+                li(v-for="act in show.acts") {{act.name}}, {{act.imageUrl}}
               div(v-if="show.tickets.length > 0" ) 
                 h4 
                   a(:href="'#collapse'+index" data-toggle="collapse") Tickets
@@ -30,7 +30,7 @@ block content
                         th Name
                         th Email
                         th Quantity
-                        th Type
+                        th type
                         th
                     tbody
                       tr(v-for="ticket in show.tickets")

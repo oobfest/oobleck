@@ -15,6 +15,7 @@ router.options('/badge-reservation/:id', controller.coorz)
 router.post('/remove-reservation/:id', controller.removeReservation)
 router.options('/remove-reservation/:id', controller.coorz)
 router.post('/set-capacity/:id', controller.setCapacity)
+router.get('/publish', controller.publish)
 
 router.post('/add-act/:id', isLoggedIn, controller.addAct)
 router.post('/remove-act/', isLoggedIn, controller.removeAct)

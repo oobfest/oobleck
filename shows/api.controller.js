@@ -45,29 +45,20 @@ module.exports = {
 
 	updateDuration: function(request, response, next) {
 		let showId = request.params.id
-		let act = request.body
-		model.updateDuration(showId, act, (error, show)=> {
+		let actId = request.body._id
+		let duration = request.body.duration
+		model.updateDuration(showId, actId, duration, (error, show)=> {
 			if(error) next(error)
 			else response.json(show)
 		})
 	},
 
 	addAct: function(request, response, next) {
-		let id = request.params.id
-		let act = {
-			name: request.body.actName,
-			type: request.body.showType,
-			_id: convertToMongoId(request.body._id)
-		}
-		model.get(id, (error, show)=> {
+		let showId = request.params.id
+		let actId = convertToMongoId(request.body._id)
+		model.addAct(showId, actId, (error, savedShow)=> {
 			if(error) next(error)
-			else {
-				show.acts.push(act)
-				model.update(id, show, (error, savedShow)=> {
-					if(error) next(error)
-					else response.json(savedShow)
-				})
-			}
+			else response.json(savedShow)
 		})
 	},
 
@@ -168,10 +159,10 @@ module.exports = {
     response.json({yay: true})
 	},
 
-	clearTickets: function(request, response, next) {
-		let showId = request.params.id
-		model.clearTickets(showId, (error, yay)=> {
-			response.json({yay: true})
+	publish: function(request, response, next) {
+		model.publish((error)=> {
+			if(error) next(error)
+			else response.json({yay: true})
 		})
 	},
 
