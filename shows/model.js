@@ -168,9 +168,9 @@ module.exports = {
 		this.get(id, (error, show)=> {
 			if(error) callback(error)
 			else {
-				let ticketsReserved = show.capacity - show.remaining
-				show.capacity = capacity
-				show.remaining = capacity - ticketsReserved
+				if (show.capacity == undefined) show.remaining = capacity
+				else show.remaining = capacity - (show.capacity - show.remaining)
+				show.capcaity = capacity
 				this.save(show, (error, savedShow)=> {
 					callback(error, savedShow)
 				})			

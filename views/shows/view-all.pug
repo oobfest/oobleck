@@ -58,6 +58,15 @@ block content
         }
       },
       methods: {
+        reserveWithBadge(showId) {
+          let badgeEmail = prompt("Badge email")
+          axios
+            .post('/api/shows/badge-reservation/' + showId, {email: badgeEmail})
+            .then(function(response) {
+              let index = this.shows.findIndex(s=> s._id == id)
+              Vue.set(this.shows, index, response.data)
+            })
+        },
         setCapacity(id) {
           let capacity = Number(prompt("New capacity"))
           axios
