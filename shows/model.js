@@ -170,7 +170,7 @@ module.exports = {
 			else {
 				if (show.capacity == undefined) show.remaining = capacity
 				else show.remaining = capacity - (show.capacity - show.remaining)
-				show.capcaity = capacity
+				show.capacity = capacity
 				this.save(show, (error, savedShow)=> {
 					callback(error, savedShow)
 				})			
