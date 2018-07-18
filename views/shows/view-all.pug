@@ -41,8 +41,6 @@ block content
                         td 
                           a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
               p(v-else) No tickets sold
-              button.btn.btn-primary(type="button" @click="setCapacity(show._id)") Set Capacity
-              | &nbsp;
               button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Create Badge Reservation
 
             td

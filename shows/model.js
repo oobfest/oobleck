@@ -152,8 +152,6 @@ module.exports = {
 								else {
 									show.tickets.push(ticket)
 									show.remaining = (show.remaining - ticket.quantity)
-									console.log("TICEKT", ticket)
-									console.log("SHOW", show)
 									show.markModified('tickets')
 									this.save(show, (error, savedShow)=> {
 										if(error) callback(error)

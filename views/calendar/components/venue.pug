@@ -16,7 +16,7 @@ script.
     props: ['day', 'venue'],
     computed: {
       workshopsForVenueAndDay() {
-        return this.$store.getters.getWorkshops(this.day, this.venue)
+        return this.$store.getters.getWorkshops(this.day, this.venue.name)
       }
     },
     methods: {
