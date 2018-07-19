@@ -7,6 +7,7 @@ let showSchema = mongoose.Schema({
 
   capacity: Number,
   remaining: Number,
+  price: Number,
 
 	acts: [],
   host: {},
@@ -24,6 +25,7 @@ let showSchema = mongoose.Schema({
     'all', 
     'performer-all', 
     'performer-weekend-upgrade'
+    'comp'
   Payment: {paypal}, false
 */
 

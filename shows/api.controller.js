@@ -130,6 +130,20 @@ module.exports = {
 		})
 	},
 
+	compReservation: function(request, response, next) {
+		let showId = request.params.id
+		let name = request.body.name
+		let email = request.body.email
+		let phone = request.body.phone
+		let quantity = request.body.quantity
+		model.ticketReservation(showId, name, email, phone, quantity, 'comp', false, (error, status)=> {
+			if(error) next(error)
+			else {
+				response.json(status)
+			}
+		})
+	},
+
 	badgeReservation: function(request, response, next) {
 		let showId = request.params.id
 		let email = request.body.email
@@ -170,6 +184,15 @@ module.exports = {
 		let showId = request.params.id
 		let capacity = request.body.capacity
 		model.setCapacity(showId, capacity, (error, savedShow)=> {
+			if(error) next(error)
+			else response.json(savedShow)
+		})
+	},
+
+	setPrice: function(request, response, next) {
+		let showId = request.params.id
+		let price = request.body.price
+		model.setPrice(showId, price, (error, savedShow)=> {
 			if(error) next(error)
 			else response.json(savedShow)
 		})

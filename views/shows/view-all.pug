@@ -20,11 +20,15 @@ block content
               h4 {{show.day}}, {{show.venue}}, {{show.time | time}}
               ul
                 li(v-for="act in show.acts") {{act.name}}
+              p(v-if="show.price") Price: 
+                a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
+              p(v-else) 
+                a(href="#" @click.prevent="setPrice(show._id)") No price set
               div(v-if="show.tickets.length > 0" ) 
                 h4 
                   a(:href="'#collapse'+index" data-toggle="collapse") Tickets
                 .collapse(:id="'collapse'+index")
-                  table.table
+                  table.table.table-sm
                     thead
                       tr
                         th Name
@@ -41,22 +45,27 @@ block content
                         td 
                           a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
               p(v-else) No tickets sold
-              button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Create Badge Reservation
+              button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Ticket Reservation
+              | &nbsp;
+              button.btn.btn-secondary.btn-xs(type="button" @click="reserveWithBadge(show._id)") Add Badge Reservation
 
             td
               a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity}}
             td.digits {{show.capacity - show.remaining}}
             td.digits {{show.remaining}}              
     p.m2(v-else) No shows yet
+    add-ticket-modal(:show-id="showId")
 
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
+  include components/add-ticket
   script.
     let app = new Vue({ 
       el: "#app",
       data() { 
         return {
           shows: [],
+          showId: null,
           search: ""
         }
       },
@@ -121,9 +130,27 @@ block content
               Vue.set(self.shows, index, response.data)
             })
             .catch((error)=> {
-              alert("Boo")
+              alert("Failed to set capacity for show :(")
               console.log(error)
             })
+        },
+        setPrice(id) {
+          let price = prompt("New price")
+          if(price == null) return
+          else price = Number(price)
+
+          let self = this
+          axios
+            .post('/api/shows/set-price/' + id, {price: price})
+            .then((response)=> {
+              let index = self.shows.findIndex(s=> s._id == id)
+              Vue.set(self.shows, index, response.data)
+            })
+            .catch((error)=> {
+              alert("Failed to set price for show :(")
+              console.log(error)
+            })
+
         }
       },
       filters: {

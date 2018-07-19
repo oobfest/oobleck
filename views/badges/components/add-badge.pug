@@ -64,12 +64,12 @@ script.
           .then(function(response) {
             let savedBadge = response.data
             self.$parent.badges.push(savedBadge)
-            reset()
+            self.reset()
           })
           .catch(function(error){
             alert("Error creating badge :(")
             console.log(error)
-            reset()
+            self.reset()
           })        
       },
       reset() {

@@ -139,7 +139,45 @@ module.exports = {
 		})
 	},
 
-	// TODO: payPalReservation
+	ticketReservation: function(showId, name, email, phone, quantity, type, payment, callback) {
+		this.get(showId, (error, show)=> {
+			if(error) callback(error)
+			else {
+				let ticket = {
+					_id: mongoose.Types.ObjectId(),
+					name: name,
+					email: email,
+					phone: phone,
+					quantity: quantity,
+					badge: type,
+					payment: payment
+				}
+
+				// Show is sold out
+				if(show.remaining <= 0) {
+					callback(null, {reservationSuccessful: false, message: "Show is sold out"})
+				}
+
+				// Asking for more tickets than what the show has left
+				else if(ticket.quantity > show.remaining) {
+					callback(null, {reservationSuccessful: false, message: `There are less than ${ticket.quantity} tickets available for this show`})
+				}
+
+				else {
+					show.tickets.push(ticket)
+					show.remaining = (show.remaining - ticket.quantity)
+					show.markModified('tickets')
+					this.save(show, (error, savedShow)=> {
+						if(error) callback(error)
+						else {
+							emailModel.sendShowConfirmationEmail(ticket.email, ticket.name, formatVenue(show.venue), formatDayAndTime(show.day, String(show.time)), false, quantity)
+							callback(null, {reservationSuccessful: true, savedShow})
+						}
+					})
+				}
+			}
+		})
+	},
 
 	badgeReservation: function(showId, email, quantity, callback) {
 		badgesModel.getByEmail(email, (error, badge)=> {
@@ -231,6 +269,18 @@ module.exports = {
 				this.save(show, (error, savedShow)=> {
 					callback(error, savedShow)
 				})			
+			}
+		})
+	},
+
+	setPrice: function(id, price, callback) {
+		this.get(id, (error, show)=> {
+			if(error) callback(error)
+			else {
+				show.price = price
+				this.save(show, (error, savedShow)=> {
+					callback(error, savedShow)
+				})
 			}
 		})
 	}
