@@ -4,6 +4,7 @@ let badgesModel= require('../badges/model')
 let mongoose = require('mongoose')
 let submissionModel = require('../submissions/model')
 let limax = require('limax')
+let emailModel = require('../email/model')
 
 let publicFields = "_id day venue time capacity remaining acts host"
 
@@ -190,7 +191,10 @@ module.exports = {
 									show.markModified('tickets')
 									this.save(show, (error, savedShow)=> {
 										if(error) callback(error)
-										else callback(null, {reservationSuccessful: true, savedShow})
+										else {
+											emailModel.sendShowConfirmationEmail(ticket.email, ticket.name, formatVenue(show.venue), formatDayAndTime(show.day, String(show.time)), true, quantity)
+											callback(null, {reservationSuccessful: true, savedShow})
+										}
 									})
 								}
 							}
@@ -230,5 +234,38 @@ module.exports = {
 			}
 		})
 	}
-	
+}
+
+function formatDayAndTime(day, time) {
+	return formatDay(day) + ", " + formatTime(time)
+}
+
+function formatTime(time) {
+	return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+}
+
+function formatDay(day) {
+	switch(day) {
+		case 'Tuesday':   return 'Tuesday, August 28th'
+		case 'Wednesday': return 'Wednesday, August 29th'
+		case 'Thursday':  return 'Thursday, August 30th'
+		case 'Friday':    return 'Friday, August 31st'
+		case 'Saturday':  return 'Saturday, September 1st'
+		case 'Sunday':    return 'Sunday, September 2nd'
+		case 'Monday':    return 'Monday, September 3rd'
+		default: return day
+	}
+}
+
+function formatVenue(venue) {
+	switch(venue) {
+	  case 'Hideout Up':        return 'Hideout Theatre Upstairs, 617 Congress Ave, Austin, TX 78701'
+	  case 'Hideout Down':      return 'Hideout Theatre Downstairs, 617 Congress Ave, Austin, TX 78701'
+	  case 'ColdTowne':         return 'ColdTowne Theater, 4803 Airport Blvd, Austin, TX 78751'
+	  case 'Fallout':           return 'Fallout Theater, 616 Lavaca St, Austin, TX 78701'
+	  case 'Velveeta':          return 'Velveeta Room, 521 E 6th St, Austin, TX 78701'
+	  case 'Spider House':      return 'Spider House Ballroom, 2906 Fruth St, Austin, TX 78705'
+	  case 'Institution':       return 'Institution Theater, 3708 Woodbury Dr, Austin, TX 78704'
+
+	}
 }

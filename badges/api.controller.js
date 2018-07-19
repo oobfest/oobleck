@@ -9,6 +9,14 @@ module.exports = {
     })
   },
 
+  create: function(request, response, next) {
+    let badge = request.body
+    model.create(badge, (error, savedBadge)=> {
+      if(error) next(error)
+      else response.json(savedBadge)
+    })
+  },
+
   delete: function(request, response, next) {
     let id = request.params.id
     model.delete(id, (error)=> {

@@ -5,7 +5,10 @@ block content
       span.dash-titlebar-title Badges
 
   #app.dash-boxes.container-fluid
-    p(v-if="total") Total: {{total}}
+    p 
+      | Total Paid: {{totalPaid}}
+      br
+      | Total: {{total}}
     .box.box-b
       table.table.box-table
         thead
@@ -15,6 +18,7 @@ block content
             th Phone
             th Badge Type
             th Quantity
+            th Paid
         tbody(v-for="badge, index in badges")
           tr(style="background-color: white")
             td 
@@ -24,19 +28,27 @@ block content
             td 
               span.badge.badge-pill(:class="getBadgeClass(badge.type)") {{getBadgeName(badge.type)}}
             td {{badge.quantity}}
+            td {{badge.payment ? '$' + Number(badge.payment.transactions[0].amount.total) : ''}}
           tr.collapse(:id="'collapse-' + index")
             td(colspan=5)
               div(v-if="badge.payment && badge.payment.create_time")
-                h3 Payment Made
+                h4 Payment Made
                 pre {{formatDate(badge.payment.create_time)}}
-                h3 Transaction ID
+                h4 Transaction ID
                 p.code
                   a(:href="'https://www.paypal.com/activity/payment/' + badge.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{badge.payment.transactions[0].related_resources[0].sale.id}}
-              //button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete
+              div(v-else)
+                p No payment information
+              button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
+    .form-group
+      button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-badge-modal") Add Badge
+    
+    add-badge-modal
 
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
   script(src="/js/vue-markdown.js")
+  include components/add-badge
   script.
     let app = new Vue({ 
       el: "#app",
@@ -49,6 +61,12 @@ block content
         total() {
           if(this.badges.length == 0) return null
           return this.badges.reduce((total, badge)=> {return total + badge.quantity}, 0)
+        },
+        totalPaid() {
+          if(this.badges.length == 0) return null
+          return this.badges
+            .filter(b=> !(['staff', 'industry', 'volunteer'].includes(b.type)))
+            .reduce((total, badge)=> { return total + badge.quantity}, 0)
         }
       },
       methods: {
@@ -59,12 +77,14 @@ block content
           if(type=='all') return "All-Access"
           if(type=='performer-weekend-upgrade') return "Weekend Upgrade"
           if(type=='performer-all') return "Full Upgrade"
+          if(type=='staff') return "Staff"
           else return "error"
         },
         getBadgeClass(type) {
           if(type=='all') return "badge-primary"
           if(type=='performer-weekend-upgrade') return "badge-info"
           if(type=='performer-all') return "badge-success"
+          if(type=='staff') return "badge-secondary"
           else return "badge-danger"
         },
         destroy(id, index) {

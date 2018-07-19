@@ -6,11 +6,17 @@ let badgeSchema = mongoose.Schema({
   phone: String,
   quantity: Number,
 
-  // Badge Types: all, performer-weekend-upgrade, performer-all
+  /* Badge Types: 
+      all
+      performer-weekend-upgrade
+      performer-all
+      volunteer
+      staff
+      industry
+  */
   type: String,
 
   payment: {},
-  reservations: {}
 })
 
 let Badge = mongoose.model('Badge', badgeSchema)

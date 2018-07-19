@@ -4,6 +4,7 @@ const isLoggedIn = require('../middleware/is-logged-in')
 const controller = require('./api.controller')
 
 router.get('/', isLoggedIn, controller.getAll)
+router.post('/', isLoggedIn, controller.create)
 router.delete('/:id', isLoggedIn, controller.delete)
 
 module.exports = router
