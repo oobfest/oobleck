@@ -135,7 +135,7 @@ module.exports = {
 		let name = request.body.name
 		let email = request.body.email
 		let phone = request.body.phone
-		let quantity = request.body.quantity
+		let quantity = Number(request.body.quantity)
 		model.ticketReservation(showId, name, email, phone, quantity, 'comp', false, (error, status)=> {
 			if(error) next(error)
 			else {

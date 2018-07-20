@@ -247,12 +247,9 @@ module.exports = {
 		this.get(showId, (error, show)=> {
 			if(error) callback(error)
 			else {
-				let ticketIndex = show.tickets
-					.map(t=> t._id)
-					.findIndex(ticketId)
+				let ticketIndex = show.tickets.findIndex(t=> t._id == ticketId)
 				show.remaining += show.tickets[ticketIndex].quantity
 				show.tickets.splice(ticketIndex, 1)
-				show.markModified('tickets')
 				this.save(show, (error, savedShow)=> {
 					if(error) callback(error)
 					else callback(null, savedShow)
