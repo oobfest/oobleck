@@ -5,6 +5,12 @@ let emailModel = require('../email/model')
 
 module.exports = {
 
+  cors: function(request, response, next) {
+    response.header("Access-Control-Allow-Origin", "*")
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    response.json({yay: true})
+  },
+
   createWorkshopSale: function(request, response, next) {
     let name = request.body.name
     let quantity = request.body.quantity
@@ -46,6 +52,24 @@ module.exports = {
       }
     })
 
+  },
+
+  createTicketSale: function(request, response, next) {
+    let showId = request.params.id
+    let ticket = request.body
+    paypalModel.createTicketSale(showId, ticket, (error, payment)=> {
+      if(error) next(error)
+      else {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        response.json(payment)        
+      }
+    })
+  },
+
+  executeTicketSale: function(request, response, next) {
+    console.log("EXECUTE TICKET SALE")
+    response.end()
   },
 
   createBadgeAllSale: function(request, response, next) {

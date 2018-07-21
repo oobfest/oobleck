@@ -25,6 +25,7 @@ script#add-badge-modal-template(type="text/template")
               option(value="volunteer") 5+ Volunteer 
               option(value="staff") Staff
               option(value="industry") Industry
+              option(value="panelist") Panelist
           .form-group
             label(for="add-badge-modal-quantity") Quantity
             input#add-badge-modal-quantity.form-control(type="number" v-model="badge.quantity" min=1 max=10)

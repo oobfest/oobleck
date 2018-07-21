@@ -1,4 +1,5 @@
 let paypalSdk = require('paypal-rest-sdk')
+let showModel = require('../shows/model')
 
 module.exports = {
   
@@ -30,6 +31,10 @@ module.exports = {
       })
     })
 
+  },
+
+  createTicketSale: function(showId, ticket, callback) {
+    callback(null, null)
   },
 
   createBadgeAllSale: function(price, quantity, callback) {

@@ -25,6 +25,9 @@ let showSchema = mongoose.Schema({
     'all', 
     'performer-all', 
     'performer-weekend-upgrade'
+    'volunteer'
+    'staff'
+    'panelist'
     'comp'
   Payment: {paypal}, false
 */
