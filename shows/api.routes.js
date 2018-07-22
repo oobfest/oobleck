@@ -27,6 +27,9 @@ router.put('/update-duration/:id', isLoggedIn, controller.updateDuration)
 router.post('/set-host/:id', isLoggedIn, controller.setHost)
 router.post('/remove-host/:id', isLoggedIn, controller.removeHost)
 
+router.get('/get-remaining-tickets/:id', controller.getRemainingTickets)
+router.options('/get-remaining-tickets/:id', controller.coorz)
+
 router.route('/:id')
 	.get(isLoggedIn, controller.getById)
   .put(isLoggedIn, controller.update)

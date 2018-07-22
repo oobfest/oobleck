@@ -81,7 +81,7 @@ module.exports = {
 			if(error) callback(error)
 			else {
 				submissionModel.get(actId, (error, submission)=> {
-					if(error) next(error)
+					if(error) callback(error)
 					else {
 						let act = {
 							_id: submission._id,
@@ -94,7 +94,7 @@ module.exports = {
 						}
 						show.acts.push(act)
 						this.update(showId, show, (error, savedShow)=> {
-							if(error) next(error)
+							if(error) callback(error)
 							else callback(null, savedShow)
 						})
 					}
@@ -143,6 +143,7 @@ module.exports = {
 		this.get(showId, (error, show)=> {
 			if(error) callback(error)
 			else {
+
 				let ticket = {
 					_id: mongoose.Types.ObjectId(),
 					name: name,
@@ -280,6 +281,16 @@ module.exports = {
 				this.save(show, (error, savedShow)=> {
 					callback(error, savedShow)
 				})
+			}
+		})
+	},
+
+	getRemainingTickets: function(showId, callback) {
+		this.get(showId, (error, show)=> {
+			if(error) callback(error)
+			else {
+				let remaining = Math.min(show.remaining, 15)
+				callback(null, {remaining})
 			}
 		})
 	}

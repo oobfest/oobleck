@@ -196,5 +196,17 @@ module.exports = {
 			if(error) next(error)
 			else response.json(savedShow)
 		})
+	},
+
+	getRemainingTickets: function(request, response, next) {
+		let showId = request.params.id
+		model.getRemainingTickets(showId, (error, remaining)=> {
+			if(error) next(error)
+			else {
+		    response.header("Access-Control-Allow-Origin", "*")
+    		response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+				response.json(remaining)
+			}
+		})
 	}
 }

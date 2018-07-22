@@ -1,4 +1,5 @@
 let paypalModel = require('./model')
+let showModel = require('../shows/model')
 let badgeModel = require('../badges/model')
 let workshopModel = require('../workshops/model')
 let emailModel = require('../email/model')
@@ -9,6 +10,22 @@ module.exports = {
     response.header("Access-Control-Allow-Origin", "*")
     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     response.json({yay: true})
+  },
+
+
+  createTicketSale: function(request, response, next) {
+    let showId = request.params.id
+    let ticket = request.body
+    ticket.quantity = Number(ticket.quantity)
+    paypalModel.createTicketSale(showId, ticket, (error, payment)=> {
+      if(error) next(error)
+      else {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        payment.tyler = 'HELLO!'
+        response.json(payment)        
+      }
+    })
   },
 
   createWorkshopSale: function(request, response, next) {
@@ -51,25 +68,29 @@ module.exports = {
         })
       }
     })
-
   },
 
-  createTicketSale: function(request, response, next) {
-    let showId = request.params.id
-    let ticket = request.body
-    paypalModel.createTicketSale(showId, ticket, (error, payment)=> {
-      if(error) next(error)
-      else {
-        response.header("Access-Control-Allow-Origin", "*")
-        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-        response.json(payment)        
-      }
-    })
-  },
 
   executeTicketSale: function(request, response, next) {
-    console.log("EXECUTE TICKET SALE")
-    response.end()
+    let showId = request.params.id
+    let paymentId = request.body.paymentId
+    let payerId = { "payer_id": request.body.payerId }
+    let ticket = request.body.ticket
+
+    // TODO: confirm & mark not sold out
+    paypalModel.executeSale(paymentId, payerId, (error, payment)=> {
+      if(error) next(error)
+      else {
+        showModel.ticketReservation(showId, ticket.name, ticket.email, ticket.phone, ticket.quantity, false, payment, (error, status)=>{
+          if(error) next(error)
+          else {
+            response.header("Access-Control-Allow-Origin", "*")
+            response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+            response.json(payment)            
+          }
+        })
+      }
+    })
   },
 
   createBadgeAllSale: function(request, response, next) {
