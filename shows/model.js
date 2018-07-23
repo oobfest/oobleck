@@ -6,7 +6,7 @@ let submissionModel = require('../submissions/model')
 let limax = require('limax')
 let emailModel = require('../email/model')
 
-let publicFields = "_id day venue time capacity remaining acts host"
+let publicFields = "_id day venue time capacity remaining acts host price"
 
 module.exports = {
 
