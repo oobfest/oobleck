@@ -1,0 +1,44 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Workshops
+
+  #vue-app
+    .dash-boxes.container-fluid
+      .row
+        .col
+          ul.list-group
+            li.list-group-item(v-for="submission in submissionsWithWorkshops") 
+              h4 {{submission.actName}} 
+              p.code {{submission.primaryContactEmail}}
+              p {{submission.workshop}}
+
+  script(src="/js/vue.js")
+  script(src="/js/axios.min.js")
+  script.
+
+    let vm = new Vue({
+      el: "#vue-app",
+      data() {
+        return {
+          submissions: []
+        }
+      },
+      computed: {
+        submissionsWithWorkshops() {
+          return this.submissions.filter(s=> (s.workshop && s.workshop != ''))
+        }
+      },
+      mounted() {
+        let self = this
+        axios
+          .get('/api/submissions/getAllPaid')
+          .then(function(response) {
+            self.submissions = response.data
+          })
+          .catch(function(error) {
+            self.submissions = []
+          })
+      }
+    })

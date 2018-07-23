@@ -19,7 +19,7 @@ block content
             td.text-left 
               h4 {{show.day}}, {{show.venue}}, {{show.time | time}}
               ul
-                li(v-for="act in show.acts") {{act.name}}
+                li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
               p(v-if="show.price") Price: 
                 a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
               p(v-else) 

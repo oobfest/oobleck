@@ -8,6 +8,9 @@ const sendEmail = require('../utilities/send-email')
 const isProductionEnvironment = require('../utilities/is-production-environment')
 const _ = require('lodash')
 
+router.get('/workshops', isLoggedIn,(request, response, next)=> {
+	response.render('submissions/workshops')
+})
 
 router.get('/emails', isLoggedIn, (request, response, next)=> {
 	submissionModel.getAllPerformerEmails((error, emails)=> {
