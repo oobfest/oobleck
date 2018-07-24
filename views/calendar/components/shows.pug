@@ -2,7 +2,7 @@ script#shows-template(type="text/template")
   div
     div(v-for="show in shows")
       .box.show2
-        a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
+        //a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
         h4.time {{show.time | time}}
         div(v-if="show.host")
           a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
