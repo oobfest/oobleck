@@ -112,6 +112,13 @@ module.exports = {
         })
       }
     })
+  },
+
+  getRemaining: function(id, callback) {
+    this.get(id, (error, workshop)=> {
+      if(error) callback(error)
+      else callback(null, {remaining: workshop.remaining})
+    })
   }
 
 }

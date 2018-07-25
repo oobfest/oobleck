@@ -24,4 +24,6 @@ router.route('/:id')
   .put(isLoggedIn, controller.update)
   .delete(isLoggedIn, controller.delete)
 
+router.get('/get-remaining/:id', controller.getRemaining)
+
  module.exports = router

@@ -91,5 +91,13 @@ module.exports = {
       if(error) next(error)
       else response.json(updatedWorkshop)
     })
+  },
+
+  getRemaining: function(request, response, next) {
+    let id = request.params.id
+    model.getRemaining(id, (error, remaining)=> {
+      if(error) next(error)
+      else response.json(remaining)
+    })
   }
 }
