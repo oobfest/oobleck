@@ -7,7 +7,6 @@ module.exports = {
     let workshop = request.body
     workshop.domain = limax(workshop.name)
     workshop.remaining = workshop.capacity
-    console.log("CREATE", workshop)
     model.create(workshop, (error, saved)=> {
       if(error) next(error)
       else response.json(saved)
@@ -97,7 +96,11 @@ module.exports = {
     let id = request.params.id
     model.getRemaining(id, (error, remaining)=> {
       if(error) next(error)
-      else response.json(remaining)
+      else {
+        response.header("Access-Control-Allow-Origin", "*")
+        response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+        response.json(remaining)
+      }
     })
   }
 }
