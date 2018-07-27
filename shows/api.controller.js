@@ -208,5 +208,14 @@ module.exports = {
 				response.json(remaining)
 			}
 		})
+	},
+
+	setEndTime: function(request, response, next) {
+		let showId = request.params.id
+		let endTime = request.body.endTime
+		model.setEndTime(showId, endTime, (error, show)=> {
+			if(error) next(error)
+			else response.json(show)
+		})
 	}
 }

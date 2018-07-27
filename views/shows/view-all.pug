@@ -41,7 +41,11 @@ block content
                         td {{ticket.name}}
                         td {{ticket.email}}
                         td {{ticket.quantity}}
-                        td {{ticket.badge ? ticket.badge : 'PayPal'}}
+
+                        td(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
+                        td(v-else) 
+                          a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{ticket.payment.transactions[0].related_resources[0].sale.id}}
+
                         td 
                           a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
               p(v-else) No tickets sold
@@ -83,6 +87,15 @@ block content
         }
       },
       methods: {
+        formatBadge(badgeType) {
+          switch(badgeType) {
+            case 'all': return 'All-Access Badge'
+            case 'performer-full-upgrade': return 'Perforer Badge (Full)'
+            case 'performer-weekend-upgrade': return 'Perforer Badge (Weekend)'
+            case 'staff': return 'Staff'
+            default: return badgeType
+          }
+        },
         reserveWithBadge(showId) {
           let badgeEmail = prompt("Badge email")
           if(badgeEmail == null) return

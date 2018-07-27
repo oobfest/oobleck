@@ -5,6 +5,8 @@ let showSchema = mongoose.Schema({
 	venue: String,
 	time: Number,
 
+  endTime: String,  // This was very, very tacked on last-minute
+
   capacity: Number,
   remaining: Number,
   price: Number,

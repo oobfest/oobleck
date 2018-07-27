@@ -296,6 +296,18 @@ module.exports = {
 				callback(null, {remaining})
 			}
 		})
+	},
+
+	setEndTime: function(showId, endTime, callback) {
+		this.get(showId, (error, show)=> {
+			if(error) callback(error)
+			else {
+				show.endTime = endTime
+				this.save(show, (error, savedShow)=> {
+					callback(null, savedShow)
+				})
+			}
+		})
 	}
 }
 
