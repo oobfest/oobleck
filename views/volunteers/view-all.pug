@@ -5,13 +5,16 @@ block content
       span.dash-titlebar-title Volunteers
 
   #app.dash-boxes.container-fluid
+
+    ul
+      li(v-for="volunteer in volunteers")
+        pre {{volunteer}}
+
     ul.nav.nav-pills
       li.nav-item
-        a.nav-link.active(data-toggle="tab" href="#show") Show
+        a.nav-link.active(data-toggle="tab" href="#show") All
       li.nav-item
-        a.nav-link(data-toggle="tab" href="#driver") Driver
-      li.nav-item
-        a.nav-link(data-toggle="tab" href="#tech") Tech
+        a.nav-link(data-toggle="tab" href="#driver") Drivers
     .tab-content.mt-3
 
       #show.tab-pane.fade.show.active
@@ -21,6 +24,7 @@ block content
             thead
               tr
                 th Name
+                th Type
                 th Scheduled
                 th Remaining
                 th Phone
@@ -28,6 +32,7 @@ block content
             tbody
               tr(v-for="showVolunteer in showVolunteers")
                 td {{showVolunteer.name}}
+                td {{showVolunteer.type}}
                 td 0
                 td {{showVolunteer.hours}}
                 td {{showVolunteer.phone}}
@@ -50,22 +55,6 @@ block content
                 td {{driverVolunteer.phone}}
                 td {{driverVolunteer.passengerCount}}
 
-      #tech.tab-pane.fade
-        p(v-if="techVolunteers.length == 0") No tech volunteers yet
-        .box.box-b(v-else)
-          table.table.box-table
-            thead
-              tr
-                th Name
-                th Phone
-                th Email
-            tbody
-              tr(v-for="techVolunteer in techVolunteers")
-                td {{techVolunteer.name}}
-                td {{techVolunteer.phone}}
-                td {{techVolunteer.email}}
-
-
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
   script(src="/js/vue-markdown.js")
@@ -79,16 +68,25 @@ block content
       },
       computed: {
         showVolunteers() {
-          return this.volunteers.filter(v=> v.type != 'tech' && v.type != 'driver')
+          return this.volunteers
         },
         driverVolunteers() {
-          return this.volunteers.filter(v=> v.type == 'driver')
-        },
-        techVolunteers() {
-          return this.volunteers.filter(v=> v.type == 'tech')
+          return this.volunteers.filter(v=> v.type.includes('driver'))
         }
       },
       methods: {
+        remove(id) {
+          let self = this
+          axios
+            .delete('/api/volunteers/' + id)
+            .then(function(response) {
+              alert("DONE!")
+            })
+            .catch(function(error) {
+              alert("ERROR")
+              console.log(error)
+            })
+        }
       },
       created() {
         let self = this

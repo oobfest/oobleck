@@ -22,7 +22,9 @@ block content
                   ul
                       li(v-for="validationError in validationErrors") {{validationError}}
                 h3 Volunteer Application
-                p Out of Bounds Comedy Festival is currently seeking applicants to be a part of our team! OoB runs August 28 to September 3. We are looking for volunteers for box office, ushers, performer registration, airport drivers, tech, party clean up, and more! Sign up now and a staff member will be in contact with you soon. More info on volunteer roles can be found in the 
+                p The  
+                  strong Out of Bounds Comedy Festival 
+                  |  is currently seeking applicants to be a part of our team! OoB runs August 28 to September 3. We are looking for volunteers for box office, ushers, performer registration, airport drivers, party assistance and more! Sign up now and a staff member will be in contact with you soon. More info on volunteer roles can be found in the 
                   a(href="https://www.facebook.com/groups/1813770925598511/") OoB Volunteers 2018 Facebook group
                   | .
                 p Please note that shifts take place at our festival venues:
@@ -68,19 +70,13 @@ block content
                   label.col-form-label.required-field(for="type") What type of volunteering are you interested in?
                   .form-check
                     input#show-checkbox.form-check-input(type="checkbox" value="show" v-model="volunteer.type")
-                    label.form-check-label(for="show-checkbox") Show
-                  .form-check
-                    input#tech-checkbox.form-check-input(type="checkbox" value="tech" v-model="volunteer.type")
-                    label.form-check-label(for="tech-checkbox") Tech
+                    label.form-check-label(for="show-checkbox") Show and Workshop (including box office, ushering &amp; performer registration)
                   .form-check
                     input#driver-checkbox.form-check-input(type="checkbox" value="driver" v-model="volunteer.type")
                     label.form-check-label(for="driver-checkbox") Driver
                   .form-check
                     input#party-checkbox.form-check-input(type="checkbox" value="party" v-model="volunteer.type")
                     label.form-check-label(for="party-checkbox") Party
-                  .form-check
-                    input#workshop-checkbox.form-check-input(type="checkbox" value="workshop" v-model="volunteer.type")
-                    label.form-check-label(for="workshop-checkbox") Workshop
                 .form-group
                   label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
                   select#hours.form-control(v-model="volunteer.hours")
@@ -129,21 +125,10 @@ block content
                 .form-group
                   label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
                   input#license-plate-number.form-control(type="text" autofocus maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
-              .box-block.box-bt(v-show="volunteer.type.includes('tech')")
-                h3 Tech Information
-                .form-group
-                  label.col-form-label(for="tech-experience") What is your previous experience doing tech? Be sure to include whether it was sketch or improv, and and at what theaters. 
-                  textarea#tech-experience.form-control(type="text" name="tech-experience" v-model="volunteer.techExperience")
-                .form-group
-                  label.col-form-label(for="volunteered-tech-before") Have you done tech for Out of Bounds before?
-                  select#volunteered-tech-before.form-control(v-model="volunteer.volunteeredTechBefore")
-                    option(value="no") No
-                    option(value="yes") Yes
               .box-block.box-bt
                 .form-group
                   label.col-form-label.required-field(for="attending-orientation") We will have an orientation meeting on 
-                    span(v-if="volunteer.type.includes('tech')").code [tech orientation date]
-                    span(v-else).code August 25th
+                    span.code August 25th
                     |, will you be able to attend?
                   select#attending-orientation.form-control(v-model="volunteer.attendingOrientation")
                     option(value="no") No
@@ -154,7 +139,7 @@ block content
               h3 Thank You!
               p Your submission has been recorded!
               p Any questions, email 
-                span.code volunteers@oobfest.com
+                a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
 
   script(src="/js/vue.js")
   script(src="/js/axios.min.js")
@@ -177,10 +162,7 @@ block content
 
             carType: '',
             passengerCount: 4,
-            licensePlateNumber: '',
-
-            techExperience: '',
-            volunteeredTechBefore: 'no',
+            licensePlateNumber: ''
           }
         }
       },
