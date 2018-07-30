@@ -22,24 +22,35 @@ block content
                   ul
                       li(v-for="validationError in validationErrors") {{validationError}}
                 h3 Volunteer Application
-                p Be a volunteer!
-                p Lots of types of volunteers
+                p Out of Bounds Comedy Festival is currently seeking applicants to be a part of our team! OoB runs August 28 to September 3. We are looking for volunteers for box office, ushers, performer registration, airport drivers, tech, party clean up, and more! Sign up now and a staff member will be in contact with you soon. More info on volunteer roles can be found in the 
+                  a(href="https://www.facebook.com/groups/1813770925598511/") OoB Volunteers 2018 Facebook group
+                  | .
+                p Please note that shifts take place at our festival venues:
                 ul
-                  li
-                    strong Show 
-                    | Description of show volunteering
-                  li
-                    strong Tech  
-                    | Description of tech volunteering
-                  li
-                    strong Driver 
-                    | Description of driver volunteering
-                  li
-                    strong Party 
-                    | Description of party volunteering
-                  li
-                    strong Workshop 
-                    | Description of workshop volunteering
+                  li Spider House Ballroom
+                  li Hideout Theatre
+                  li ColdTowne Theater
+                  li Fallout Theater
+                  li The Institution Theater
+                  li Velveeta Room
+                  li Additional downtown party venues TBA
+                p Out of Bounds relies on our volunteers to make the festival run smoothly and to make sure everyone has fun. It's important that our volunteers have fun, too!  Snacks will be available for show and registration volunteers during shifts, and all volunteers are entitled to attend to any non-sold-out show the day of their shift(s). 
+                p All volunteers are eligible to perform in our OoB Volunteer Showcase (details pending). 
+                p Any volunteer completing 5 or more shifts will earn a 
+                  em Volunteer 5+ Shifts Badge
+                  | . This is equivalent to a performer badge and gives you entry to any non-sold-out show for the entirety of the festival! 
+                h4 MegaRaffle
+                p All 5+ shift volunteers and all performer-volunteers earn a raffle ticket for each shift completed. Raffle prizes will include:
+                ul
+                  li FREE submission to next year's OoB
+                  li FREE diagnostic workshop from Asaf Ronen
+                  li FREE improv coaching from Ellen Pizarek
+                  li Gift cards from local Austin businesses
+                  li OoB swag
+                  li and more...
+                p Send any questions to 
+                  a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
+                  | !
               .box-block.box-bt
                 h3 General Information
                 .form-group
@@ -55,12 +66,21 @@ block content
                 h3 Volunteering Specifics
                 .form-group
                   label.col-form-label.required-field(for="type") What type of volunteering are you interested in?
-                  select#type.form-control(v-model="volunteer.type")
-                    option(value="show") Show
-                    option(value="tech") Tech
-                    option(value="driver") Driver
-                    option(value="party") Party
-                    option(value="workshop") Workshop
+                  .form-check
+                    input#show-checkbox.form-check-input(type="checkbox" value="show" v-model="volunteer.type")
+                    label.form-check-label(for="show-checkbox") Show
+                  .form-check
+                    input#tech-checkbox.form-check-input(type="checkbox" value="tech" v-model="volunteer.type")
+                    label.form-check-label(for="tech-checkbox") Tech
+                  .form-check
+                    input#driver-checkbox.form-check-input(type="checkbox" value="driver" v-model="volunteer.type")
+                    label.form-check-label(for="driver-checkbox") Driver
+                  .form-check
+                    input#party-checkbox.form-check-input(type="checkbox" value="party" v-model="volunteer.type")
+                    label.form-check-label(for="party-checkbox") Party
+                  .form-check
+                    input#workshop-checkbox.form-check-input(type="checkbox" value="workshop" v-model="volunteer.type")
+                    label.form-check-label(for="workshop-checkbox") Workshop
                 .form-group
                   label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
                   select#hours.form-control(v-model="volunteer.hours")
@@ -93,7 +113,7 @@ block content
                   select#volunteered-before.form-control(v-model="volunteer.volunteeredBefore")
                     option(value="no") No
                     option(value="yes") Yes
-              .box-block.box-bt(v-show="volunteer.type == 'driver'")
+              .box-block.box-bt(v-show="volunteer.type.includes('driver')")
                 h3 Driver Information
                 .form-group
                   label.col-form-label.required-field(for="car-type") What is your car's make and model? 
@@ -109,7 +129,7 @@ block content
                 .form-group
                   label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
                   input#license-plate-number.form-control(type="text" autofocus maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
-              .box-block.box-bt(v-show="volunteer.type == 'tech'")
+              .box-block.box-bt(v-show="volunteer.type.includes('tech')")
                 h3 Tech Information
                 .form-group
                   label.col-form-label(for="tech-experience") What is your previous experience doing tech? Be sure to include whether it was sketch or improv, and and at what theaters. 
@@ -122,8 +142,8 @@ block content
               .box-block.box-bt
                 .form-group
                   label.col-form-label.required-field(for="attending-orientation") We will have an orientation meeting on 
-                    span(v-if="volunteer.type=='tech'").code [tech orientation date]
-                    span(v-else).code [non-tech orientation date]
+                    span(v-if="volunteer.type.includes('tech')").code [tech orientation date]
+                    span(v-else).code August 25th
                     |, will you be able to attend?
                   select#attending-orientation.form-control(v-model="volunteer.attendingOrientation")
                     option(value="no") No
@@ -149,7 +169,7 @@ block content
             name: '',
             email: '',
             phone: '',
-            type: '',
+            type: [],
             hours: 0,
             referral: '',
             volunteeredBefore: 'no',

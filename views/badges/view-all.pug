@@ -5,10 +5,14 @@ block content
       span.dash-titlebar-title Badges
 
   #app.dash-boxes.container-fluid
-    p 
-      | Total Paid: {{totalPaid}}
-      br
-      | Total: {{total}}
+    h4 Badge Stats
+    ul
+      li Total Badges: 
+        span.code {{totals.total}}
+      li Paid All-Access: 
+        span.code {{totals.allAccessTotal}}
+      li Performer Upgrades (Weekend/Full/Total): 
+        span.code {{totals.performerWeekendTotal}}/{{totals.performerFullTotal}}/{{totals.performerWeekendTotal + totals.performerFullTotal}}
     .box.box-b
       table.table.box-table
         thead
@@ -39,7 +43,7 @@ block content
                   a(:href="'https://www.paypal.com/activity/payment/' + badge.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{badge.payment.transactions[0].related_resources[0].sale.id}}
               div(v-else)
                 p No payment information
-              button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
+              //button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
     .form-group
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-badge-modal") Add Badge
     
@@ -55,36 +59,57 @@ block content
       data() { 
         return {
           badges: [],
+          totals: {
+            total: 0,
+            allAccessTotal: 0,
+            performerWeekendTotal: 0,
+            performerFullTotal: 0
+          }
         }
       },
       computed: {
         total() {
           if(this.badges.length == 0) return null
           return this.badges.reduce((total, badge)=> {return total + badge.quantity}, 0)
-        },
-        totalPaid() {
-          if(this.badges.length == 0) return null
-          return this.badges
-            .filter(b=> !(['staff', 'industry', 'volunteer'].includes(b.type)))
-            .reduce((total, badge)=> { return total + badge.quantity}, 0)
         }
       },
       methods: {
+        getTotals() {
+          for(let i=0; i<this.badges.length; i++) {
+            let badge = this.badges[i]
+
+            // All Badges
+            this.totals.total++
+
+            // All-Access Badge (paid)
+            if(badge.type == 'all' && badge.payment) 
+              this.totals.allAccessTotal += badge.quantity
+
+            // Performer Upgrade (full)
+            if(badge.type == 'performer-full-upgrade') 
+              this.totals.performerFullTotal++
+
+            // Performer Upgrade (weekend-only)
+            if(badge.type == 'performer-weekend-upgrade') 
+              this.totals.performerWeekendTotal++
+
+          }
+        },
         formatDate(date) {
           return new Date(Date.parse(date)).toLocaleString('en-US')
         },
         getBadgeName(type) {
           if(type=='all') return "All-Access"
           if(type=='performer-weekend-upgrade') return "Weekend Upgrade"
-          if(type=='performer-all') return "Full Upgrade"
+          if(type=='performer-full-upgrade') return "Full Upgrade"
           if(type=='staff') return "Staff"
           else return "error"
         },
         getBadgeClass(type) {
           if(type=='all') return "badge-primary"
-          if(type=='performer-weekend-upgrade') return "badge-info"
-          if(type=='performer-full-upgrade') return "badge-success"
-          if(type=='staff') return "badge-secondary"
+          if(type=='performer-weekend-upgrade') return "badge-secondary"
+          if(type=='performer-full-upgrade') return "badge-info"
+          if(type=='staff') return "badge-success"
           else return "badge-danger"
         },
         destroy(id, index) {
@@ -107,6 +132,7 @@ block content
           .get('/api/badges')
           .then(function(response) {
             self.badges = response.data
+            self.getTotals()
           })
           .catch(function(error) {
             alert("Error getting badges :(")
