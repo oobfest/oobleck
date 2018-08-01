@@ -53,7 +53,7 @@ block content
       created() {
         let self = this
         axios
-          .get('/api/submissions/get-all-accepted')
+          .get('/api/submissions/get-valid-acts')
           .then(function(response) {
             self.acts = response.data
           })
