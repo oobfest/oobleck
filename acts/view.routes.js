@@ -9,6 +9,10 @@ const isProductionEnvironment = require('../utilities/is-production-environment'
 const _ = require('lodash')
 const util = require('../acts/util')
 
+router.get('/social', isLoggedIn, (request, response, next)=> {
+  response.render('acts/social')
+})
+
 router.get('/sandbox', isLoggedIn, (request, response, next)=> {
   response.render('acts/sandbox')
 })
