@@ -13,4 +13,5 @@ ${isBadge
 }
 
 <p>You can email box-office@oobfest.com for any ticket-related concerns and email ruby@oobfest.com for general questions about the festival.</p>
+<p><a href="https://goo.gl/forms/nOdLXU755hnYmiX62">Please take our audience survey!</a> OoB is a non-profit and taking this survey will help us in accurate reporting to our current and potential funders and sponsors.</p>
 `}

@@ -23,5 +23,6 @@ Unfortunately, <i>if you do not show up at least 5 minutes before the show start
 <p>Issues with tickets, website or payment? Email box-office@oobfest.com</p>
 
 <p>General thoughts or questions about shows, the festival, etc? Email ruby@oobfest.com</p>
+<p><a href="https://goo.gl/forms/nOdLXU755hnYmiX62">Please take our audience survey!</a> OoB is a non-profit and taking this survey will help us in accurate reporting to our current and potential funders and sponsors.</p>
 `
 }

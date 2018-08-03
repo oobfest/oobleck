@@ -42,20 +42,29 @@ block content
                 td {{showVolunteer.email}}
               tr.collapse(:id="'collapse-' + index")
                 td(colspan=6)
-                  
-                  p(v-if="showVolunteer.volunteeredBefore") ✅ Has volunteered before
-                  p(v-else) 🆕 Has not volunteered before
-                  
-                  p(v-if="showVolunteer.attendingOrientation") ✅ Can attend orientation meeting
-                  p(v-else) ⛔️ Cannot attend orientation meeting
+                  ul.list-unstyled
+                    li
+                      span(v-if="showVolunteer.volunteeredBefore") ✅ Has volunteered before
+                      span(v-else) 🆕 Has not volunteered before
+                    li
+                      span(v-if="showVolunteer.attendingOrientation") ✅ Can attend orientation meeting
+                      span(v-else) ⛔️ Cannot attend orientation meeting
+                    li
+                      span(v-if="showVolunteer.performing") 🐝 Is performing during the festival
+                      span(v-else="showVolunteer.performing == undefined") 🤷‍♀️ May or may not be performing
+                      span(v-else) ✅ Is not performing during the festival
 
                   div(v-if="showVolunteer.referral")
-                    h4 Referral
+                    h4 🗣 Referral
                     p {{showVolunteer.referral}}
+
+                  div(v-if="showVolunteer.notes")
+                    h4 📝 Notes
+                    p {{showVolunteer.notes}}
 
                   div(v-if="showVolunteer.type.includes('driver')")
                     hr
-                    h4 Driver Details
+                    h4 🚙 Driver Details
                     p Car: 
                       span.font-italic {{showVolunteer.carType}}
                     p Passengers: 

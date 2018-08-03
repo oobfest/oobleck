@@ -9,6 +9,8 @@ let volunteerSchema = mongoose.Schema({
   volunteeredBefore: Boolean,
   referral: String,
   attendingOrientation: Boolean,
+  performing: Boolean,
+  notes: String,
 
   // Driver
   carType: String,

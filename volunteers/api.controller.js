@@ -12,6 +12,8 @@ module.exports = {
 			volunteeredBefore: request.body.volunteeredBefore == 'yes' ? true : false,
 			referral: request.body.referral,
 			attendingOrientation: request.body.attendingOrientation == 'yes' ? true : false,
+			performing: request.body.performing == 'yes' ? true : false,
+			notes: request.body.notes,
 
 			carType: request.body.carType,
 			passengerCount: request.body.passengerCount,

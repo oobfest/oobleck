@@ -110,6 +110,11 @@ block content
                   select#volunteered-before.form-control(v-model="volunteer.volunteeredBefore")
                     option(value="no") No
                     option(value="yes") Yes
+                .form-group
+                  label.col-form-label.required-field(for="performing") Are you performing during the festival?
+                  select#performing.form-control(v-model="volunteer.performing")
+                    option(value="no") No
+                    option(value="yes") Yes
               .box-block.box-bt(v-show="volunteer.type.includes('driver')")
                 h3 Driver Information
                 .form-group
@@ -134,6 +139,9 @@ block content
                   select#attending-orientation.form-control(v-model="volunteer.attendingOrientation")
                     option(value="no") No
                     option(value="yes") Yes
+                .form-group
+                  label.col-form-label(for="notes") Anything else that we should know? 
+                  textarea#notes.form-control(maxlength="1500" name="notes" v-model="volunteer.notes")
                 .text-center
                   button.btn.btn-primary.btn-lg(type="button" @click="create") Submit
             .box-block(v-show="submitted")
@@ -159,7 +167,9 @@ block content
             hours: 0,
             referral: '',
             volunteeredBefore: 'no',
+            performing: 'no',
             attendingOrientation: 'yes',
+            notes: '',
 
             carType: '',
             passengerCount: 4,
