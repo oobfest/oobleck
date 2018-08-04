@@ -17,6 +17,8 @@ block content
             th Cap
             th Sold
             th Left
+            th Audit Cap
+            th Audit Left
             th Refund
         tbody(v-for="(workshop, index) in workshops")
           tr( style="background-color: white")
@@ -27,6 +29,9 @@ block content
             td {{workshop.capacity}}
             td {{workshop.capacity - workshop.remaining}}
             td {{workshop.remaining}}
+            td 
+              a(href="#" @click="setAuditCapacity(workshop._id)") {{workshop.auditCapacity ? workshop.auditCapacity : 'set'}}
+            td {{workshop.auditRemaining ? workshop.auditRemaining : ''}}
             td {{workshop.refunded}}
           tr.collapse(:id="'collapse-' + index")
             td(colspan="7")
@@ -104,8 +109,28 @@ block content
             })
             .catch((error)=> {
               alert("Error setting workshop refund :(")
-              console.log(error)
+              console.log( error)
             })
+        },
+        setAuditCapacity(workshopId) {
+          let auditCapacity = Number(prompt("Set new capacity"))
+          if (Number.isNaN(auditCapacity) || auditCapacity < 0) {
+            alert("Invalid capacity")
+            return
+          }
+          else {
+            let self = this
+            axios
+              .post('/api/workshops/set-audit-capacity/' + workshopId, {auditCapacity: auditCapacity})
+              .then(function(response){
+                let index = self.workshops.map(w=> w._id).indexOf(workshopId)
+                Vue.set(self.workshops, index, response.data)                
+              })
+              .catch(function(error) {
+                alert("Error setting audit capacity for workshop :(")
+                console.log(error)
+              })
+          }
         },
         editWorkshop(selectedWorkshop) {
           this.modalWorkshop = selectedWorkshop

@@ -18,6 +18,8 @@ let workshopSchema = mongoose.Schema({
   capacity: Number,
   remaining: Number, 
   refunded: Number,
+  auditCapacity: Number,
+  auditRemaining: Number,
 
   students: [{
     name: String,

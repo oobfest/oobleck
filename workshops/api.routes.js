@@ -25,5 +25,6 @@ router.route('/:id')
   .delete(isLoggedIn, controller.delete)
 
 router.get('/get-remaining/:id', controller.getRemaining)
+router.post('/set-audit-capacity/:id', controller.setAuditCapacity)
 
  module.exports = router

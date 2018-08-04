@@ -117,7 +117,29 @@ module.exports = {
   getRemaining: function(id, callback) {
     this.get(id, (error, workshop)=> {
       if(error) callback(error)
-      else callback(null, {remaining: workshop.remaining})
+      else callback(null, {remaining: workshop.remaining, auditRemaining: workshop.auditRemaining})
+    })
+  },
+
+  setAuditCapacity: function(id, auditCapacity, callback) {
+    this.get(id, (error, workshop)=> {
+      if(error) callback(error)
+      else {
+
+        if(workshop.auditRemaining == undefined) {
+          workshop.auditRemaining = auditCapacity
+        }
+        else {
+          let auditCount = workshop.auditCapacity - workshop.auditRemaining
+          workshop.auditRemaining = auditCapacity - auditCount
+        }
+
+        workshop.auditCapacity = auditCapacity
+        
+        this.save(workshop, (error, savedWorkshop)=> {
+          callback(error, savedWorkshop)
+        })
+      }
     })
   }
 

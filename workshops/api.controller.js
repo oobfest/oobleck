@@ -102,5 +102,14 @@ module.exports = {
         response.json(remaining)
       }
     })
+  },
+
+  setAuditCapacity: function(request, response, next) {
+    let id = request.params.id
+    let auditCapacity = Number(request.body.auditCapacity)
+    model.setAuditCapacity(id, auditCapacity, (error, workshop)=> {
+      if(error) next(error)
+      else response.json(workshop)
+    })
   }
 }
