@@ -26,6 +26,9 @@ script#add-workshop-modal-template(type="text/template")
           .form-group
             label(for="add-workshop-modal-capacity") Maximum Number of Students
             input#add-workshop-modal-capacity.form-control(type="number" v-model="workshop.capacity" min=0 max=120)
+          .form-group
+            label(for="edit-workshop-modal-audit-capacity") Maximum Number of Auditors
+            input#edit-workshop-modal-audit-capacity.form-control(type="number" v-model="workshop.auditCapacity" min=0 max=120)
           input(type="hidden" name="imageUrl" v-model="workshop.imageUrl")
           input(type="hidden" name="deleteImageUrl" v-model="workshop.deleteImageUrl")
           upload-image(:imageUrl="workshop.imageUrl",:deleteImageUrl="workshop.deleteImageUrl")

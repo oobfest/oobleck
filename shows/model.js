@@ -124,12 +124,14 @@ module.exports = {
 			      for(let j=0; j<shows[i].acts.length; j++) {
 			        let domain = limax(shows[i].acts[j].name)
 			        let submission = submissions.find(s=> s.domain == domain)
-			        shows[i].acts[j].imageUrl = submission.imageUrl.substr(0, submission.imageUrl.length-4)
-			        shows[i].acts[j].description = submission.publicDescription
-			        shows[i].acts[j].country = submission.country
-			        shows[i].acts[j].city = submission.city
-			        shows[i].acts[j].state = submission.state
-			        shows[i].acts[j].domain = domain
+			        if(submission != undefined) {
+				        shows[i].acts[j].imageUrl = submission.imageUrl.substr(0, submission.imageUrl.length-4)
+				        shows[i].acts[j].description = submission.publicDescription
+				        shows[i].acts[j].country = submission.country
+				        shows[i].acts[j].city = submission.city
+				        shows[i].acts[j].state = submission.state
+				        shows[i].acts[j].domain = domain
+				      }
 			      }
 			      shows[i].markModified('acts')
 			      shows[i].save(function(error, savedShow) {

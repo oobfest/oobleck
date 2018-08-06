@@ -16,10 +16,10 @@ let workshopSchema = mongoose.Schema({
   time: String,
 
   capacity: Number,
-  remaining: Number, 
+  sold: Number, 
   refunded: Number,
   auditCapacity: Number,
-  auditRemaining: Number,
+  auditSold: Number,
 
   students: [{
     name: String,

@@ -6,7 +6,7 @@ block content
 
   #app.dash-boxes.container-fluid
     add-workshop-modal(:workshop="modalWorkshop")
-    edit-workshop-modal(:workshop="modalWorkshop")
+    edit-workshop-modal(:workshop="modalWorkshop" @update-workshop="updateWorkshop")
     .box.box-b
       table.box-table.table
         thead
@@ -14,27 +14,21 @@ block content
             th Name
             th Teacher(s)
             th When
-            th Cap
             th Sold
-            th Left
-            th Audit Cap
-            th Audit Left
-            th Refund
+            th Audit
+            th Refunds
         tbody(v-for="(workshop, index) in workshops")
           tr( style="background-color: white")
             td
               a(:href="'#collapse-' + index" data-toggle="collapse") {{workshop.name ? workshop.name : '[no name]'}}
             td {{workshop.teacher}}
             td {{getWorkshopDate(workshop)}}
-            td {{workshop.capacity}}
-            td {{workshop.capacity - workshop.remaining}}
-            td {{workshop.remaining}}
-            td 
-              a(href="#" @click="setAuditCapacity(workshop._id)") {{workshop.auditCapacity ? workshop.auditCapacity : 'set'}}
-            td {{workshop.auditRemaining ? workshop.auditRemaining : ''}}
+            td.code(:class="{'text-success': workshop.sold == workshop.capacity, 'text-danger': workshop.sold > workshop.capacity}") {{workshop.sold}}/{{workshop.capacity}}
+            td.code {{workshop.auditSold}}/{{workshop.auditCapacity}}
+              //a(href="#" @click="setAuditCapacity(workshop._id)") 
             td {{workshop.refunded}}
           tr.collapse(:id="'collapse-' + index")
-            td(colspan="7")
+            td(colspan="6")
               h4 Description
               vue-markdown(:source="workshop.description")
               h4 Teacher Bio
@@ -99,6 +93,10 @@ block content
         }
       },
       methods: {
+        updateWorkshop(workshop) {
+          let index = this.workshops.map(w=> w._id).indexOf(workshop._id)
+          Vue.set(this.workshops, index, workshop)
+        },
         setRefund(workshopId, studentEmail, refunded) {
           let self = this
           axios
@@ -111,26 +109,6 @@ block content
               alert("Error setting workshop refund :(")
               console.log( error)
             })
-        },
-        setAuditCapacity(workshopId) {
-          let auditCapacity = Number(prompt("Set new capacity"))
-          if (Number.isNaN(auditCapacity) || auditCapacity < 0) {
-            alert("Invalid capacity")
-            return
-          }
-          else {
-            let self = this
-            axios
-              .post('/api/workshops/set-audit-capacity/' + workshopId, {auditCapacity: auditCapacity})
-              .then(function(response){
-                let index = self.workshops.map(w=> w._id).indexOf(workshopId)
-                Vue.set(self.workshops, index, response.data)                
-              })
-              .catch(function(error) {
-                alert("Error setting audit capacity for workshop :(")
-                console.log(error)
-              })
-          }
         },
         editWorkshop(selectedWorkshop) {
           this.modalWorkshop = selectedWorkshop

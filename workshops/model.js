@@ -1,7 +1,7 @@
 const Workshop = require('./schema')
 var _ = require('lodash')
 
-let publicFields = "name domain description teacher bio affiliation imageUrl day venue time capacity remaining"
+let publicFields = "name domain description teacher bio affiliation imageUrl day venue time capacity sold auditCapacity auditSold"
 
 module.exports = {
 
@@ -74,7 +74,14 @@ module.exports = {
       else {
         workshop.students.push(student)
         workshop.markModified('students')
-        workshop.remaining -= student.quantity
+        
+        if(student.auditing) {
+          workshop.auditSold += student.quantity
+        } 
+        else {
+          workshop.sold += student.quantity
+        }
+
         this.save(workshop, (error, savedWorkshop)=> {
           callback(error, savedWorkshop)
         })
@@ -117,7 +124,9 @@ module.exports = {
   getRemaining: function(id, callback) {
     this.get(id, (error, workshop)=> {
       if(error) callback(error)
-      else callback(null, {remaining: workshop.remaining, auditRemaining: workshop.auditRemaining})
+      else {
+        callback(null, {sold: workshop.sold, auditSold: workshop.auditSold})
+      }
     })
   },
 

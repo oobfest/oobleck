@@ -31,8 +31,9 @@ module.exports = {
   createWorkshopSale: function(request, response, next) {
     let name = request.body.name
     let quantity = request.body.quantity
-    let price = 55
-    paypalModel.createWorkshopSale(name, price, quantity, (error, payment)=> {
+    let auditing = request.body.auditing == 'true'
+    let price = auditing ? 15 : 55
+    paypalModel.createWorkshopSale(name, price, quantity, auditing, (error, payment)=> {
       if(error) next(error)
       else {
         response.header("Access-Control-Allow-Origin", "*")
@@ -54,7 +55,7 @@ module.exports = {
           email: request.body.email,
           phone: request.body.phone,
           quantity: request.body.quantity,
-          auditing: false,
+          auditing: request.body.auditing == 'true',
           payment: payment
         }
         let domain = request.body.domain

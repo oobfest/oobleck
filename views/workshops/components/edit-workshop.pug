@@ -27,6 +27,9 @@ script#edit-workshop-modal-template(type="text/template")
           .form-group
             label(for="edit-workshop-modal-capacity") Maximum Number of Students
             input#edit-workshop-modal-capacity.form-control(type="number" v-model="workshop.capacity" min=0 max=120)
+          .form-group
+            label(for="edit-workshop-modal-audit-capacity") Maximum Number of Auditors
+            input#edit-workshop-modal-audit-capacity.form-control(type="number" v-model="workshop.auditCapacity" min=0 max=120)
           input(type="hidden" name="imageUrl" v-model="workshop.imageUrl")
           input(type="hidden" name="deleteImageUrl" v-model="workshop.deleteImageUrl")
           div(v-if="workshop.imageUrl")
@@ -49,7 +52,8 @@ script.
           .put('/api/workshops/' + self.workshop._id, self.workshop)
           .then(function(response) {
             // TODO: This should affect $parent.workshops[index], not this child property
-            self.workshop = response.data
+            //self.workshop = response.data
+            self.$emit('update-workshop', response.data)
           })
           .catch(function(error){
             alert("Error updating workshop :(")

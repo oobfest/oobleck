@@ -3,7 +3,7 @@ let showModel = require('../shows/model')
 
 module.exports = {
   
-  createWorkshopSale: function(workshopName, price, quantity, callback) {
+  createWorkshopSale: function(workshopName, price, quantity, auditing, callback) {
     let total = price * quantity
     let paymentData = {
       intent: "sale",
@@ -12,15 +12,15 @@ module.exports = {
       transactions: [{
         item_list: { 
           items: [{
-            name: "Workshop",
-            sku: "workshop",
+            name: (auditing ? "Audit Workshop: " : "Workshop: " + workshopName),
+            sku: (auditing ? "audit-workshop" : "workshop"),
             price: price,
             currency: "USD",
             quantity: quantity
           }]
         },
         amount: { currency: "USD", total: total },
-        description: "Workshop: " + workshopName,
+        description: (auditing ? "Audit " : "") + "Workshop: " + workshopName,
       }]
     }
 
