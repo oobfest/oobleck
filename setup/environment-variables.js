@@ -20,7 +20,7 @@ module.exports = function() {
 		}
 	}
 	else {
-		log.info("Getting Heroku environment variables")
+		log.info("💁‍♂️  Getting Heroku environment variables")
 	}
 
 	// Confirm we have all environment variables

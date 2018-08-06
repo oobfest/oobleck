@@ -30,7 +30,7 @@ block content
             td {{badge.email}}
             td {{badge.phone}}
             td 
-              span.badge.badge-pill(:class="getBadgeClass(badge.type)") {{getBadgeName(badge.type)}}
+              span.badge.badge-pill(:class="badge.type") {{getBadgeName(badge.type)}}
             td {{badge.quantity}}
             td {{badge.payment ? '$' + Number(badge.payment.transactions[0].amount.total) : ''}}
           tr.collapse(:id="'collapse-' + index")
@@ -48,6 +48,15 @@ block content
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-badge-modal") Add Badge
     
     add-badge-modal
+
+  style.
+    .badge { color: white; background-color: #999999 }
+    .badge.all { background-color: #377eb8 }
+    .badge.performer-full-upgrade { background-color: #1f78b4 }
+    .badge.performer-weekend-upgrade { background-color: #7570b3 }
+    .badge.volunteer { background-color: #ff7f00 }
+    .badge.staff { background-color: #4daf4a }
+    .badge.industry { background-color: #a6761d }
 
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
@@ -101,16 +110,11 @@ block content
         getBadgeName(type) {
           if(type=='all') return "All-Access"
           if(type=='performer-weekend-upgrade') return "Weekend Upgrade"
-          if(type=='performer-full-upgrade') return "Full Upgrade"
+          if(type=='performer-full-upgrade') return "Performer All-Access"
           if(type=='staff') return "Staff"
-          else return "error"
-        },
-        getBadgeClass(type) {
-          if(type=='all') return "badge-primary"
-          if(type=='performer-weekend-upgrade') return "badge-secondary"
-          if(type=='performer-full-upgrade') return "badge-info"
-          if(type=='staff') return "badge-success"
-          else return "badge-danger"
+          if(type=='industry') return "Industry"
+          if(type=='volunteer') return "5+ Volunteer"
+          else return "Other"
         },
         destroy(id, index) {
           if (confirm("Delete badge? This is probably a bad idea.")) {
