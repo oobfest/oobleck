@@ -76,10 +76,10 @@ module.exports = {
         workshop.markModified('students')
         
         if(student.auditing) {
-          workshop.auditSold += student.quantity
+          workshop.auditSold += Number(student.quantity)
         } 
         else {
-          workshop.sold += student.quantity
+          workshop.sold += Number(student.quantity)
         }
 
         this.save(workshop, (error, savedWorkshop)=> {
