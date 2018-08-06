@@ -52,8 +52,8 @@ module.exports = {
     workshop.sold = 0
     for(let student of workshop.students) {
       if(!student.refunded) {
-        if(student.auditing) workshop.auditSold += student.quantity
-        else workshop.sold += student.quantity
+        if(student.auditing) workshop.auditSold += Number(student.quantity)
+        else workshop.sold += Number(student.quantity)
       }
     }
 
