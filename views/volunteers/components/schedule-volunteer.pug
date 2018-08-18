@@ -1,0 +1,27 @@
+script#schedule-volunteer-modal-template(type="text/template")
+  #schedule-volunteer-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h4.modal-title Schedule Volunteer
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          .form-group
+            label(for="schedule-volunteer-modal-name") Name
+            input#schedule-volunteer-modal-name.form-control(type="text" v-model="name")
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button" @click="" data-dismiss="modal") Save
+
+script.
+  Vue.component('schedule-volunteer-modal', {
+    template: "#schedule-volunteer-modal-template",
+    data() {
+      return {
+        name: ""
+      }
+    },
+    methods: {
+    }
+  })

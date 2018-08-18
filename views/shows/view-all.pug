@@ -70,16 +70,21 @@ block content
 
         ul.list-unstyled
           li(v-for="email in Object.keys(tickets)")
-            h3.mt-3 {{tickets[email][0].name}} 
-              small.badge.badge-light {{tickets[email].length}}
+            h3.mt-4 {{tickets[email][0].name}} 
+              small.badge.badge-light ${{getStats(email)}}
             h6 {{email}}
-            table.table.table-sm.box-table
-              tr(v-for="ticket in tickets[email]")
-                td {{ticket.day}}, {{ticket.venue}}, {{ticket.time}}
-                td(v-if="ticket.badge") {{ticket.badge}}
-                td(v-else-if="ticket.payment") 
-                  a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal
-                td(v-else) n/a
+            table.table.table-sm.mb-0
+              tbody.striped(v-for="day in days")
+                tr(v-for="ticket in formatTickets(email, day)")
+                  td.borderless 
+                    span(style="user-select: none") {{ticket.quantity > 1 ? '(' + ticket.quantity + ')' : ''}} 
+                    | {{ticket.day}}, {{ticket.time | time}}, {{formatVenue(ticket.venue)}}                  
+                  td.text-right.borderless(style="user-select: none")
+                    span(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
+                    span(v-else-if="ticket.payment") 
+                      a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal (${{Number(ticket.payment.transactions[0].amount.total)}})
+                    span(v-else) n/a
+            hr.mt-0
     add-ticket-modal(:show-id="showId")
 
   script(src="/js/axios.min.js")
@@ -93,7 +98,8 @@ block content
         return {
           shows: [],
           showId: null,
-          search: ""
+          search: "",
+          days: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday']
         }
       },
       computed: {
@@ -117,6 +123,9 @@ block content
               ticket.day = this.shows[i].day
               ticket.venue = this.shows[i].venue
               ticket.time = this.shows[i].time
+              ticket.paid = ticket.payment 
+                ? Number(ticket.payment.transactions[0].amount.total)
+                : 0
               tickets.push(ticket)
             }
           }
@@ -124,6 +133,31 @@ block content
         }
       },
       methods: {
+        formatTickets(email, day) {
+          return this.tickets[email]
+            .filter(t => t.day == day)
+            .sort((a, b)=> a.time - b.time)
+        },
+        getStats(email) {
+          let paid = 0
+          let tickets = this.tickets[email]
+          for(let ticket of tickets) {
+            paid += ticket.paid
+          }
+          return paid
+        },
+        formatVenue(venue) {
+          switch(venue) {
+            case 'Hideout Down': return 'Hideout Downstairs'
+            case 'Hideout Up': return 'Hideout Upstairs'
+            case 'ColdTowne': return 'ColdTowne'
+            case 'Fallout': return 'Fallout'
+            case 'Velveeta': return 'Velveeta Room'
+            case 'Spider House': return 'Spider House Ballroom'
+            case 'Institution': return 'Institution'
+            default: return venue
+          }
+        },
         formatBadge(badgeType) {
           switch(badgeType) {
             case 'all': return 'All-Access Badge'
