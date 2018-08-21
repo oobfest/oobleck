@@ -18,6 +18,8 @@ router.options('/remove-reservation/:id', controller.coorz)
 router.post('/set-capacity/:id', isLoggedIn, controller.setCapacity)
 router.post('/set-price/:id', isLoggedIn, controller.setPrice)
 
+router.post('/set-volunteer/')
+
 router.get('/publish', isLoggedIn, controller.publish)
 
 router.post('/add-act/:id', isLoggedIn, controller.addAct)

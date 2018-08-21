@@ -13,7 +13,12 @@ let showSchema = mongoose.Schema({
 
 	acts: [],
   host: {},
-  tickets: []
+  tickets: [],
+
+  volunteerBoxOffice1: mongoose.Schema.Types.ObjectId,
+  volunteerBoxOffice2: mongoose.Schema.Types.ObjectId,
+  volunteerTicketTaker1: mongoose.Schema.Types.ObjectId,
+  volunteerTicketTaker2: mongoose.Schema.Types.ObjectId,
 })
 
 /* Ticket

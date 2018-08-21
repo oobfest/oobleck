@@ -53,7 +53,7 @@ block content
                       span(v-else) ⛔️ Cannot attend orientation meeting
                     li
                       span(v-if="showVolunteer.performing") 🐝 Is performing during the festival
-                      span(v-else="showVolunteer.performing == undefined") 🤷‍♀️ May or may not be performing
+                      span(v-else="showVolunteer.performing === undefined") 🤷‍♀️ May or may not be performing
                       span(v-else) ✅ Is not performing during the festival
 
                   div(v-if="showVolunteer.referral")
@@ -72,7 +72,7 @@ block content
                     p Passengers: 
                       span.code {{showVolunteer.passengerCount}}
                     p License Plate Number: 
-                      spab.code {{showVolunteer.licensePlateNumber}}
+                      span.code {{showVolunteer.licensePlateNumber}}
 
 
       #driver.tab-pane.fade

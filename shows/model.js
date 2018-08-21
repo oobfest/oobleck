@@ -67,6 +67,21 @@ module.exports = {
 		})
 	},
 
+	updateVolunteer: function(showId, volunteerRole, volunteerId, callback) {
+		this.get(showId, (error, show)=> {
+			if(error) callback(error)
+			else {
+				if(volunteerRole == 'box-office-1') show.volunteerBoxOffice1 = volunteerId
+				if(volunteerRole == 'box-office-2') show.volunteerBoxOffice2 = volunteerId
+				if(volunteerRole == 'ticket-taker-1') show.volunteerTicketTaker1 = volunteerId
+				if(volunteerRole == 'ticket-taker-2') show.volunteerTicketTaker2 = volunteerId
+				show.save((error, savedShow)=> {
+					callback(error, savedShow)
+				})
+			}
+		})
+	},
+
 	delete: function(id, callback) {
 		this.get(id, (error, show)=> {
 			if(error) callback(error, null)
