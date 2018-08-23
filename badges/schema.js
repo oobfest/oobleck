@@ -9,7 +9,7 @@ let badgeSchema = mongoose.Schema({
   /* Badge Types: 
       all
       performer-weekend-upgrade
-      performer-all
+      performer-all (??)
       volunteer
       staff
       industry

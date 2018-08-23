@@ -8,21 +8,34 @@ let transporter = nodemailer.createTransport({
 
 let badgeEmail = 
 `
-<p><b>How do I get my badge?</b><br>
-You will be sent specific information on how to pick up your badge closer to the fest, but registration takes place the first few days of the festival at one of our downtown venues.</p>
+<p>This year's Out of Bounds Comedy Festival is Tues, Aug 28th - Mon, Sept 3rd.</p>
 
 <p><b>How do I reserve tickets?</b><br>
-Once tickets for individual shows go on sale, you'll receive an email letting you know. There will be an "I have a festival badge" option, and you'll register with the email address associated with the badge (AKA, the one this email was sent to) </p>
+Your badge allows you to reserve tickets online. Simply go to https://oobfest.com/schedule/ and use the email address this email was sent to.</p>
 
-<p><b>Then what?</b><br>
+<p><b>How do you get your tickets?</b><br>
 Just show up with your badge at least 5 minutes before show time! Your name and email will be listed on our box office sheet the day of the show. You'll be required to show us your badge to receive a ticket.</p>
 
 <p><b>What if I'm late?</b><br>
 Unfortunately, <i>if you do not show up at least 5 minutes before the show start time we will release your ticket to others on our wait-list.</i> If you plan on driving, please remember to factor in time it will take to park!</p>
 
+<p><b>How do I get my badge?</b><br>
+Please pick up your badge at the following locations:
+<ul>
+<li>Sunday, 8/26, ColdTowne Theater, 5pm-9pm</li>
+<li>Tuesday, 8/28, Hideout Theatre 6:30pm-10pm</li>
+<li>Wednesday, 8/29, Hideout Theatre 6:30pm-10pm</li>
+<li>Thursday, 8/30, Hideout Theatre 6:30pm-10pm</li>
+<li>Friday, 8/31, Hideout Theatre 6:30pm-10pm</li>
+<li>Saturday, 9/1 Hideout Theatre 3pm-6pm</li>
+</ul></p>
+
+<p><b>ColdTowne Theater</b> is at 4803 Airport Blvd, Austin, TX 78751<br>
+<b>Hideout Theatre</b> is at 617 Congress Ave, Austin, TX 787801</p>
+
 <p>Issues with tickets, website or payment? Email box-office@oobfest.com</p>
 
-<p>General thoughts or questions about shows, the festival, etc? Email ruby@oobfest.com</p>
+<p>Any questions or thoughts about the festival or would like some recommendations? Email ruby@oobfest.com</p>
 `
 
 
