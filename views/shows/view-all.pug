@@ -13,52 +13,52 @@ block content
     .tab-content.mt-3
       #shows.tab-pane.fade.show.active
         .box.box-b(v-if="shows.length > 0")
-          table.box-table.table.text-center
+          table.box-table.table.table-sm.text-center
             thead
               tr
                 th 
                   input.form-control(type="text" placeholder="Search day, venue and time" v-model="search")
                 th Cap
-                th Sold
-                th Left
+                th 
+                  a(href="#" @click.prevent="sortByRemaining = false") Sold
+                th 
+                  a(href="#" @click.prevent="sortByRemaining = true") Left
             tbody
               tr(v-for="(show, index) in filteredShows")
                 td.text-left 
-                  h4 {{show.day}}, {{show.venue}}, {{show.time | time}}
-                  ul
-                    li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
-                  p(v-if="show.price") Price: 
-                    a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
-                  p(v-else) 
-                    a(href="#" @click.prevent="setPrice(show._id)") No price set
-                  div(v-if="show.tickets.length > 0" ) 
-                    h4 
-                      a(:href="'#collapse'+index" data-toggle="collapse") Tickets
-                    .collapse(:id="'collapse'+index")
-                      table.table.table-sm
-                        thead
-                          tr
-                            th Name
-                            th Email
-                            th Quantity
-                            th Type
-                            th
-                        tbody
-                          tr(v-for="ticket in show.tickets")
-                            td {{ticket.name}}
-                            td {{ticket.email}}
-                            td {{ticket.quantity}}
+                  a(:href="'#collapse'+index" data-toggle="collapse") {{show.day}}, {{show.venue}}, {{show.time | time}}
+                  .collapse(:id="'collapse'+index")
+                    ul
+                      li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
+                    p(v-if="show.price") Price: 
+                      a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
+                    p(v-else) 
+                      a(href="#" @click.prevent="setPrice(show._id)") No price set
 
-                            td(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
-                            td(v-else) 
-                              a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{ticket.payment.transactions[0].related_resources[0].sale.id}}
+                    table.table.table-sm(v-if="show.capacity != show.remaining")
+                      thead
+                        tr
+                          th Name
+                          th Email
+                          th Quantity
+                          th Type
+                          th
+                      tbody
+                        tr(v-for="ticket in show.tickets")
+                          td {{ticket.name}}
+                          td {{ticket.email}}
+                          td {{ticket.quantity}}
 
-                            td 
-                              a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
-                  p(v-else) No tickets sold
-                  button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Ticket Reservation
-                  | &nbsp;
-                  button.btn.btn-secondary.btn-xs(type="button" @click="reserveWithBadge(show._id)") Add Badge Reservation
+                          td(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
+                          td(v-else) 
+                            a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{ticket.payment.transactions[0].related_resources[0].sale.id}}
+
+                          td 
+                            a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
+                    p(v-else) No tickets sold
+                    button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Ticket Reservation
+                    | &nbsp;
+                    button.btn.btn-secondary.btn-xs(type="button" @click="reserveWithBadge(show._id)") Add Badge Reservation
 
                 td
                   a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity}}
@@ -67,37 +67,37 @@ block content
         p.m2(v-else) No shows yet
 
       #tickets.tab-pane.fade
-
-        table.table
-          thead
-            tr
-              th Name
-              th Email
-              th Shows
-              th Reserved
-              th Paid
-          tbody(v-for="email, index in Object.keys(tickets)")
-            tr
-              td 
-                a(:href="'#collapse-tickets-'+index" data-toggle="collapse") {{tickets[email][0].name}}
-              td.code {{email}}
-              td {{tickets[email].length}}
-              td {{getQuantity(email)}}
-              td
-                span(v-if="getPaid(email) > 0") ${{getPaid(email)}}
-            tr.collapse(:id="'collapse-tickets-'+index")
-              td.p-0(colspan=5)
-                table.table.table-sm.mb-0
-                  tbody.striped(v-for="day in days")
-                    tr(v-for="ticket in formatTickets(email, day)")
-                      td.borderless 
-                        span(style="user-select: none") {{ticket.quantity > 1 ? '(' + ticket.quantity + ')' : ''}} 
-                        | {{ticket.day}}, {{ticket.time | time}}, {{formatVenue(ticket.venue)}}                  
-                      td.text-right.borderless(style="user-select: none")
-                        span(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
-                        span(v-else-if="ticket.payment") 
-                          a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal (${{Number(ticket.payment.transactions[0].amount.total)}})
-                        span(v-else) n/a
+        .box.box-b
+          table.table
+            thead
+              tr
+                th Name
+                th Email
+                th Shows
+                th Reserved
+                th Paid
+            tbody(v-for="email, index in Object.keys(tickets)")
+              tr
+                td 
+                  a(:href="'#collapse-tickets-'+index" data-toggle="collapse") {{tickets[email][0].name}}
+                td.code {{email}}
+                td {{tickets[email].length}}
+                td {{getQuantity(email)}}
+                td
+                  span(v-if="getPaid(email) > 0") ${{getPaid(email)}}
+              tr.collapse(:id="'collapse-tickets-'+index")
+                td.p-0(colspan=5)
+                  table.table.table-sm.mb-0
+                    tbody.striped(v-for="day in days")
+                      tr(v-for="ticket in formatTickets(email, day)")
+                        td.borderless 
+                          span(style="user-select: none") {{ticket.quantity > 1 ? '(' + ticket.quantity + ')' : ''}} 
+                          | {{ticket.day}}, {{ticket.time | time}}, {{formatVenue(ticket.venue)}}                  
+                        td.text-right.borderless(style="user-select: none")
+                          span(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
+                          span(v-else-if="ticket.payment") 
+                            a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal (${{Number(ticket.payment.transactions[0].amount.total)}})
+                          span(v-else) n/a
     add-ticket-modal(:show-id="showId")
 
   script(src="/js/axios.min.js")
@@ -109,6 +109,8 @@ block content
       el: "#app",
       data() { 
         return {
+          sortByRemaining: false,
+          ticketsSort: 'shows',
           shows: [],
           showId: null,
           search: "",
@@ -117,6 +119,8 @@ block content
       },
       computed: {
         filteredShows() {
+          if(this.sortByRemaining) this.shows.sort((a,b)=> {return b.remaining - a.remaining })
+          else this.shows.sort((a,b)=> { return (a.capacity - a.remaining) - (b.capacity - b.remaining) })
           if (this.search == '') return this.shows
           else {
             let searchRegex = new RegExp(this.search, 'i')
