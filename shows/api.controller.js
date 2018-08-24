@@ -146,7 +146,7 @@ module.exports = {
 
 	badgeReservation: function(request, response, next) {
 		let showId = request.params.id
-		let email = request.body.email
+		let email = request.body.email.toLowerCase()
 		let quantity = request.body.quantity
 		model.badgeReservation(showId, email, quantity, (error, status)=> {
 			if(error) next(error)
