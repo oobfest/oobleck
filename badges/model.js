@@ -27,9 +27,11 @@ module.exports = {
     })
   },
 
-  getByEmail: function(email, callback) {
+  getByEmail: function(unsafeEmail, callback) {
     // TODO: Shouldn't do findOne, what if performer buys all-access for partner?
-    Badge.findOne({email}, (error, badge)=> {
+    let safeEmail = unsafeEmail.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+    let safeEmailRegex = new RegExp('^' + safeEmail + '$', 'i')
+    Badge.findOne({email: safeEmailRegex}, (error, badge)=> {
       callback(error, badge)
     })
   },
