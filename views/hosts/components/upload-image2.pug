@@ -1,7 +1,7 @@
 script#upload-image-template(type="text/template")
   div
     h3 Image Upload
-    div(v-show="(state==0 && !imageUrl) || (state != 1 && !imageUrl)")
+    div(v-show="!imageUrl || imageUrl == ''")
       .custom-file
         input#file-input.custom-file-input(type="file" accept="image/*" @change="uploadImage")
         label.custom-file-label(for="file-input") Select Image
@@ -13,7 +13,7 @@ script#upload-image-template(type="text/template")
       p {{message}}
       .progress
         .progress-bar.bg-primary(:style="{width: uploadPercent + '%'}")
-    div(v-show="state==2 || imageUrl")
+    div(v-show="imageUrl && imageUrl != ''")
       img.img-thumbnail(:src="imageUrl ? imageUrl+'l.jpg' : ''" alt="Image preview")
       br
       button.btn.btn-danger(@click="deleteImage") Delete Image

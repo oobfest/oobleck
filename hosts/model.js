@@ -40,13 +40,10 @@ module.exports = {
 						else {
 							for(let i=0; i<shows.length; i++) {
 								let show  = shows[i]
-								if(show.host && show.host._id == savedHost._id) {
+								if(show.host && show.host.name == savedHost.name) {
 									show.host = savedHost
 									showsModel.update(show._id, show, (error, savedShow)=> {
 										if(error) callback(error)
-										else {
-											console.log("SUCCESS")
-										}
 									})
 								}
 							}

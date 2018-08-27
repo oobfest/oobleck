@@ -9,7 +9,7 @@ script#edit-host-modal-template(type="text/template")
         .modal-body
           .form-group
             label(for="edit-host-modal-name") Name
-            input#edit-host-modal-name.form-control(type="text" v-model="host.name")
+            input#edit-host-modal-name.form-control(type="text" v-model="host.name" readonly)
           .form-group
             label(for="edit-host-modal-email") Email
             input#edit-host-modal-email.form-control.code(type="email" v-model="host.email")
@@ -28,12 +28,9 @@ script#edit-host-modal-template(type="text/template")
           .form-group
             upload-image2(
               :image-url="host.imageUrl"
-              :delete-image-url="host.deleteImageUrl" 
+              :delete-image-url="host.deleteImageUrl"
               @update-image-url="updateImage($event)"
-            )            
-          //.form-group
-            pre {{host.imageUrl}}
-            pre {{host.deleteImageUrl}}
+            )
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
           button.btn.btn-primary(type="button" @click="updateHost" data-dismiss="modal") Save
@@ -50,13 +47,11 @@ script.
       updateImage(event) {
         this.$parent.selectedHost.imageUrl = event.imageUrl
         this.$parent.selectedHost.deleteImageUrl = event.deleteImageUrl
+        this.host.imageUrl = event.imageUrl
+        this.host.deleteImageUrl = event.deleteImageUrl
         this.updateHost(event)
       },
-      updateHost(event) {
-        if(event) {
-          this.host.imageUrl = event.imageUrl
-          this.host.deleteImageUrl = event.deleteImageUrl
-        }
+      updateHost() {
         this.$emit('update', this.host)
         axios
           .put('/api/hosts/' + this.host._id, this.host)
@@ -65,8 +60,7 @@ script.
           })
           .catch(function(error) {
             console.log("ERRORRRR")
-          })
-        
+          })        
       }
     }
   })
