@@ -1,7 +1,7 @@
 script#upload-image-template(type="text/template")
   div
     h3 Image Upload
-    div(v-show="state == 0")
+    div(v-show="(state==0 && !imageUrl) || (state != 1 && !imageUrl)")
       .custom-file
         input#file-input.custom-file-input(type="file" accept="image/*" @change="uploadImage")
         label.custom-file-label(for="file-input") Select Image
@@ -19,7 +19,7 @@ script#upload-image-template(type="text/template")
       button.btn.btn-danger(@click="deleteImage") Delete Image
 
 script.
-  Vue.component('upload-image', {
+  Vue.component('upload-image2', {
     template: "#upload-image-template",
     props: ['imageUrl', 'deleteImageUrl'],
     data() {
@@ -30,22 +30,16 @@ script.
       }
     },
     methods: {
-      updateImageUrl(imageUrl) {
-        this.$emit('update-image-url', imageUrl)
+      updateImageUrl(imageUrl, deleteImageUrl) {
+        this.$emit('update-image-url', {imageUrl: imageUrl, deleteImageUrl: deleteImageUrl})
       },
-      updateDeleteImageUrl(deleteImageUrl) {
-        this.$emit('update-delete-image-url', deleteImageUrl)
-      },
-
       deleteImage() {
         if(this.deleteImageUrl != '') window.open(this.deleteImageUrl)
-        this.updateImageUrl('')
-        this.updateDeleteImageUrl('')
+        this.updateImageUrl('', '')
         this.state = 0
         this.message = ''
         this.uploadPercent = 0
       },
-
       uploadImage(event) {
         let self = this // keep 'this' scope for Axios
         let image = event.target.files[0]
@@ -92,8 +86,7 @@ script.
               // IDK why "data" is inside "response.data"
               let imageUrl = 'http://imgur.com/' + response.data.data.id
               let deleteImageUrl = 'http://imgur.com/delete/' + response.data.data.deletehash
-              self.updateImageUrl(imageUrl)
-              self.updateDeleteImageUrl(deleteImageUrl)
+              self.updateImageUrl(imageUrl, deleteImageUrl)
               self.state++
             })
             .catch(function(error) {

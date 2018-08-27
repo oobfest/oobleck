@@ -26,15 +26,19 @@ script#edit-host-modal-template(type="text/template")
             label(for="edit-host-modal-videoUrl") Video URL
             input#edit-host-modal-videoUrl.form-control(type="text" v-model="host.videoUrl")
           .form-group
-            pre {{host._id}}
+            upload-image2(
+              :image-url="host.imageUrl"
+              :delete-image-url="host.deleteImageUrl" 
+              @update-image-url="updateImage($event)"
+            )            
+          //.form-group
             pre {{host.imageUrl}}
             pre {{host.deleteImageUrl}}
-            pre Available: {{host.availability}}
-            pre Can Attend: {{host.canAttendMeeting}}
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
           button.btn.btn-primary(type="button" @click="updateHost" data-dismiss="modal") Save
 
+include ../components/upload-image2
 script.
   Vue.component('edit-host-modal', {
     template: "#edit-host-modal-template",
@@ -43,7 +47,25 @@ script.
       return {}
     },
     methods: {
-      updateHost() {
+      updateImage(event) {
+        this.$parent.selectedHost.imageUrl = event.imageUrl
+        this.$parent.selectedHost.deleteImageUrl = event.deleteImageUrl
+        this.updateHost(event)
+      },
+      updateHost(event) {
+        if(event) {
+          this.host.imageUrl = event.imageUrl
+          this.host.deleteImageUrl = event.deleteImageUrl
+        }
+        this.$emit('update', this.host)
+        axios
+          .put('/api/hosts/' + this.host._id, this.host)
+          .then(function(response) {
+            console.log("SUCCESS")
+          })
+          .catch(function(error) {
+            console.log("ERRORRRR")
+          })
         
       }
     }

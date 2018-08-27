@@ -1,5 +1,6 @@
 const Host = require('./schema')
 var _ = require('lodash')
+let showsModel = require('../shows/model')
 
 module.exports = {
 
@@ -34,6 +35,23 @@ module.exports = {
 			else {
 				let updatedHost = _.merge(oldHost, newHost)
 				this.save(updatedHost, (error, savedHost)=> {
+					showsModel.getAll((error, shows)=> {
+						if(error) callback(error)
+						else {
+							for(let i=0; i<shows.length; i++) {
+								let show  = shows[i]
+								if(show.host && show.host._id == savedHost._id) {
+									show.host = savedHost
+									showsModel.update(show._id, show, (error, savedShow)=> {
+										if(error) callback(error)
+										else {
+											console.log("SUCCESS")
+										}
+									})
+								}
+							}
+						}
+					})
 					callback(error, savedHost)
 				})
 			}

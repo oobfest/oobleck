@@ -5,7 +5,7 @@ block content
       span.dash-titlebar-title Host Submissions
 
   #app.dash-boxes.container-fluid
-    edit-host-modal(:host="Object.assign({}, selectedHost)")
+    edit-host-modal(:host="Object.assign({}, selectedHost)" @update="updateHost")
     .box.box-b(v-if="hosts.length > 0")
       table.box-table.table
         thead
@@ -29,7 +29,7 @@ block content
               h4 Availability
               ul.list-inline
                 li.list-inline-item(v-for="day in host.availability") {{day}}
-              //button.btn.btn-secondary(data-toggle="modal" data-target="#edit-host-modal" @click="selectedHost = host") Edit
+              button.btn.btn-secondary(data-toggle="modal" data-target="#edit-host-modal" @click="selectedHost = host") Edit
     p.m2(v-else) No hosts yet
 
   script(src="/js/axios.min.js")
@@ -44,7 +44,12 @@ block content
           selectedHost: {},
         }
       },
-      methods: {},
+      methods: {
+        updateHost(savedHost) {
+          let index = this.hosts.map(h=> h._id).indexOf(savedHost._id)
+          Vue.set(this.hosts, index, savedHost)
+        }      
+      },
       created() {
         let self = this
         axios
@@ -56,5 +61,5 @@ block content
             alert("Error getting hosts :(")
             console.log(error)
           })
-      }
+      },
     })
