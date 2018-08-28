@@ -2,7 +2,7 @@ module.exports = function (shows) {
 return `
 <p>Hello!</p>
 
-<p>You are currently reserved for the following Out of Bounds shows:</p>
+<p>Here's a quick reminder that you have tickets for the following Out of Bounds shows:</p>
 
 <ul>
 ${shows.map((show) => `<li>${show}</li>`).join('\n')}

@@ -83,5 +83,17 @@ module.exports = {
       if(error) console.log(error)
       else console.log("SENT! " + recipientEmail)
     })
+  },
+  sendShowReminderEmail: function(recipientEmail, tickets) {
+    transporter.sendMail({
+      to: recipientEmail,
+      bcc: "admin@oobfest.com",
+      from: "box-office@oobfest.com",
+      subject: "Out of Bounds Booking Reminder",
+      html: require('./email-templates/show-reminder')(tickets)
+    }, (error, info)=> {
+      if(error) console.log(error)
+      else console.log("SENT! ", recipientEmail)
+    })
   }
 }
