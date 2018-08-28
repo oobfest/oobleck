@@ -17,7 +17,31 @@ block content
             thead
               tr
                 th 
-                  input.form-control(type="text" placeholder="Search day, venue and time" v-model="search")
+                  .row
+                    .col
+                      .form-group.mb-0
+                        select.form-control(v-model="searchDay")
+                          option(value="" disabled selected) Filter by Day
+                          option(value="") All
+                          option Tuesday
+                          option Wednesday
+                          option Thursday
+                          option Friday
+                          option Saturday
+                          option Sunday
+                          option Monday
+                    .col                  
+                      .form-group.mb-0
+                        select.form-control(v-model="searchVenue")
+                          option(value="" disabled selected) Filter by Venue
+                          option(value="") All
+                          option(value="Hideout Down") Hideout Downstairs
+                          option(value="Hideout Up") Hideout Upstairs
+                          option ColdTowne
+                          option Fallout
+                          option(value="Velveeta") Velveeta Room
+                          option Spider House
+                          option Institution
                 th Cap
                 th 
                   a(href="#" @click.prevent="sortByRemaining = false") Sold
@@ -113,23 +137,19 @@ block content
           ticketsSort: 'shows',
           shows: [],
           showId: null,
-          search: "",
+          searchDay: "",
+          searchVenue: "",
           days: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday']
         }
       },
       computed: {
         filteredShows() {
-          if(this.sortByRemaining) this.shows.sort((a,b)=> {return b.remaining - a.remaining })
+          if(this.sortByRemaining) this.shows.sort((a,b)=> { return b.remaining - a.remaining })
           else this.shows.sort((a,b)=> { return (a.capacity - a.remaining) - (b.capacity - b.remaining) })
-          if (this.search == '') return this.shows
-          else {
-            let searchRegex = new RegExp(this.search, 'i')
-            return this.shows.filter(s=> {
-              let searchedString = s.day + " " + s.venue + " " + s.time + " " + 
-                                   s.venue + " " + s.day + " " + s.time + " " + s.venue
-              return searchedString.match(searchRegex)
-            })
-          }
+
+          let searchDayRegex = new RegExp(this.searchDay, 'i')
+          let searchVenueRegex = new RegExp(this.searchVenue, 'i')
+          return this.shows.filter(s=> { return s.day.match(searchDayRegex) && s.venue.match(searchVenueRegex) })
         },
         tickets() {
           let tickets = []
