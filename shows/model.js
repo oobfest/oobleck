@@ -41,6 +41,12 @@ module.exports = {
 		})
 	},
 
+	getByDayVenueTime: function(day, venue, time, callback) {
+		Show.findOne({day, venue, time}, (error, show)=> {
+			callback(error, show)
+		})
+	},
+
 	update: function(id, newShow, callback) {
 		this.get(id, (error, oldShow)=> {
 			if(error) callback(error)

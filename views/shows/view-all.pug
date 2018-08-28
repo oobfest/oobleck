@@ -10,6 +10,8 @@ block content
         a.nav-link.active(data-toggle="tab" href="#shows") Shows
       li.nav-item
         a.nav-link(data-toggle="tab" href="#tickets") Tickets
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#print-tickets") Print Tickets
     .tab-content.mt-3
       #shows.tab-pane.fade.show.active
         .box.box-b(v-if="shows.length > 0")
@@ -122,6 +124,31 @@ block content
                           span(v-else-if="ticket.payment") 
                             a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal (${{Number(ticket.payment.transactions[0].amount.total)}})
                           span(v-else) n/a
+    
+      #print-tickets.tab-pane.fade
+        .row
+          .col-sm-6
+            form(action="/shows/print" target="_blank")
+              .form-group
+                label(for="print-day") Day
+                select#print-day.form-control(v-model="print.day" name="day")
+                  option(v-for="day in days") {{day}}
+              .form-group
+                label(for="print-venue") Venue
+                select#print-venue.form-control(v-model="print.venue" name="venue")
+                  option Hideout Down
+                  option Hideout Up
+                  option ColdTowne
+                  option Fallout
+                  option Velveeta
+                  option Spider House
+                  option Institution
+              .form-group
+                label(for="print-time") Time
+                select#print-time.form-control(v-model="print.time" name="time")
+                  option(:value="time" v-for="time in times") {{time | time}} 
+              button.btn.btn-primary(type="submit" ) View
+
     add-ticket-modal(:show-id="showId")
 
   script(src="/js/axios.min.js")
@@ -133,6 +160,11 @@ block content
       el: "#app",
       data() { 
         return {
+          print: {
+            day: 'Tuesday',
+            venue: '',
+            time: '',
+          },
           sortByRemaining: false,
           ticketsSort: 'shows',
           shows: [],
@@ -143,6 +175,12 @@ block content
         }
       },
       computed: {
+        times() {
+          return this.shows
+            .filter(s=> (s.venue == this.print.venue) && (s.day == this.print.day))
+            .map(s=> s.time)
+            .sort((a,b)=> a-b)
+        },
         filteredShows() {
           if(this.sortByRemaining) this.shows.sort((a,b)=> { return b.remaining - a.remaining })
           else this.shows.sort((a,b)=> { return (a.capacity - a.remaining) - (b.capacity - b.remaining) })
@@ -170,6 +208,9 @@ block content
         }
       },
       methods: {
+        clicky(yay) {
+          alert(yay)
+        },
         formatTickets(email, day) {
           return this.tickets[email]
             .filter(t => t.day == day)

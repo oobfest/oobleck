@@ -31,7 +31,7 @@ app.listen(process.env.PORT, ()=> {
 	log.info("🐵  Listening on port " + process.env.PORT)
 })
 
-/*
+
 let showsModel = require('./shows/model')
 let _ = require('lodash')
 let formatTime = function(time) { 
@@ -51,33 +51,43 @@ let formatVenue = function(venue) {
   }
 }
 
+/*
+// Get all shows
 showsModel.getAll((error, shows)=> {
-  let showTickets = []
+  let ungroupedTickets = []
+
+  // For each show
   for(let i=0; i<shows.length; i++) {
+
+    // For each ticket in the show
     for(let j=0; j<shows[i].tickets.length; j++) {
-      let ticket = shows[i].tickets[j]
-      ticket.showId = shows[i]._id
-      ticket.day = shows[i].day
-      ticket.venue = shows[i].venue
-      ticket.time = shows[i].time
-      ticket.paid = ticket.payment 
-        ? Number(ticket.payment.transactions[0].amount.total)
-        : 0
-      showTickets.push(ticket)
+
+      // Add ticket to ungrouped array
+      ungroupedTickets.push({
+        email: shows[i].tickets[j].email,
+        quantity: shows[i].tickets[j].quantity,
+        day: shows[i].day,
+        venue: shows[i].venue,
+        time: shows[i].time,
+      })
     }
   }
-  let ticketsByEmail = _.groupBy(showTickets, 'email')
-  let emails = Object.keys(ticketsByEmail)
-  for(let email of emails) {
-    let show = ticketsByEmail[email]
 
-    console.log(email)
+  // Group array by each ticket's email
+  let groupedTickets = _.groupBy(ungroupedTickets, 'email')
+
+  let emails = []
+  for(let email of Object.keys(groupedTickets)) {
     let tickets = []
-    for(let ticket of show) {
+    for(let ticket of groupedTickets[email]) {
       tickets.push(`${ticket.quantity > 1 ? '(' + ticket.quantity + ') ' : '' }${ticket.day}, ${formatTime(ticket.time)}, ${formatVenue(ticket.venue)}`)
     }
-    console.log(tickets)
-
+    emails.push({
+      email: email,
+      tickets: tickets
+    })
   }
+
+  console.log(emails)
 })
 */
