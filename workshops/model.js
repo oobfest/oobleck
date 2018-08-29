@@ -105,12 +105,12 @@ module.exports = {
         let index = workshop.students.map(s=> s.email).indexOf(email)
         workshop.students[index].refunded = refunded
         if(refunded) {
-          workshop.remaining += workshop.students[index].quantity
+          workshop.sold -= workshop.students[index].quantity
           if(workshop.refunded == undefined) workshop.refunded = 1
           else workshop.refunded++
         }
         else {
-          workshop.remaining -= workshop.students[index].quantity
+          workshop.sold += workshop.students[index].quantity
           workshop.refunded--
         }
         workshop.markModified('students')
