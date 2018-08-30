@@ -6,6 +6,10 @@ module.exports = {
     response.render('shows/view-all')
   },
 
+  tickets: function(request, response, next) {
+    response.render('shows/tickets')
+  },
+
   print: function(request, response, next) {
     let day = request.query.day
     let venue = request.query.venue

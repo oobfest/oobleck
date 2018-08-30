@@ -2,122 +2,42 @@ extends ../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
-      span.dash-titlebar-title Shows
+      span.dash-titlebar-title 
+        a(href="/shows") Shows
+        |  / Tickets
 
   #app.dash-boxes.container-fluid
-    ul.nav.nav-pills
-      li.nav-item
-        a.nav-link.active(data-toggle="tab" href="#shows") Shows
-      li.nav-item
-        a.nav-link(href="/shows/tickets") Tickets
-      li.nav-item
-        a.nav-link(data-toggle="tab" href="#print-tickets") Print Tickets
-    .tab-content.mt-3
-      #shows.tab-pane.fade.show.active
-        .box.box-b(v-if="shows.length > 0")
-          table.box-table.table.table-sm.text-center
-            thead
-              tr
-                th 
-                  .row
-                    .col
-                      .form-group.mb-0
-                        select.form-control(v-model="searchDay")
-                          option(value="" disabled selected) Filter by Day
-                          option(value="") All
-                          option Tuesday
-                          option Wednesday
-                          option Thursday
-                          option Friday
-                          option Saturday
-                          option Sunday
-                          option Monday
-                    .col                  
-                      .form-group.mb-0
-                        select.form-control(v-model="searchVenue")
-                          option(value="" disabled selected) Filter by Venue
-                          option(value="") All
-                          option(value="Hideout Down") Hideout Downstairs
-                          option(value="Hideout Up") Hideout Upstairs
-                          option ColdTowne
-                          option Fallout
-                          option(value="Velveeta") Velveeta Room
-                          option Spider House
-                          option Institution
-                th Cap
-                th 
-                  a(href="#" @click.prevent="sortByRemaining = false") Sold
-                th 
-                  a(href="#" @click.prevent="sortByRemaining = true") Left
-            tbody
-              tr(v-for="(show, index) in filteredShows")
-                td.text-left 
-                  a(:href="'#collapse'+index" data-toggle="collapse") {{show.day}}, {{show.venue}}, {{show.time | time}}
-                  .collapse(:id="'collapse'+index")
-                    ul
-                      li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
-                    p(v-if="show.price") Price: 
-                      a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
-                    p(v-else) 
-                      a(href="#" @click.prevent="setPrice(show._id)") No price set
-
-                    table.table.table-sm(v-if="show.capacity != show.remaining")
-                      thead
-                        tr
-                          th Name
-                          th Email
-                          th Quantity
-                          th Type
-                          th
-                      tbody
-                        tr(v-for="ticket in show.tickets")
-                          td {{ticket.name}}
-                          td {{ticket.email}}
-                          td {{ticket.quantity}}
-
-                          td(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
-                          td(v-else) 
-                            a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{ticket.payment.transactions[0].related_resources[0].sale.id}}
-
-                          td 
-                            a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
-                    p(v-else) No tickets sold
-                    button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Ticket Reservation
-                    | &nbsp;
-                    button.btn.btn-secondary.btn-xs(type="button" @click="reserveWithBadge(show._id)") Add Badge Reservation
-
-                td
-                  a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity}}
-                td.digits {{show.capacity - show.remaining}}
-                td.digits {{show.remaining}}              
-        p.m2(v-else) No shows yet
-    
-      #print-tickets.tab-pane.fade
-        .row
-          .col-sm-6
-            form(action="/shows/print" target="_blank")
-              .form-group
-                label(for="print-day") Day
-                select#print-day.form-control(v-model="print.day" name="day")
-                  option(v-for="day in days") {{day}}
-              .form-group
-                label(for="print-venue") Venue
-                select#print-venue.form-control(v-model="print.venue" name="venue")
-                  option Hideout Down
-                  option Hideout Up
-                  option ColdTowne
-                  option Fallout
-                  option Velveeta
-                  option Spider House
-                  option Institution
-              .form-group
-                label(for="print-time") Time
-                select#print-time.form-control(v-model="print.time" name="time")
-                  option(:value="time" v-for="time in times") {{time | time}} 
-              button.btn.btn-primary(type="submit" ) View
-
-    add-ticket-modal(:show-id="showId")
-
+    .box.box-b
+      table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Shows
+            th Reserved
+            th Paid
+        tbody(v-for="email, index in Object.keys(tickets)")
+          tr
+            td 
+              a(:href="'#collapse-tickets-'+index" data-toggle="collapse") {{tickets[email][0].name}}
+            td.code {{email}}
+            td {{tickets[email].length}}
+            td {{getQuantity(email)}}
+            td
+              span(v-if="getPaid(email) > 0") ${{getPaid(email)}}
+          tr.collapse(:id="'collapse-tickets-'+index")
+            td.p-0(colspan=5)
+              table.table.table-sm.mb-0
+                tbody.striped(v-for="day in days")
+                  tr(v-for="ticket in formatTickets(email, day)")
+                    td.borderless 
+                      span(style="user-select: none") {{ticket.quantity > 1 ? '(' + ticket.quantity + ')' : ''}} 
+                      | {{ticket.day}}, {{ticket.time | time}}, {{formatVenue(ticket.venue)}}                  
+                    td.text-right.borderless(style="user-select: none")
+                      span(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
+                      span(v-else-if="ticket.payment") 
+                        a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal (${{Number(ticket.payment.transactions[0].amount.total)}})
+                      span(v-else) n/a
   script(src="/js/axios.min.js")
   script(src="/js/vue.js")
   script(src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js" integrity="sha256-/GKyJ0BQJD8c8UYgf7ziBrs/QgcikS7Fv/SaArgBcEI=" crossorigin="anonymous")
@@ -127,6 +47,7 @@ block content
       el: "#app",
       data() { 
         return {
+          showTables: false,
           print: {
             day: 'Tuesday',
             venue: '',
