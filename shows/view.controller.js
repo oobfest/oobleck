@@ -13,15 +13,23 @@ module.exports = {
     model.getByDayVenueTime(day, venue, time, (error, show)=> {
       if(error) next(error)
       else if(show == null) response.send(`Show "${day} ${venue} ${time}" not found`)
-      else response.render('shows/print-tickets', { 
-        day, 
-        venue, 
-        time, 
-        price: show.price,
-        capacity: show.capacity, 
-        remaining: show.remaining, 
-        tickets: show.tickets 
-      })
+      else {
+        let tickets = show.tickets.sort((a,b)=> 
+          a.name.toLowerCase() > b.name.toLowerCase()
+            ? 1 
+            : b.name.toLowerCase() > a.name.toLowerCase()
+              ? -1 
+              : 0 )
+        response.render('shows/print-tickets', { 
+          day, 
+          venue, 
+          time, 
+          tickets,
+          price: show.price,
+          capacity: show.capacity, 
+          remaining: show.remaining, 
+        })
+      }
     })
   }
 }
