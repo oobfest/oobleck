@@ -4,7 +4,7 @@ script#venue-template(type="text/template")
     p(v-if="venue.availability") Available {{venue.availability}}
     ul.list-inline(v-show="$root.editMode")
       li.list-inline-item
-        //a.add-show(href="#" @click.prevent="showAddShowModal(day, venue.name)" data-toggle="modal" data-target="#add-show-modal") add show
+        a.add-show(href="#" @click.prevent="showAddShowModal(day, venue.name)" data-toggle="modal" data-target="#add-show-modal") add show
       li.list-inline-item
         a.add-show(href="#" @click.prevent="showWorkshopModal(day, venue.name)" data-toggle="modal" data-target="#add-workshop-modal") add workshop
     workshop(v-for="(workshop, index) in workshopsForVenueAndDay",:workshop="workshop",:key="index")
