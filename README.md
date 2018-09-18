@@ -1,5 +1,5 @@
 # OoBleck 
-Todo: build entire app
+I did it! 🎉
 
 ## How to Run
 Download a copy with `clone https://github.com/oobfest/oobleck.git`
