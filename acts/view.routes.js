@@ -1,4 +1,3 @@
-// Double-check these imports
 const express = require('express')
 const router = express.Router()
 const isLoggedIn = require('../middleware/is-logged-in')
@@ -63,6 +62,8 @@ router.get('/create-public', (request, response, next)=> {
 router.post('/create-public', (request, response, next)=> {
 
   let submission = util.formatSubmissionObject(request)
+
+  // Since this path is for invited acts, we automatically mark the following
   submission.paymentInfo = true
   submission.stamp = 'in'
   submission.confirmed = true
