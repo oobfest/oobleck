@@ -8,7 +8,7 @@ const log = require('winston')
 const sendEmail = require('../utilities/send-email')
 const isNotARobot = require('../middleware/is-not-a-robot')
 
-// Get first page of form
+// First page of application
 router.get('/', (request, response) => {
 
 	if((Date.now() > 1523867498876) && (request.query.superlate !== process.env.LATE_SUBMISSION_PASSWORD)) {		// Todo: make the concept of time more intuitive in the field of computer science
@@ -27,7 +27,7 @@ router.get('/', (request, response) => {
 	}
 })
 
-// Submit first page, go to second page (if no errors)
+// Submission of the first page, if valid renders the second page
 router.post('/details', isNotARobot, submissionValidation, (request, response, next) => {
 
 	let submission = request.body
@@ -96,6 +96,7 @@ router.post('/photo-upload', (request, response, next)=> {
 	})
 })
 
+// Async Promo Code
 router.post('/promo/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let promoCode = request.body.promoCode
@@ -110,11 +111,12 @@ router.post('/promo/:objectId', (request, response)=> {
 	}
 })
 
+// Async pay validation
 router.post('/pay/:objectId', (request, response)=> {
 	let objectId = request.params.objectId
 	let paymentInfo = request.body.paymentInfo
 	submissionModel.updatePayment(objectId, paymentInfo, (error, submission)=> {
-		response.send({'cool-message': "YAY!"})
+		response.send({'success': true})
 	})
 })
 
@@ -160,7 +162,7 @@ router.post('/finish', (request, response, next)=>{
 	})
 })
 
-// GET /apply/hosting
+// Hosting application
 router.get('/hosting', (request, response)=> {
 	response.render('apply/host-application', { 
 		recaptcha: true, 
@@ -295,9 +297,9 @@ function calculateApplicationFee(submission) {
 	let lateDeadline = new Date(1523768400000)
 	let currentDate = new Date(Date.now())
 
-	//if (currentDate > earlyBirdDeadline) 	applicationFee += 10
-	//if (currentDate > regularDeadline)		applicationFee += 10
-	//if (currentDate > lateDeadline)			applicationFee += 0
+	if (currentDate > earlyBirdDeadline) 	applicationFee += 10
+	if (currentDate > regularDeadline)	applicationFee += 10
+	if (currentDate > lateDeadline)		applicationFee += 0
 
 	return applicationFee
 }
